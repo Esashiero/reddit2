@@ -1,70 +1,90 @@
 # 🤖 Reddit AI Curator
 
-> **🤖 For AI Agents:** Please refer to [`AGENTS.md`](AGENTS.md) for your operational instructions, available tools, and workflow patterns.
-
-**Reddit AI Curator** is a toolbox for an intelligent agent designed to find high-quality Reddit discussions based on your specific needs. It replaces manual searching and scripting with a powerful, agent-driven workflow.
+**Reddit AI Curator** is an advanced, AI-powered information retrieval system designed to find high-quality, relevant Reddit discussions. It combines professional Boolean search logic with Large Language Model (LLM) analysis to sift through thousands of posts and deliver the most impactful results.
 
 ---
 
-## 🕵️ The Agentic Framework
+## 🚀 Key Features
 
-This project has pivoted from a script-based system to an **Agentic Tool-Use** model. Instead of running a hard-coded optimization loop, you now instruct a CLI-based AI agent (like `opencode`, Gemini-CLI, etc.), which uses the tools provided in this repository to find, filter, and score content.
+### 🏆 Multi-Query Tournament
+Doesn't just run one search. It generates multiple query variations (Broad, Specific, Narrative, Jargon) and runs a "tournament" on a sample size to see which one performs best before committing to a full search.
 
-The agent follows a **Reason-Act-Observe** loop, allowing it to self-correct and refine its strategy, just like a human researcher.
+### 🌊 Smart Search Cascade
+If it doesn't find enough high-quality posts, it automatically triggers a tiered fallback system:
+1.  **Sort Variation**: Retries with `relevance`, `top`, `hot`, and `comments` sorts.
+2.  **Variant Fallback**: Uses the runner-up queries from the tournament.
+3.  **Expansion**: Increases fetch limits to 500 posts per sub and expands the time filter.
+4.  **Adaptive Scoring**: Intelligently relaxes the quality threshold (from 80 to 70/60) if the quota is still unmet.
 
-### Core Components of the Framework
-
-1.  **Socratic Intent Decomposition**
-    The agent is instructed to first break down your request to understand its core components, assumptions, and linguistic markers before it even attempts a search.
-
-2.  **Toolbox (`tools.py`)**
-    The agent has access to a set of simple, powerful command-line tools:
-    -   **`generate_query`**: Translates your natural language into a precise Reddit Boolean search string.
-    -   **`execute_search`**: Runs the search on Reddit and fetches candidate posts.
-    -   **`score_results`**: Uses an LLM to score the relevance of the found posts against your original, nuanced intent.
-
-3.  **The Agentic Loop (Reason-Act-Observe)**
-    The agent, not a script, drives the process:
-    -   **Reason**: It formulates a plan (e.g., "First, I'll generate a query...").
-    -   **Act**: It calls the appropriate tool from `tools.py`.
-    -   **Observe**: It analyzes the output.
-    -   **Refine**: If the results are poor, it critiques its own work, refines the query, and tries again.
-
-This approach is far more flexible and powerful than the previous `auto_optimize.py` script.
+### 📚 Continual Learning System
+-   **Tag Extraction**: Automatically extracts semantic tags from high-scoring results to learn the "vocabulary" of successful matches.
+-   **Favorites**: Save your favorite posts to train the AI. It will use your favorites to prioritize themes and keywords in future searches.
+-   **Auto-Blacklist**: Automatically blacklists posts scoring >85 to ensure every new search provides fresh content.
 
 ---
 
-## 🚀 Usage
+## 🛠️ Setup & Installation
 
-The primary way to use this project is by directing a capable CLI agent to use the provided `tools.py` script.
+1.  **Python 3.12+**
+2.  **Install Dependencies**:
+    ```bash
+    pip install praw mistralai google-generativeai flask python-dotenv
+    ```
+3.  **Configure Environment**:
+    Create a `.env` file with your credentials:
+    ```env
+    REDDIT_CLIENT_ID=your_id
+    REDDIT_CLIENT_SECRET=your_secret
+    REDDIT_USER_AGENT=your_agent
+    MISTRAL_API_KEY=your_key  # or GOOGLE_API_KEY
+    ```
 
-### Example Agentic Session
+---
 
-**1. Your Instruction to the Agent:**
+## 🖥️ Usage
+
+### CLI Commands
+
+**1. AI-Powered Curation (Best Results)**
+Generates queries, runs a tournament, and performs the search cascade automatically.
+```bash
+python app.py curate --description "First person stories of car accidents in heavy rain" --target_posts 10
 ```
-> agent "Find me first-person stories on Reddit where a woman was assaulted in a public pool by a stranger, but I only want stories with a lot of detail."
+
+**2. Direct Boolean Search**
+```bash
+python app.py search --keywords "car accident AND (rain OR storm)" --criteria "High detail stories only"
 ```
 
-**2. The Agent's Internal Monologue & Actions:**
-*   **Reasoning**: "I'll start by generating a query."
-*   **Action**: `> python tools.py generate_query --description "..."`
-*   **Observation**: Gets a query: `(pool AND stranger AND assaulted...)`
-*   **Reasoning**: "Now I'll search for 20 posts with this query."
-*   **Action**: `> python tools.py execute_search --query "..." --limit 20`
-*   **Observation**: Gets a list of 20 posts.
-*   **Reasoning**: "Time to score these posts against the user's detailed request."
-*   **Action**: `> python tools.py score_results --posts_json "[...]" --user_intent "..."`
-*   **Observation & Refinement**: "Scores are low. Too many news articles. I'll add `-flair:news` and `self:true` to the query and re-run the search and score steps."
+**3. Discover Subreddits**
+Finds subreddits that are most likely to contain the content you are looking for.
+```bash
+python app.py discover --keywords "adventure travel and hiking"
+```
 
-This loop continues until the agent is satisfied with the quality of the results.
+**Optional Flags:**
+- `--exhaustive`: Try all sorts and variants for maximum recall.
+- `--no-fallback`: Disable the automatic cascade.
+- `--json`: Output raw data only.
+
+### 🌐 Web Interface
+Launch the interactive dashboard to run searches, view live results, manage subreddits, and browse your favorites.
+```bash
+python app.py
+# Open http://localhost:5000 in your browser
+```
 
 ---
 
-## 🛠️ Prerequisites & Configuration
-- **A capable CLI-based AI Agent** (e.g., opencode, a custom LangChain/LlamaIndex agent).
-- **Python 3.10+**
-- **Reddit API Credentials** (Client ID, Secret, User Agent) in a `.env` file.
-- **AI Provider Keys** (Mistral or Gemini) in a `.env` file for the underlying tools.
+## 📂 Project Structure
+
+- `app.py`: Main application entry point (CLI & Web).
+- `tag_learning.py`: The "brain" that manages favorites and tag-based refinement.
+- `report_generator.py`: Generates the beautiful, standalone HTML reports.
+- `config/`: Centralized folder for all JSON data (favorites, learning DB, queries, blacklist).
+- `static/` & `templates/`: Responsive frontend assets.
+- `results/`: Output folder for JSON and HTML findings.
+
+---
 
 **License:** MIT
-# reddit2

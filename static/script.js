@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Listeners
     const deepScan = document.getElementById('deep_scan');
     if (deepScan) {
-        deepScan.addEventListener('change', function() {
+        deepScan.addEventListener('change', function () {
             const manualInput = document.getElementById('scan_limit');
             manualInput.disabled = this.checked;
             manualInput.style.opacity = this.checked ? "0.5" : "1";
@@ -31,27 +31,27 @@ async function generateAIQuery() {
     const inputField = document.getElementById('ai-gen-input');
     const desc = inputField.value;
     // Find the button next to the input
-    const btn = inputField.nextElementSibling; 
-    
-    if(!desc.trim()) return alert("Please describe what you want first.");
-    
+    const btn = inputField.nextElementSibling;
+
+    if (!desc.trim()) return alert("Please describe what you want first.");
+
     // UI Loading State
     const originalText = btn.innerText;
     btn.disabled = true;
     btn.innerText = "Generating...";
-    
+
     try {
         const res = await fetch('/api/generate_query', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 description: desc,
                 provider: document.getElementById('provider').value
             })
         });
-        
+
         const data = await res.json();
-        
+
         if (data.query) {
             // Set the raw input
             document.getElementById('raw-query-input').value = data.query;
@@ -60,11 +60,11 @@ async function generateAIQuery() {
         } else {
             alert("AI Error: " + (data.error || "Unknown error"));
         }
-    } catch(e) {
+    } catch (e) {
         console.error(e);
         alert("Network Error: Check console logs.");
     }
-    
+
     // Reset UI
     btn.disabled = false;
     btn.innerText = originalText;
@@ -87,29 +87,29 @@ function syncRawToBuilder() {
         found = true;
         // Split by OR, remove quotes if present
         const groupTerms = match[1].split(/ OR |\|/i).map(s => s.trim().replace(/"/g, '')).filter(s => s);
-        
+
         if (groupTerms.length > 0) {
             // Add group without triggering sync back (prevent loop)
-            const groupDiv = addNewGroup(false); 
+            const groupDiv = addNewGroup(false);
             const termContainer = groupDiv.querySelector('.terms-container');
-            termContainer.innerHTML = ''; 
+            termContainer.innerHTML = '';
             groupTerms.forEach(term => addTermToContainer(termContainer, term, false));
         }
     }
-    
+
     // If empty/invalid, reset to one empty group
     if (!found && raw.trim() === '') {
         addNewGroup(false);
     }
-    
-    updatePreviewOnly(); 
+
+    updatePreviewOnly();
 }
 
 // 2. Visual Builder -> Raw Text
 function syncBuilderToRaw() {
     const groups = document.querySelectorAll('.query-group');
     let blocks = [];
-    
+
     groups.forEach(group => {
         const inputs = group.querySelectorAll('input');
         let terms = [];
@@ -117,7 +117,7 @@ function syncBuilderToRaw() {
             const val = inp.value.trim();
             if (val) terms.push(val);
         });
-        
+
         if (terms.length > 0) {
             // Join terms with OR, wrap in quotes for safety
             const quotedTerms = terms.map(t => `"${t}"`);
@@ -146,7 +146,7 @@ function addNewGroup(triggerSync = true) {
         <button class="btn-add-term" onclick="addTerm(this)">+ Add "OR" Term</button>
     `;
     container.appendChild(groupDiv);
-    
+
     // Add default empty input
     if (triggerSync) {
         addTermToContainer(groupDiv.querySelector('.terms-container'), "", true);
@@ -158,7 +158,7 @@ function addTerm(btn) {
     addTermToContainer(btn.previousElementSibling, "", true);
 }
 
-function addTermToContainer(container, value="", triggerSync=true) {
+function addTermToContainer(container, value = "", triggerSync = true) {
     const row = document.createElement('div');
     row.className = 'term-row';
     row.innerHTML = `
@@ -166,11 +166,11 @@ function addTermToContainer(container, value="", triggerSync=true) {
         <button class="btn-icon" onclick="removeTerm(this)">&times;</button>
     `;
     container.appendChild(row);
-    
+
     // Only focus if adding manually
-    if(!value && triggerSync) row.querySelector('input').focus();
-    
-    if(triggerSync) syncBuilderToRaw();
+    if (!value && triggerSync) row.querySelector('input').focus();
+
+    if (triggerSync) syncBuilderToRaw();
 }
 
 function removeTerm(btn) {
@@ -200,16 +200,16 @@ function updatePreviewOnly() {
     const groups = getBuilderData();
     const previewBox = document.getElementById('combo-preview');
     if (groups.length === 0) { previewBox.innerHTML = "Add terms..."; return; }
-    
+
     const combinations = cartesian(groups);
     let html = "";
     const displayLimit = 20;
-    
+
     combinations.slice(0, displayLimit).forEach(combo => {
         const line = Array.isArray(combo) ? combo.join(" + ") : combo;
         html += `<div class="preview-item">🔎 ${line}</div>`;
     });
-    
+
     if (combinations.length > displayLimit) {
         html += `<div class="preview-item" style="color:#888">...and ${combinations.length - displayLimit} more combinations</div>`;
     }
@@ -218,11 +218,11 @@ function updatePreviewOnly() {
 
 function cartesian(args) {
     if (args.length === 0) return [];
-    const r = [], max = args.length-1;
+    const r = [], max = args.length - 1;
     function helper(arr, i) {
-        for (let j=0, l=args[i].length; j<l; j++) {
+        for (let j = 0, l = args[i].length; j < l; j++) {
             const a = arr.slice(0); a.push(args[i][j]);
-            if (i==max) r.push(a); else helper(a, i+1);
+            if (i == max) r.push(a); else helper(a, i + 1);
         }
     }
     helper([], 0);
@@ -240,9 +240,9 @@ async function fetchAndRenderSubreddits() {
 }
 
 async function syncSubreddits() {
-    await fetch('/api/subreddits', { 
-        method: 'POST', 
-        headers: {'Content-Type': 'application/json'}, 
+    await fetch('/api/subreddits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(activeSubreddits)
     });
 }
@@ -282,7 +282,7 @@ async function removeSub(sub) {
 function updateExplainer() {
     const box = document.getElementById('logic-explainer');
     if (!box) return;
-    
+
     const target = document.getElementById('target_posts').value;
     const isDeep = document.getElementById('deep_scan').checked;
     const limit = document.getElementById('scan_limit').value;
@@ -303,7 +303,7 @@ function toggleTimeFilter() {
     const sortVal = document.getElementById('sort_by').value;
     const timeSelect = document.getElementById('time_filter');
     const timeContainer = document.getElementById('time_filter_container');
-    
+
     if (sortVal === 'top' || sortVal === 'relevance') {
         timeSelect.disabled = false;
         timeContainer.style.opacity = "1";
@@ -317,7 +317,7 @@ function toggleTimeFilter() {
 async function saveCurrentQuery() {
     const name = document.getElementById('save-name').value.trim();
     if (!name) return alert("Please enter a name.");
-    
+
     const payload = {
         groups: getBuilderData(),
         criteria: document.getElementById('criteria').value,
@@ -334,10 +334,10 @@ async function saveCurrentQuery() {
 
     await fetch('/api/queries', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, payload })
     });
-    
+
     document.getElementById('save-name').value = "";
     fetchSavedQueries();
     alert("Saved!");
@@ -360,8 +360,8 @@ async function fetchSavedQueries() {
 async function deleteSelectedQuery() {
     const select = document.getElementById('saved-list');
     const name = select.value;
-    if(!name) return;
-    if(confirm("Delete " + name + "?")) {
+    if (!name) return;
+    if (confirm("Delete " + name + "?")) {
         await fetch('/api/queries/' + encodeURIComponent(name), { method: 'DELETE' });
         fetchSavedQueries();
     }
@@ -373,16 +373,16 @@ function loadSelectedQuery() {
     if (!selectedOpt.value) return;
 
     const payload = JSON.parse(selectedOpt.dataset.payload);
-    
+
     // Rebuild visual from data
     document.getElementById('builder-container').innerHTML = '';
     payload.groups.forEach(groupTerms => {
         const groupDiv = addNewGroup(false);
         const container = groupDiv.querySelector('.terms-container');
-        container.innerHTML = ''; 
+        container.innerHTML = '';
         groupTerms.forEach(term => addTermToContainer(container, term, false));
     });
-    
+
     // Sync to Raw
     syncBuilderToRaw();
 
@@ -391,15 +391,15 @@ function loadSelectedQuery() {
     document.getElementById('ai_chunk').value = payload.ai_chunk || 5;
     document.getElementById('scan_limit').value = payload.scan_limit || 100;
     document.getElementById('provider').value = payload.provider || "mistral";
-    
-    if(payload.sort) document.getElementById('sort_by').value = payload.sort;
-    if(payload.time) document.getElementById('time_filter').value = payload.time;
-    if(payload.post_type) document.getElementById('post_type').value = payload.post_type;
+
+    if (payload.sort) document.getElementById('sort_by').value = payload.sort;
+    if (payload.time) document.getElementById('time_filter').value = payload.time;
+    if (payload.post_type) document.getElementById('post_type').value = payload.post_type;
     toggleTimeFilter();
 
     const deepBox = document.getElementById('deep_scan');
     deepBox.checked = payload.deep_scan || false;
-    
+
     if (payload.subreddits) {
         activeSubreddits = payload.subreddits;
         renderSubreddits();
@@ -423,19 +423,19 @@ async function fetchHistory() {
         const res = await fetch('/api/blacklist');
         const data = await res.json();
         const items = Object.values(data).reverse();
-        
+
         if (items.length === 0) {
             container.innerHTML = '<p style="color:#666; text-align:center;">No history found.</p>';
             return;
         }
-        
+
         container.innerHTML = '';
         items.forEach(item => {
             const div = document.createElement('div');
             div.className = 'history-card';
             let criteriaShort = item.criteria || "None";
             if (criteriaShort.length > 50) criteriaShort = criteriaShort.substring(0, 50) + "...";
-            
+
             div.innerHTML = `
                 <h4><a href="${item.url}" target="_blank">${item.title}</a></h4>
                 <span class="meta-tag">🔎 Query: ${item.keywords}</span>
@@ -450,7 +450,7 @@ async function fetchHistory() {
 }
 
 async function clearHistory() {
-    if(!confirm("Clear all history?")) return;
+    if (!confirm("Clear all history?")) return;
     await fetch('/api/blacklist/clear', { method: 'POST' });
     fetchHistory();
 }
@@ -485,7 +485,7 @@ function startScan() {
 
     const eventSource = new EventSource("/stream?" + params.toString());
 
-    eventSource.onmessage = function(e) {
+    eventSource.onmessage = function (e) {
         if (e.data.startsWith("<<<HTML_RESULT>>>")) {
             const htmlContent = e.data.replace("<<<HTML_RESULT>>>", "").replaceAll("||NEWLINE||", "\n");
             results.innerHTML = htmlContent;
@@ -508,7 +508,7 @@ function startScan() {
         }
     };
 
-    eventSource.onerror = function() {
+    eventSource.onerror = function () {
         eventSource.close();
         btn.disabled = false;
         logs.innerHTML += "\n❌ Connection Closed.";
@@ -537,7 +537,7 @@ function startDiscovery() {
 
     const eventSource = new EventSource("/stream_discovery?" + params.toString());
 
-    eventSource.onmessage = function(e) {
+    eventSource.onmessage = function (e) {
         if (e.data.startsWith("<<<JSON_CARD>>>")) {
             const sub = JSON.parse(e.data.replace("<<<JSON_CARD>>>", ""));
             renderDiscoveryCard(sub);
@@ -551,7 +551,7 @@ function startDiscovery() {
         }
     };
 
-    eventSource.onerror = function() {
+    eventSource.onerror = function () {
         eventSource.close();
         btn.disabled = false;
         logs.innerHTML += "\n❌ Connection Closed.";
@@ -585,42 +585,127 @@ async function addDiscoverySub(name, btn) {
     }
 }
 
-// Global variable to store approved posts for export
+// Global state
 let approvedPostsData = [];
+let userFavorites = {};
+
+async function loadUserFavorites() {
+    try {
+        const resp = await fetch('/api/favorites');
+        if (resp.ok) {
+            userFavorites = await resp.json();
+        }
+    } catch (e) {
+        console.error("Failed to load favorites", e);
+    }
+}
+
+// Ensure favorites are loaded when page loads
+document.addEventListener('DOMContentLoaded', loadUserFavorites);
 
 function renderApprovedPosts(posts) {
     approvedPostsData = posts;  // Store for export
     const box = document.getElementById('results');
     if (!box) return;
-    
+
     let html = '<div class="results-header">';
     html += '<h3>✅ Approved Posts (' + posts.length + ')</h3>';
     html += '<button class="btn-export" onclick="exportResults()" style="background:#10b981;margin-left:10px;">📥 Export Results</button>';
     html += '</div>';
     html += '<div class="approved-posts">';
-    
-    posts.forEach(post => {
+
+    posts.forEach((post, idx) => {
         const score = post.score || 0;
         const scoreClass = score >= 80 ? 'score-high' : (score >= 60 ? 'score-medium' : 'score-low');
-        // Truncate content for preview
-        const contentPreview = post.content ? 
-            '<div class="approved-content">' + escapeHtml(post.content.substring(0, 300)) + (post.content.length > 300 ? '...' : '') + '</div>' : 
+        const isFavorited = !!userFavorites[post.id];
+
+        // Date formatting
+        const dateStr = post.timestamp ? new Date(post.timestamp * 1000).toLocaleDateString() : 'Unknown Date';
+
+        // Tags rendering
+        let tagsHtml = '';
+        if (post.tags && post.tags.length > 0) {
+            tagsHtml = '<div class="tag-list">';
+            post.tags.slice(0, 8).forEach(tag => {
+                tagsHtml += `<span class="tag-pill">${escapeHtml(tag)}</span>`;
+            });
+            tagsHtml += '</div>';
+        }
+
+        const longContent = post.content && post.content.length > 500;
+        const contentHtml = post.content ?
+            `<div id="content-${idx}" class="approved-content ${longContent ? 'collapsed' : ''}">${escapeHtml(post.content)}</div>` :
             '';
+        const toggleHtml = longContent ?
+            `<button class="show-toggle" onclick="toggleContent(${idx})">Show More ↓</button>` :
+            '';
+
         html += `
             <div class="approved-card">
                 <div class="approved-header">
-                    <span class="sub-tag">r/${post.sub}</span>
-                    <span class="score-tag ${scoreClass}">Score: ${score}</span>
+                    <div>
+                        <span class="sub-tag">r/${post.sub}</span>
+                        <div class="post-date">${dateStr}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button class="fav-btn ${isFavorited ? 'active' : ''}" 
+                                onclick="toggleFavorite('${post.id}', ${idx})" 
+                                title="Favorite this post for better learning">
+                                ${isFavorited ? '★' : '☆'}
+                        </button>
+                        <span class="score-tag ${scoreClass}">Score: ${score}</span>
+                    </div>
                 </div>
                 <h4><a href="${post.url}" target="_blank">${escapeHtml(post.title)}</a></h4>
-                ${contentPreview}
-                <div class="approved-meta">ID: ${post.id}</div>
+                ${contentHtml}
+                ${toggleHtml}
+                ${tagsHtml}
+                <div class="approved-meta" style="margin-top:10px;">ID: ${post.id}</div>
             </div>
         `;
     });
     html += '</div>';
-    
+
     box.innerHTML = html;
+}
+
+function toggleFavorite(postId, idx) {
+    const isFavorited = !!userFavorites[postId];
+    const post = approvedPostsData[idx] || Object.values(userFavorites).find(p => p.id === postId);
+
+    if (isFavorited) {
+        // DELETE
+        fetch(`/api/favorites/${postId}`, { method: 'DELETE' })
+            .then(() => {
+                delete userFavorites[postId];
+                renderApprovedPosts(approvedPostsData);
+            });
+    } else {
+        // POST
+        fetch('/api/favorites', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(post)
+        }).then(() => {
+            userFavorites[postId] = post;
+            renderApprovedPosts(approvedPostsData);
+        });
+    }
+}
+
+function toggleContent(idx) {
+    const el = document.getElementById(`content-${idx}`);
+    const btn = el.nextElementSibling;
+    const isCollapsed = el.classList.contains('collapsed');
+
+    if (isCollapsed) {
+        el.classList.remove('collapsed');
+        btn.innerText = "Show Less ↑";
+    } else {
+        el.classList.add('collapsed');
+        btn.innerText = "Show More ↓";
+        el.closest('.approved-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 }
 
 function escapeHtml(text) {
@@ -634,12 +719,12 @@ function exportResults() {
         alert('No results to export!');
         return;
     }
-    
+
     // Create formatted export
     const timestamp = new Date().toISOString().split('T')[0];
     let exportText = `Reddit Curator Results - ${timestamp}\n`;
     exportText += '=====================================\n\n';
-    
+
     approvedPostsData.forEach((post, index) => {
         exportText += `${index + 1}. [${post.sub}] Score: ${post.score}\n`;
         exportText += `   Title: ${post.title}\n`;
@@ -647,7 +732,7 @@ function exportResults() {
         exportText += `   ID: ${post.id}\n`;
         exportText += '\n-------------------------------------\n\n';
     });
-    
+
     // Create and download file
     const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);

@@ -1,10 +1,32 @@
-import prawcore
+import os
+import json
+import sys
+import time
+import re
+import hashlib
 import logging
-from logging.handlers import RotatingFileHandler
-from markupsafe import escape
+import argparse
+import requests
+import praw
+import prawcore
+import concurrent.futures
+import threading
+import queue
+from typing import List, Dict, Any, Generator, Optional, Tuple, Set
 from collections import deque
 from functools import lru_cache
-import hashlib
+from logging.handlers import RotatingFileHandler
+
+from flask import Flask, render_template, request, jsonify, Response
+from report_generator import _generate_html_report
+from tag_learning import (
+    load_tagged_results, save_tagged_results, 
+    find_similar_posts, analyze_vocabulary, highlight_keywords,
+    extract_tags_prompt
+)
+from markupsafe import escape
+from dotenv import load_dotenv, find_dotenv
+from mistralai import Mistral
 
 load_dotenv(find_dotenv(), override=True)
 
@@ -46,9 +68,10 @@ def validate_env():
 validate_env()
 
 # --- Files & Constants ---
-SAVED_QUERIES_FILE = "saved_queries.json"
-SUBREDDITS_FILE = "subreddits.json"
-BLACKLIST_FILE = "blacklist.json"
+SAVED_QUERIES_FILE = "config/saved_queries.json"
+SUBREDDITS_FILE = "config/subreddits.json"
+BLACKLIST_FILE = "config/blacklist.json"
+FAVORITES_FILE = "config/favorites.json"
 
 DEFAULT_SUBS_ENV = os.getenv(
     "REDDIT_SUBREDDITS", "offmychest,sexualassault,TwoXChromosomes,amiwrong,relationship_advice,confessions,india,indiasocial,advice,relationships,lifeadvice,trueoffmychest,self,rapecounseling,vent,questions,familyissues,family"
@@ -58,6 +81,24 @@ REDDIT_SECRET = os.getenv("REDDIT_CLIENT_SECRET")
 REDDIT_AGENT = os.getenv("REDDIT_USER_AGENT", "script:flask_app:v12_fixed")
 MISTRAL_KEY = os.getenv("MISTRAL_API_KEY", "")
 GOOGLE_KEY = os.getenv("GOOGLE_API_KEY", "")
+
+
+def load_favorites() -> Dict:
+    """Load the user favorites database."""
+    if os.path.exists(FAVORITES_FILE):
+        try:
+            with open(FAVORITES_FILE, "r") as f:
+                return json.load(f)
+        except:
+            return {}
+    return {}
+
+
+def save_favorites(data: Dict):
+    """Save the user favorites database."""
+    os.makedirs(os.path.dirname(FAVORITES_FILE), exist_ok=True)
+    with open(FAVORITES_FILE, "w") as f:
+        json.dump(data, f, indent=2)
 
 
 class LLMFilter:
@@ -147,13 +188,17 @@ class LLMFilter:
                     raise
 
             except Exception as e:
-                if "429" in str(e):
+                error_msg = str(e)
+                if "429" in error_msg:
                     logger.warning(f"Rate limited by {self.provider}, retrying in {delay}s...")
                     time.sleep(delay)
                     retries -= 1
                     delay *= 2
+                elif "<!DOCTYPE" in error_msg or "<html" in error_msg.lower():
+                    logger.error(f"LLM Error ({self.provider}): API returned HTML (likely 500/502/503 Server Error).")
+                    return []
                 else:
-                    logger.error(f"LLM Error ({self.provider}): {e}")
+                    logger.error(f"LLM Error ({self.provider}): {error_msg}")
                     if self.debug:
                         logger.debug(f"Raw Content: {content}")
                     return []
@@ -162,6 +207,169 @@ class LLMFilter:
     def expand_query(self, original_keywords: str, criteria: str) -> str:
         # Implementation could be expanded, but keeping simple for now
         return original_keywords
+
+    def extract_core_characteristics(self, description: str) -> Optional[Dict[str, List[str]]]:
+        """
+        Extracts mandatory characteristics from the description that must be preserved.
+        Returns a dict of theme groups: {"relationship": ["brother", "sibling"], ...}
+        """
+        sys_p = (
+            "Analyze the following Reddit search description. Identify 2-4 CORE, NON-NEGOTIABLE characteristics or themes. "
+            "For each characteristic, provide 2-4 synonyms or related terms that preserve the EXACT same meaning. "
+            "These will be used to enforce constraints on Boolean search queries.\n\n"
+            "Example Description: 'woman assaulted while sleeping by their brother who pulled their shirt up'\n"
+            "Example Output: {\n"
+            "  \"core_constraints\": [\n"
+            "    {\"theme\": \"sleep state\", \"terms\": [\"sleeping\", \"asleep\", \"passed out\", \"unconscious\"]},\n"
+            "    {\"theme\": \"relationship\", \"terms\": [\"brother\", \"sibling\"]},\n"
+            "    {\"theme\": \"specific action\", \"terms\": [\"shirt up\", \"pulled shirt\", \"clothing displaced\"]}\n"
+            "  ]\n"
+            "}\n"
+            "Return ONLY a JSON object."
+        )
+        
+        try:
+            if self.provider == "mistral" and hasattr(self, "client"):
+                res = self.client.chat.complete(
+                    model="mistral-large-latest",
+                    messages=[
+                        {"role": "system", "content": sys_p},
+                        {"role": "user", "content": description},
+                    ],
+                    response_format={"type": "json_object"},
+                )
+                content = str(res.choices[0].message.content)
+            elif hasattr(self, "api_key"):
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={self.api_key}"
+                pl = {
+                    "contents": [{"parts": [{"text": description}]}],
+                    "system_instruction": {"parts": [{"text": sys_p}]},
+                    "generationConfig": {"response_mime_type": "application/json"},
+                }
+                res = requests.post(url, json=pl, headers={"Content-Type": "application/json"})
+                content = res.json()["candidates"][0]["content"]["parts"][0]["text"]
+            else:
+                return None
+
+            data = json.loads(content)
+            return data
+        except Exception as e:
+            logger.error(f"Error extracting core characteristics: {e}")
+            return None
+
+    def extract_tags(self, post: Dict) -> Optional[Dict]:
+        """
+        Extract semantic tags from a high-scoring post for the learning system.
+        Returns {"tags": [...], "effective_terms": [...]}
+        """
+        prompt = extract_tags_prompt(post)
+        
+        try:
+            if self.provider == "mistral" and hasattr(self, "client"):
+                res = self.client.chat.complete(
+                    model="mistral-large-latest",
+                    messages=[{"role": "user", "content": prompt}],
+                    response_format={"type": "json_object"},
+                )
+                content = str(res.choices[0].message.content)
+            elif hasattr(self, "api_key"):
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={self.api_key}"
+                pl = {
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {"response_mime_type": "application/json"},
+                }
+                res = requests.post(url, json=pl, headers={"Content-Type": "application/json"})
+                content = res.json()["candidates"][0]["content"]["parts"][0]["text"]
+            else:
+                return None
+
+            return json.loads(content)
+        except Exception as e:
+            logger.warning(f"Tag extraction failed: {e}")
+            return None
+
+    def generate_query_variations(self, description: str, num_variations: int = 5, core_constraints: Optional[Dict] = None, vocabulary_context: Optional[Dict] = None) -> List[Dict[str, str]]:
+        """
+        Generates multiple search query variations for better recall.
+        Returns a list of dicts: {"type": "...", "query": "...", "reasoning": "..."}
+        """
+        constraint_text = ""
+        if core_constraints and "core_constraints" in core_constraints:
+            constraint_text = "\nCRITICAL CONSTRAINTS - Every query variation MUST include at least one term from EACH of these groups:\n"
+            for group in core_constraints["core_constraints"]:
+                constraint_text += f"- Theme '{group['theme']}': ({' OR '.join(group['terms'])})\n"
+
+        vocab_text = ""
+        if vocabulary_context:
+            suggested = vocabulary_context.get("suggested_terms", [])
+            if suggested:
+                vocab_text = f"\nLEARNED VOCABULARY - These terms have worked well in similar searches: {', '.join(suggested[:8])}\n"
+
+        sys_p = (
+            f"You are an expert Reddit Search Engineer. Generate {num_variations} DIFFERENT high-precision Boolean Search Queries.\n\n"
+            "AXES OF VARIATION:\n"
+            "1. BROAD: Less restrictive, high recall.\n"
+            "2. SPECIFIC: High precision, detailed constraints.\n"
+            "3. SYNONYM: Alternative vocabulary/slang.\n"
+            "4. NARRATIVE: Focus on storytelling markers (e.g., 'happened to me', 'first time').\n"
+            "5. JARGON: Niche community terminology.\n\n"
+            "REDDIT SYNTAX: (A OR B) AND (C OR D). Max 3 AND groups, Max 3 terms per OR group.\n"
+            f"{constraint_text}"
+            f"{vocab_text}\n"
+            "Return a JSON object with a 'queries' key containing a list of objects with 'type', 'query', and 'reasoning'."
+        )
+        
+        retries = 3
+        delay = 5
+        while retries > 0:
+            content = "N/A"
+            try:
+                if self.provider == "mistral" and hasattr(self, "client"):
+                    res = self.client.chat.complete(
+                        model="mistral-large-latest",
+                        messages=[
+                            {"role": "system", "content": sys_p},
+                            {"role": "user", "content": description},
+                        ],
+                        response_format={"type": "json_object"},
+                    )
+                    content = str(res.choices[0].message.content)
+                elif hasattr(self, "api_key"):
+                    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={self.api_key}"
+                    pl = {
+                        "contents": [{"parts": [{"text": description}]}],
+                        "system_instruction": {"parts": [{"text": sys_p}]},
+                        "generationConfig": {"response_mime_type": "application/json"},
+                    }
+                    res = requests.post(url, json=pl, headers={"Content-Type": "application/json"})
+                    content = res.json()["candidates"][0]["content"]["parts"][0]["text"]
+                else:
+                    return []
+
+                try:
+                    data = json.loads(content)
+                    queries = data.get("queries", [])
+                    if not queries:
+                        # Fallback for alternative JSON structures
+                        if isinstance(data, list):
+                            queries = data
+                    return queries[:num_variations]
+                except json.JSONDecodeError:
+                    match = re.search(r"({.*})", content, re.DOTALL)
+                    if match:
+                        data = json.loads(match.group(1))
+                        return data.get("queries", [])[:num_variations]
+                    raise
+            except Exception as e:
+                if "429" in str(e):
+                    time.sleep(delay)
+                    retries -= 1
+                    delay *= 2
+                else:
+                    logger.error(f"Error generating query variations: {e}")
+                    if self.debug: logger.debug(f"Raw variations content: {content}")
+                    return []
+        return []
 
     def generate_boolean_string(self, description: str) -> str:
         sys_p = (
@@ -275,6 +483,289 @@ DEFAULT_SEARCH_SUBREDDITS = [
     "family",
 ]
 
+def load_subreddits_config() -> List[str]:
+    """Load subreddits from file or fallback to env/defaults."""
+    if os.path.exists(SUBREDDITS_FILE):
+        try:
+            with open(SUBREDDITS_FILE, "r") as f:
+                subs = json.load(f)
+                if isinstance(subs, list) and subs:
+                    return [s.strip() for s in subs if s.strip()]
+        except Exception as e:
+            logger.warning(f"Error loading subreddits file: {e}")
+            
+    # Fallback
+    return [s.strip() for s in DEFAULT_SUBS_ENV.split(",") if s.strip()]
+
+class ConcurrentSearchPipeline:
+    def __init__(self, engine, llm_filter, criteria, target_posts=10, ai_chunk_size=5):
+        self.engine = engine
+        self.llm = llm_filter
+        self.criteria = criteria
+        self.target_posts = target_posts
+        self.ai_chunk_size = ai_chunk_size
+        
+        self.found_posts = queue.Queue()
+        self.scored_results = []
+        self.scored_lock = threading.Lock()
+        self.is_running = True
+        self.seen_ids = set()
+        
+        # Load Blacklist into seen_ids to skip already processed content
+        if os.path.exists(BLACKLIST_FILE):
+            try:
+                with open(BLACKLIST_FILE, "r") as f:
+                    bl = json.load(f)
+                    for pid in bl:
+                        self.seen_ids.add(pid)
+            except:
+                pass
+        
+        # Stats tracking
+        self.stats = {
+            "fetched": 0,
+            "analyzed": 0,
+            "scores": {
+                "high": 0,   # >= 80
+                "medium": 0, # 60-79
+                "low": 0     # < 60
+            },
+            "per_sub": {} # sub: {"fetched": 0, "approved": 0}
+        }
+        
+    def _search_worker(self, query, subreddits, sort_by, time_filter, post_type, limit=100):
+        try:
+            # If subreddits is just ["all"] or empty, use the configured default list
+            search_subs = subreddits
+            if not search_subs or (len(search_subs) == 1 and search_subs[0] == "all"):
+                 search_subs = DEFAULT_SEARCH_SUBREDDITS
+            
+            # Use configured subreddits if we are in a broader mode
+            # But the caller usually handles this. Let's just trust the passed subreddits list
+            # unless it explicitly asks for 'default' expansion.
+            
+            with concurrent.futures.ThreadPoolExecutor(max_workers=min(len(search_subs), 10)) as executor:
+                futures = []
+                for sub in search_subs:
+                    if not self.is_running: break
+                    futures.append(executor.submit(self._search_sub, sub, query, sort_by, time_filter, post_type, limit))
+                
+                for future in concurrent.futures.as_completed(futures):
+                    try:
+                        future.result()
+                    except Exception as e:
+                        logger.error(f"Thread error in search: {e}")
+        finally:
+            self.found_posts.put(None) # End of search sentinel
+
+    def _search_sub(self, sub, query, sort_by, time_filter, post_type, limit=100):
+        try:
+            # Use lowercase for consistent mapping in stats
+            sub_key = sub.lower()
+            with self.scored_lock:
+                if sub_key not in self.stats["per_sub"]:
+                    self.stats["per_sub"][sub_key] = {"fetched": 0, "approved": 0}
+
+            # We use a limited window per sub for speed
+            search_api = self.engine.reddit.subreddit(sub).search(
+                query, sort=sort_by, time_filter=time_filter, limit=limit
+            )
+            for post in search_api:
+                if not self.is_running: break
+                
+                with self.scored_lock:
+                    if post.id in self.seen_ids: continue
+                    self.seen_ids.add(post.id)
+                
+                if (post_type == "text" and not post.is_self) or (post_type == "media" and post.is_self):
+                    continue
+                
+                p_data = {
+                    "id": post.id,
+                    "title": post.title,
+                    "sub": post.subreddit.display_name,
+                    "url": f"https://www.reddit.com{post.permalink}",
+                    "content": post.selftext,
+                    "timestamp": post.created_utc,
+                    "upvotes": post.score,
+                    "num_comments": post.num_comments
+                }
+                with self.scored_lock:
+                    self.stats["fetched"] += 1
+                    self.stats["per_sub"][sub_key]["fetched"] += 1
+                
+                self.found_posts.put((post, p_data))
+                
+                # Check early termination based on already scored results
+                with self.scored_lock:
+                    if len([r for r in self.scored_results if r.get('score', 0) >= 80]) >= self.target_posts:
+                        self.is_running = False
+                        break
+        except Exception as e:
+            logger.warning(f"Error scanning r/{sub}: {e}")
+
+    def _process_batch_gen(self, batch):
+        posts_to_analyze = [p[1] for p in batch]
+        results = self.llm.analyze(posts_to_analyze, self.criteria)
+        
+        with self.scored_lock:
+            pmap = {p[1]['id']: p[1] for p in batch} # Map ID to p_data (dict)
+            for r in results:
+                post_data = pmap.get(r['id'])
+                if post_data:
+                    # Merge metadata into result
+                    r.update(post_data)
+                    
+                    # Content Quality Signals
+                    bonus = 0
+                    if len(r.get('content', '')) > 800: bonus += 7
+                    if r.get('upvotes', 0) > 200: bonus += 5
+                    if r.get('num_comments', 0) > 20: bonus += 3
+                    
+                    # 5. Feedback Bias (Learning Feature)
+                    bias = self.engine._get_subreddit_bias(r.get('sub', ''))
+                    score = min(100, (r.get('score', 0) * bias) + bonus)
+                    r['score'] = score
+                    
+                    # Update stats
+                    self.stats["analyzed"] += 1
+                    sub_key = r.get('sub', '').lower()
+                    if score >= 80:
+                        self.stats["scores"]["high"] += 1
+                        if sub_key in self.stats["per_sub"]:
+                            self.stats["per_sub"][sub_key]["approved"] += 1
+                    elif score >= 60:
+                        self.stats["scores"]["medium"] += 1
+                    else:
+                        self.stats["scores"]["low"] += 1
+                
+                self.scored_results.append(r)
+                yield f"<<<POST_SCORED>>>{json.dumps(r)}"
+            
+            if len([r for r in self.scored_results if r.get('score', 0) >= 80]) >= self.target_posts:
+                self.is_running = False
+
+    def run_tournament(self, variations, subreddits, sort_by, time_filter, post_type):
+        yield "🏆 Starting Query Tournament (5 competing variations):"
+        for i, var in enumerate(variations, 1):
+            yield f"   {i}. [{var['type']}] \"{var['query']}\""
+        yield ""
+        
+        performance = {}
+        with concurrent.futures.ThreadPoolExecutor(max_workers=len(variations)) as executor:
+            future_to_var = {
+                executor.submit(self._test_variation, var, subreddits, sort_by, time_filter, post_type): var 
+                for var in variations
+            }
+            for future in concurrent.futures.as_completed(future_to_var):
+                var = future_to_var[future]
+                try:
+                    stats = future.result()
+                    # New weighted score
+                    v_score = (stats['high_quality'] * 10) + (stats['avg_score'] * 0.5)
+                    performance[var['query']] = {**stats, "v_score": v_score, "type": var['type']}
+                    yield f"   📊 Variant '{var['type']}': {stats['high_quality']} matches found (avg {stats['avg_score']:.1f}) | Score: {v_score:.1f}"
+                except Exception as e:
+                    logger.error(f"Tournament error: {e}")
+        
+        if not performance: return [variations[0]['query']]
+        
+        # Sort by variant score descending
+        sorted_variants = sorted(performance.items(), key=lambda x: x[1]['v_score'], reverse=True)
+        winner = sorted_variants[0][0]
+        yield f"✅ Tournament Winner: \"{winner}\""
+        
+        # Return top 3 queries
+        return [q for q, s in sorted_variants[:3]]
+
+    def _test_variation(self, var, subreddits, sort_by, time_filter, post_type):
+        # Increased sample size: test across 3 subs, up to 50 posts total
+        test_subs = subreddits[:3] if "all" not in subreddits else DEFAULT_SEARCH_SUBREDDITS[:3]
+        found = []
+        for sub in test_subs:
+            try:
+                # Per-variant sample size increased to 20 per sub (max 60 total)
+                for p in self.engine.reddit.subreddit(sub).search(var['query'], sort=sort_by, time_filter=time_filter, limit=20):
+                    if (post_type == "text" and not p.is_self) or (post_type == "media" and p.is_self): continue
+                    found.append({
+                        "id": p.id, 
+                        "title": p.title, 
+                        "content": p.selftext[:500],
+                        "sub": p.subreddit.display_name,
+                        "upvotes": p.score,
+                        "num_comments": p.num_comments
+                    })
+                    if len(found) >= 50: break
+                if len(found) >= 50: break
+            except: continue
+        
+        if not found: return {"avg_score": 0, "high_quality": 0}
+        
+        # We need to analyze them via LLMFilter.analyze to get real scores
+        results = self.llm.analyze(found, self.criteria)
+        
+        # Score the variant results using the same logic as real search
+        scored = []
+        for r in results:
+            pmap = {p['id']: p for p in found}
+            p_data = pmap.get(r['id'])
+            if p_data:
+                bonus = 0
+                if len(p_data['content']) > 400: bonus += 7
+                if p_data['upvotes'] > 200: bonus += 5
+                
+                bias = self.engine._get_subreddit_bias(p_data['sub'])
+                r['score'] = min(100, (r.get('score', 0) * bias) + bonus)
+                scored.append(r)
+
+        avg = sum(r.get('score', 0) for r in scored) / len(scored) if scored else 0
+        hq = len([r for r in scored if r.get('score', 0) >= 75]) # Slightly lower threshold for tournament
+        return {"avg_score": avg, "high_quality": hq}
+
+    def execute(self, query, subreddits, sort_by="new", time_filter="all", post_type="any", limit=100):
+        # 0. Show Configuration
+        yield f"\n🔍 Search Pass Configuration:"
+        yield f"   Query: {query}"
+        yield f"   Sort: {sort_by} | Time: {time_filter} | Limit: {limit}/sub"
+        
+        # Reset running state if we're adding another pass
+        self.is_running = True
+        
+        search_t = threading.Thread(
+            target=self._search_worker, 
+            args=(query, subreddits, sort_by, time_filter, post_type, limit)
+        )
+        search_t.start()
+        
+        batch = []
+        while self.is_running or not self.found_posts.empty():
+            try:
+                item = self.found_posts.get(timeout=0.5)
+                if item is None: break
+                
+                batch.append(item)
+                if len(batch) >= self.ai_chunk_size:
+                    yield from self._process_batch_gen(batch)
+                    batch = []
+            except queue.Empty:
+                if not self.is_running: break
+                continue
+            
+            # Key Fix: Stop processing queue immediately if target met
+            if not self.is_running:
+                break
+        
+        if batch:
+            yield from self._process_batch_gen(batch)
+            
+        self.is_running = False
+        search_t.join()
+        
+        with self.scored_lock:
+            final = sorted(self.scored_results, key=lambda x: x.get('score', 0), reverse=True)
+            yield f"✅ Pass Complete. Total candidates analyzed: {self.stats['analyzed']} ({self.stats['scores']['high']} high-quality)"
+            return final
+
 
 class RedditSearchEngine:
     def __init__(self, provider: str = "mistral", debug: bool = False):
@@ -284,6 +775,38 @@ class RedditSearchEngine:
             client_id=REDDIT_ID, client_secret=REDDIT_SECRET, user_agent=REDDIT_AGENT
         )
         self.llm = LLMFilter(provider, debug=debug)
+
+    def _get_subreddit_bias(self, sub: str) -> float:
+        """Calculate score multiplier based on historical feedback."""
+        try:
+            fb_file = "feedback.json"
+            if not os.path.exists(fb_file): return 1.0
+            with open(fb_file, "r") as f:
+                data = json.load(f)
+            if sub not in data: return 1.0
+            pos = data[sub].get("positive", 0)
+            neg = data[sub].get("negative", 0)
+            total = pos + neg
+            if total == 0: return 1.0
+            ratio = (pos - neg) / total
+            return 1.0 + (ratio * 0.25) # Max +25% boost, -25% penalty
+        except Exception: return 1.0
+
+    def _log_feedback(self, sub: str, feedback_type: str):
+        """Persist user feedback for a subreddit."""
+        try:
+            fb_file = "feedback.json"
+            fb_data = {}
+            if os.path.exists(fb_file):
+                with open(fb_file, "r") as f:
+                    fb_data = json.load(f)
+            if sub not in fb_data:
+                fb_data[sub] = {"positive": 0, "negative": 0}
+            fb_data[sub][feedback_type] = fb_data[sub].get(feedback_type, 0) + 1
+            with open(fb_file, "w") as f:
+                json.dump(fb_data, f, indent=2)
+        except Exception as e:
+            logger.error(f"Error logging feedback: {e}")
 
     def _log(self, msg: str):
         if self.debug:
@@ -362,137 +885,202 @@ class RedditSearchEngine:
         sort_by: str = "new",
         time_filter: str = "all",
         post_type: str = "any",
+        use_tournament: bool = False,
+        exhaustive: bool = False,
+        no_fallback: bool = False
     ) -> Generator[str, None, List]:
-        # 1. Parse keywords for client-side filtering
-        parsed_groups = self.parse_keywords(keywords)
-        # 2. Build Reddit-compatible query for API calls
-        reddit_query = self.build_reddit_query(parsed_groups)
-        print(reddit_query)
-        if self.debug:
-            self._log(f"DEBUG: Parsed Filter Groups: {parsed_groups}")
-            self._log(f"DEBUG: Reddit Query: {reddit_query}")
-
-        yield f"⚙️ Mode: Iterative Search\n🔎 Query: {keywords}\n🎯 Goal: Find {target_posts} posts total."
-
-        all_matches = []
-        seen_ids = set()
-        total_matches = 0  # Track total matches across all subreddits
-
-        def perform_fetch(query, limit):
-            search_subs = (
-                subreddits if "all" not in subreddits else DEFAULT_SEARCH_SUBREDDITS
+        """
+        Orchestrates parallel search and scoring.
+        """
+        start_time = time.time()
+        
+        # 0. Initial Status
+        yield f"🚀 Concurrent Pipeline Activated\n🔎 Initial Query: {keywords}\n🎯 Target: {target_posts} posts"
+        
+        pipeline = ConcurrentSearchPipeline(self, self.llm, criteria or keywords, target_posts, ai_chunk_size)
+        
+        # 1. Multi-Query Tournament
+        top_queries = [keywords]
+        if use_tournament and criteria:
+            yield "🎯 Analyzing description for core characteristics..."
+            core_constraints = self.llm.extract_core_characteristics(criteria)
+            
+            if core_constraints and "core_constraints" in core_constraints:
+                themes = [c["theme"] for c in core_constraints["core_constraints"]]
+                yield f"   🔒 Identified Mandatory constraints: {', '.join(themes)}"
+            
+            # Learning System: Check for similar past successes
+            vocabulary_context = None
+            tagged_db = load_tagged_results()
+            favorites_db = load_favorites()
+            
+            # Combine tagged historical successes and favorites for better learning
+            training_data = {**tagged_db, **favorites_db}
+            
+            if training_data:
+                similar = find_similar_posts(criteria, training_data, top_k=8)
+                if similar:
+                    vocabulary_context = analyze_vocabulary(similar)
+                    yield f"   📚 Learning from {len(similar)} similar results/favorites..."
+                    
+                    # Also influence the criteria for better scoring later
+                    if vocabulary_context and vocabulary_context['suggested_terms']:
+                        criteria = f"{criteria}\n(Preferred context: {', '.join(vocabulary_context['suggested_terms'])})"
+            
+            variations = self.llm.generate_query_variations(
+                criteria, 
+                num_variations=5, 
+                core_constraints=core_constraints,
+                vocabulary_context=vocabulary_context
             )
-            yield f"ℹ️ Searching across {len(search_subs)} subreddits."
-            nonlocal total_matches  # Allow modification of outer variable
-
-            for sub in search_subs:
-                self._log(f"Searching r/{sub}...")
-                yield f"📡 Scanning r/{sub}..."
+            if variations:
+                gen = pipeline.run_tournament(variations, subreddits, sort_by, time_filter, post_type)
                 try:
-                    # Use a larger fetch limit because we filter locally
-                    fetch_limit = max(limit * 2, 50)
+                    while True:
+                        yield next(gen)
+                except StopIteration as e:
+                    top_queries = e.value or [keywords]
+            else:
+                yield "⚠️ Variation generation failed, falling back to original keywords."
+        
+        # 2. Tiered Search Cascade
+        final_posts = []
+        current_threshold = 80
+        
+        # Helper check for quota
+        def quota_met():
+            if exhaustive: return False
+            return len([p for p in final_posts if p.get('score', 0) >= current_threshold]) >= target_posts
 
-                    for post in self.reddit.subreddit(sub).search(
-                        query,
-                        sort=sort_by,
-                        time_filter=time_filter,
-                        limit=fetch_limit,
-                    ):
-                        if post.id in seen_ids:
-                            continue
-                        seen_ids.add(post.id)
+        # List of sorts to try in order
+        sort_cascade = [sort_by]
+        if not no_fallback:
+            additional_sorts = ["relevance", "top", "hot", "comments"]
+            sort_cascade.extend([s for s in additional_sorts if s != sort_by])
 
-                        if (post_type == "text" and not post.is_self) or (
-                            post_type == "media" and post.is_self
-                        ):
-                            continue
+        # Tier 1 & 2: Tournament Queries + Sorts
+        for q_idx, query in enumerate(top_queries):
+            if quota_met(): break
+            
+            for s_idx, current_sort in enumerate(sort_cascade):
+                if quota_met(): break
+                
+                # In Tier 1 (Winner), try all sorts. In Tier 2, maybe just top 1-2 sorts unless exhaustive
+                if q_idx > 0 and s_idx > 1 and not exhaustive: break
+                
+                label = "Primary" if q_idx == 0 else f"Secondary #{q_idx}"
+                yield f"\n📡 Starting {label} Search Pass (sort={current_sort})..."
+                
+                limit = 500 if exhaustive else manual_limit
+                gen = pipeline.execute(query, subreddits, current_sort, time_filter, post_type, limit=limit)
+                
+                try:
+                    while True:
+                        yield next(gen)
+                except StopIteration as e:
+                    # Pipeline already has all results in pipeline.scored_results
+                    final_posts = pipeline.scored_results
 
-                        # Local filtering - only yield progress, not full post content
-                        full_text = f"{post.title} {post.selftext}"
-                        if self.matches_logic(full_text, parsed_groups):
-                            total_matches += 1
-                            # Just show progress, not full post content
-                            yield f"📍 Found match #{total_matches}: {post.title[:60]}..."
-                            p_data = {
-                                "id": post.id,
-                                "title": post.title,
-                                "sub": post.subreddit.display_name,
-                                "url": f"https://www.reddit.com{post.permalink}",
-                                "content": post.selftext[:500] + "...",
-                                "timestamp": post.created_utc,
-                            }
-                            # Store for later processing, don't yield to stream
-                            all_matches.append((post, p_data))
-                        elif self.debug:
-                            self._log(
-                                f"DEBUG: Filtered out {post.id} ({post.title[:30]}...)"
-                            )
+        # Tier 3: Expanded Parameters (if still needed)
+        if not quota_met() and not no_fallback:
+            yield f"\n🔄 Quota not met ({len([p for p in final_posts if p.get('score', 0) >= 80])}/{target_posts}). Attempting Tier 3 (Expanded Parameters)..."
+            # Try winner query with 'all' time and higher limit
+            gen = pipeline.execute(top_queries[0], subreddits, "top", "all", post_type, limit=500)
+            try:
+                while True:
+                    yield next(gen)
+            except StopIteration as e:
+                final_posts = pipeline.scored_results
 
-                        # Stop if we've reached the total limit across all subreddits
-                        if total_matches >= limit:
-                            yield f"🛑 Reached limit of {limit} matches."
-                            return  # Exit the function entirely
-                except Exception as e:
-                    self._log(f"Error in r/{sub}: {e}")
-                    continue
+        # Tier 4: Adaptive Scoring (Threshold lowering)
+        if not quota_met() and not no_fallback:
+            yield f"\n⚠️ Quota still not met. Attempting Tier 4 (Adaptive Scoring)..."
+            for threshold in [70, 60]:
+                current_threshold = threshold
+                yield f"   📉 Relaxing quality threshold to ≥{threshold}..."
+                if quota_met():
+                    yield f"   ✅ Quota met with threshold {threshold}."
+                    break
 
-        # Execute Fetch - Use the built reddit_query, not the original keywords
-        for _ in perform_fetch(reddit_query, manual_limit):
-            pass
+        # Final Cleanup & Stats
+        pipeline.is_running = False
+            
+        # 4. Metrics Logging (Learning features)
+        duration = time.time() - start_time
+        overall_query = top_queries[0] if top_queries else keywords
+        self._log_search_metrics(overall_query, criteria or keywords, subreddits, len(final_posts), duration)
+        
+        # Show Detailed Stats
+        yield "\n📊 Search Statistics:"
+        yield f"   - Posts fetched from Reddit: {pipeline.stats['fetched']}"
+        yield f"   - Posts analyzed by LLM: {pipeline.stats['analyzed']}"
+        yield f"   - Distribution: {pipeline.stats['scores']['high']} High, {pipeline.stats['scores']['medium']} Medium, {pipeline.stats['scores']['low']} Low"
+        
+        # 5. Tag Extraction & Enrichment for Learning System
+        if final_posts:
+            tagged_db = load_tagged_results()
+            
+            # First, enrich all posts with tags if they exist in DB
+            for p in final_posts:
+                if p['id'] in tagged_db:
+                    p['tags'] = tagged_db[p['id']].get('tags', [])
 
-        if not all_matches:
-            yield "\n❌ No posts found matching strict criteria."
-            yield "💡 Tip: Reddit's search covers comments, but this tool filters by Title/Body. Try removing quotes or broad terms."
-            return []
-
-        yield f"✅ Found {len(all_matches)} candidate posts."
-
-        if criteria:
-            yield f"\n🤖 AI Analyzing {len(all_matches)} candidates..."
-            processed, pmap = [], {}
-            for post, p_data in all_matches:
-                processed.append(
-                    {
-                        "id": p_data["id"],
-                        "sub": p_data["sub"],
-                        "title": p_data["title"],
-                        "content": p_data["content"],
-                    }
-                )
-                pmap[p_data["id"]] = post
-
-            scored_results = []
-            for i in range(0, len(processed), ai_chunk_size):
-                batch = processed[i : i + ai_chunk_size]
-                yield f"   Processing batch {i // ai_chunk_size + 1}..."
-                results = self.llm.analyze(batch, criteria)
-                for r in results:
-                    yield f"<<<POST_SCORED>>>{json.dumps(r)}"
-                    if r.get("score", 0) > 50:
-                        scored_results.append(r)
-
-            scored_results.sort(key=lambda x: x.get("score", 0), reverse=True)
-            final_posts = []
-            for r in scored_results[:target_posts]:
-                if r["id"] in pmap:
-                    post = pmap[r["id"]]
-                    final_posts.append(
-                        {
-                            "id": r["id"],
-                            "title": post.title,
-                            "sub": post.subreddit.display_name,
-                            "url": f"https://www.reddit.com{post.permalink}",
-                            "score": r.get("score", 0),
-                            "content": post.selftext,
+            # Then, extract new tags for high-scorers not yet in DB
+            high_scorers_to_extract = [p for p in final_posts if p.get('score', 0) >= 80 and p['id'] not in tagged_db]
+            
+            if high_scorers_to_extract:
+                yield f"🏷️ Extracting tags from {len(high_scorers_to_extract[:3])} new high-scoring posts..."
+                for post in high_scorers_to_extract[:3]:
+                    tags = self.llm.extract_tags(post)
+                    if tags:
+                        post['tags'] = tags.get('tags', [])
+                        tagged_db[post['id']] = {
+                            "title": post.get('title', ''),
+                            "content": post.get('content', '')[:2000],
+                            "score": post.get('score', 0),
+                            "original_query": overall_query,
+                            "tags": post['tags'],
+                            "effective_terms": tags.get('effective_terms', []),
+                            "timestamp": post.get('timestamp') or time.time()
                         }
-                    )
-            yield f"   🎉 Approved {len(final_posts)} posts."
-            yield f"<<<APPROVED_POSTS>>>{json.dumps(final_posts)}"
-            yield "<<<DONE>>>"
-            return final_posts
+                save_tagged_results(tagged_db)
+                yield f"   ✅ Learning complete."
+        
+        # 6. Blacklist high-scorers (>85) to avoid processing them in next runs
+        high_scorers_to_bl = [p for p in final_posts if p.get('score', 0) >= 85]
+        if high_scorers_to_bl:
+            self.save_to_blacklist(high_scorers_to_bl, overall_query, criteria or keywords)
+            yield f"   🔒 {len(high_scorers_to_bl)} posts added to blacklist (already processed)."
 
-        # No AI criteria - return PRAW post objects
-        return all_matches[:target_posts]
+        # Final sorting by score descending
+        if final_posts:
+            final_posts = sorted(final_posts, key=lambda x: x.get('score', 0), reverse=True)
+            
+        yield "<<<DONE>>>"
+        return final_posts
+
+    def _log_search_metrics(self, keywords, criteria, subreddits, count, duration):
+        try:
+            entry = {
+                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                "query": keywords,
+                "criteria": criteria,
+                "subs_count": len(subreddits),
+                "subs": subreddits[:10],
+                "result_count": count,
+                "duration_sec": round(duration, 2)
+            }
+            log_file = "search_log.json"
+            data = []
+            if os.path.exists(log_file):
+                with open(log_file, "r") as f:
+                    try: data = json.load(f)
+                    except: pass
+            data.append(entry)
+            with open(log_file, "w") as f:
+                json.dump(data[-50:], f, indent=2)
+        except Exception as e:
+            logger.error(f"Metric logging error: {e}")
 
     def save_to_blacklist(self, posts: List, keywords: str, criteria: str):
         current_bl = {}
@@ -504,10 +1092,14 @@ class RedditSearchEngine:
                 logger.warning(f"Could not load blacklist file: {e}")
 
         for p in posts:
-            current_bl[p.id] = {
-                "id": p.id,
-                "title": p.title,
-                "url": f"https://www.reddit.com{p.permalink}",
+            pid = p.get('id') if isinstance(p, dict) else p.id
+            title = p.get('title') if isinstance(p, dict) else p.title
+            url = p.get('url') if isinstance(p, dict) else f"https://www.reddit.com{p.permalink}"
+            
+            current_bl[pid] = {
+                "id": pid,
+                "title": title,
+                "url": url,
                 "keywords": keywords,
                 "criteria": criteria,
                 "timestamp": time.time(),
@@ -663,6 +1255,33 @@ def clear_blacklist():
         return jsonify({"error": "Failed to clear blacklist"}), 500
 
 
+@app.route("/api/favorites", methods=["GET"])
+def get_favorites_api():
+    return jsonify(load_favorites())
+
+
+@app.route("/api/favorites", methods=["POST"])
+def add_favorite_api():
+    post = request.json
+    if not post or 'id' not in post:
+        return jsonify({"error": "Invalid post data"}), 400
+    
+    favs = load_favorites()
+    favs[post['id']] = post
+    save_favorites(favs)
+    return jsonify({"status": "favorited"})
+
+
+@app.route("/api/favorites/<post_id>", methods=["DELETE"])
+def remove_favorite_api(post_id):
+    favs = load_favorites()
+    if post_id in favs:
+        del favs[post_id]
+        save_favorites(favs)
+        return jsonify({"status": "removed"})
+    return jsonify({"error": "Not found"}), 404
+
+
 @app.route("/api/subreddits", methods=["GET"])
 def get_subreddits():
     if os.path.exists(SUBREDDITS_FILE):
@@ -768,35 +1387,40 @@ def stream():
             sort_by=args.get("sort", "new"),
             time_filter=args.get("time", "all"),
             post_type=args.get("post_type", "any"),
+            use_tournament=args.get("tournament") == "true",
+            exhaustive=args.get("exhaustive") == "true",
+            no_fallback=args.get("no_fallback") == "true"
         )
         final_posts = []
-        try:
-            while True:
-                yield send(next(gen))
-        except StopIteration as e:
-            final_posts = e.value
+        it = iter(gen)
+        while True:
+            try:
+                msg = next(it)
+                if msg.startswith("<<<POST_SCORED>>>"):
+                    try:
+                        data = json.loads(msg.replace("<<<POST_SCORED>>>", ""))
+                        clean_msg = f"   ⭐ [{data.get('score', 0):.1f}] r/{data.get('sub')}: {data.get('title', '')[:40]}..."
+                        yield send(clean_msg)
+                    except: pass
+                elif msg.startswith("<<<"): 
+                    pass # hide other protocol messages
+                else:
+                    yield send(msg)
+            except StopIteration as e:
+                final_posts = e.value
+                break
 
-        # Send HTML formatted results for the frontend
-        html_res = ""
-        for p in final_posts:
-            # Handle both PRAW objects and dictionary format
-            if isinstance(p, dict):
-                # Dictionary format (with AI criteria)
-                title = p.get("title", "")
-                sub = p.get("sub", "")
-                url = p.get("url", "")
-                content = p.get("content", "")
-            else:
-                # PRAW object format (without AI criteria)
-                title = p.title
-                sub = p.subreddit.display_name
-                url = f"https://www.reddit.com{p.permalink}"
-                content = p.selftext
+        if final_posts:
+             # Save to results/ folder if running from web too
+            os.makedirs("results", exist_ok=True)
+            # Use timestamp + query/criteria for filename
+            q_safe = "".join(c for c in (args.get("criteria") or args.get("keywords") or "results") if c.isalnum() or c in (' ', '_'))[:50].strip().replace(" ", "_")
+            filename = f"results/{time.strftime('%Y%m%d_%H%M%S')}_{q_safe}.html"
+            _generate_html_report(final_posts, q_safe, filename)
+            yield send(f"💾 Saved report: {filename}")
 
-            safe_body = escape(content).replace("\n", "<br>")
-            html_res += f"""<div class="card"><h3>{escape(title)}</h3><span class="meta">r/{escape(sub)} | <a href="{url}" target="_blank">Open</a></span><hr style="border-color:#333"><div class="body-text">{safe_body}</div></div>"""
-
-        yield send(f"<<<HTML_RESULT>>>{html_res.replace('\n', '||NEWLINE||')}")
+        # Send HTML formatted results/JSON for the frontend to render the list
+        yield send(f"<<<APPROVED_POSTS>>>{json.dumps(final_posts)}")
 
     return Response(generate(), mimetype="text/event-stream")
 
@@ -827,6 +1451,22 @@ def stream_discovery():
         yield send("<<<DONE>>>")
 
     return Response(generate(), mimetype="text/event-stream")
+
+
+@app.route("/api/feedback", methods=["POST"])
+def api_feedback():
+    data = request.json
+    if not data or "subreddit" not in data or "type" not in data:
+        return jsonify({"error": "Missing subreddit or type"}), 400
+    
+    sub = data["subreddit"]
+    fb_type = data["type"] # "positive" or "negative"
+    if fb_type not in ["positive", "negative"]:
+        return jsonify({"error": "Invalid feedback type"}), 400
+        
+    engine = RedditSearchEngine()
+    engine._log_feedback(sub, fb_type)
+    return jsonify({"status": "success"})
 
 
 def run_cli():
@@ -937,6 +1577,21 @@ Examples:
         default=5,
         help="Batch size for AI analysis (default: 5)",
     )
+    search_parser.add_argument(
+        "--tournament",
+        action="store_true",
+        help="Enable Query Tournament to test multiple variations (default: False)",
+    )
+    search_parser.add_argument(
+        "--exhaustive",
+        action="store_true",
+        help="Try all sort methods and variants for maximum recall (slower)",
+    )
+    search_parser.add_argument(
+        "--no-fallback",
+        action="store_true",
+        help="Disable automatic fallback cascade if quota not met",
+    )
 
     # =========================================================================
     # CURATE COMMAND - AI-powered search from description
@@ -1021,9 +1676,25 @@ The 'curate' command automatically:
         help="Batch size for AI analysis (default: 5)",
     )
     curate_parser.add_argument(
+        "--exhaustive",
+        action="store_true",
+        help="Try all sort methods and variants for maximum recall (slower)",
+    )
+    curate_parser.add_argument(
+        "--no-fallback",
+        action="store_true",
+        help="Disable automatic fallback cascade if quota not met",
+    )
+    curate_parser.add_argument(
         "--no_score",
         action="store_true",
         help="Skip AI scoring - return raw search results (faster, no LLM needed)",
+    )
+    curate_parser.add_argument(
+        "--tournament",
+        action="store_true",
+        default=True,
+        help="Enable Query Tournament to test multiple variations (default: True for curate)",
     )
 
     # =========================================================================
@@ -1093,23 +1764,64 @@ def _run_search_command(args):
         sort_by=args.sort,
         time_filter=args.time,
         post_type=args.post_type,
+        use_tournament=args.tournament,
+        exhaustive=args.exhaustive,
+        no_fallback=args.no_fallback
     )
     final_posts = []
-    try:
-        for msg in gen:
+    it = iter(gen)
+    while True:
+        try:
+            msg = next(it)
             if not args.json:
                 print(msg)
-    except StopIteration as e:
-        final_posts = e.value
+        except StopIteration as e:
+            final_posts = e.value
+            break
+
+    if final_posts:
+        # Save results to file
+        os.makedirs("results", exist_ok=True)
+        sanitized_q = "".join(c for c in args.keywords if c.isalnum() or c in (' ', '_'))[:50].strip().replace(" ", "_")
+        filename_json = f"results/{time.strftime('%Y%m%d_%H%M%S')}_{sanitized_q}.json"
+        filename_html = f"results/{time.strftime('%Y%m%d_%H%M%S')}_{sanitized_q}.html"
+        
+        output_data = [
+            {
+                "id": p.get("id"),
+                "title": p.get("title"),
+                "subreddit": p.get("sub"),
+                "url": p.get("url"),
+                "content": p.get("content"),
+                "score": p.get("score"),
+            }
+            for p in final_posts
+        ]
+        
+        with open(filename_json, "w") as f:
+            json.dump(output_data, f, indent=2)
+        
+        # Extract terms from query for highlighting
+        import re
+        highlight_terms = re.findall(r'"([^"]+)"|([a-zA-Z]+)', args.keywords)
+        highlight_terms = [t[0] or t[1] for t in highlight_terms if t[0] or t[1]]
+        highlight_terms = [t for t in highlight_terms if t.upper() not in ('AND', 'OR', 'NOT')]
+            
+        _generate_html_report(final_posts, args.keywords, filename_html, highlight_terms=highlight_terms)
+            
+        print(f"\n💾 Results saved to:")
+        print(f"   - JSON: {filename_json}")
+        print(f"   - HTML: {filename_html}")
 
     if args.json:
         output = [
             {
-                "id": p.id,
-                "title": p.title,
-                "subreddit": p.subreddit.display_name,
-                "url": f"https://www.reddit.com{p.permalink}",
-                "content": p.selftext,
+                "id": p.get("id"),
+                "title": p.get("title"),
+                "subreddit": p.get("sub"),
+                "url": p.get("url"),
+                "content": p.get("content"),
+                "score": p.get("score"),
             }
             for p in final_posts
         ]
@@ -1152,13 +1864,12 @@ def _run_curate_command(args):
     print(f"\n🔍 Step 2/3: Scanning Reddit for matching posts...")
     engine = RedditSearchEngine(provider=args.provider, debug=args.debug)
 
-    subs = (
-        [s.strip() for s in args.subreddits.split(",")]
-        if args.subreddits
-        else DEFAULT_SUBS_ENV.split(",")
-    )
+    if args.subreddits:
+        subs = [s.strip() for s in args.subreddits.split(",")]
+    else:
+        subs = load_subreddits_config()
 
-    print(f"   📂 Scanning {len(subs)} subreddits...")
+    print(f"   📂 Scanning {len(subs)} subreddits: {', '.join(subs[:5])}{'...' if len(subs)>5 else ''}")
     if not args.json:
         print(f"   📊 Target: {args.target_posts} posts | Scan limit: {args.limit}")
 
@@ -1174,14 +1885,20 @@ def _run_curate_command(args):
             sort_by=args.sort,
             time_filter=args.time,
             post_type=args.post_type,
+            use_tournament=False, # Tournament doesn't make sense without criteria
+            exhaustive=args.exhaustive,
+            no_fallback=args.no_fallback
         )
         final_posts = []
-        try:
-            for msg in gen:
+        it = iter(gen)
+        while True:
+            try:
+                msg = next(it)
                 if not args.json:
                     print(msg)
-        except StopIteration as e:
-            final_posts = e.value or []
+            except StopIteration as e:
+                final_posts = e.value or []
+                break
     else:
         # Full AI-powered curation with scoring
         gen = engine.search(
@@ -1194,24 +1911,80 @@ def _run_curate_command(args):
             sort_by=args.sort,
             time_filter=args.time,
             post_type=args.post_type,
+            use_tournament=args.tournament,
+            exhaustive=args.exhaustive,
+            no_fallback=args.no_fallback
         )
         final_posts = []
-        try:
-            for msg in gen:
+        it = iter(gen)
+        while True:
+            try:
+                msg = next(it)
                 if not args.json:
-                    print(msg)
-        except StopIteration as e:
-            final_posts = e.value
+                    if msg.startswith("<<<POST_SCORED>>>"):
+                        try:
+                            # Parse structured log and print pretty summary
+                            data = json.loads(msg.replace("<<<POST_SCORED>>>", ""))
+                            score = data.get("score", 0)
+                            title = data.get("title", "")[:60]
+                            sub = data.get("sub", "")
+                            print(f"   ⭐ [{score:.1f}] r/{sub}: {title}...")
+                        except: pass
+                    elif msg.startswith("<<<"): 
+                        pass # Ignore other protocol messages
+                    else:
+                        print(msg)
+            except StopIteration as e:
+                final_posts = e.value
+                break
 
     # Step 3: Display final results
+    if final_posts:
+        # Save results to file
+        os.makedirs("results", exist_ok=True)
+        sanitized_desc = "".join(c for c in args.description if c.isalnum() or c in (' ', '_'))[:50].strip().replace(" ", "_")
+        filename_json = f"results/{time.strftime('%Y%m%d_%H%M%S')}_{sanitized_desc}.json"
+        filename_html = f"results/{time.strftime('%Y%m%d_%H%M%S')}_{sanitized_desc}.html"
+        
+        output_data = [
+            {
+                "id": p.get("id"),
+                "title": p.get("title"),
+                "subreddit": p.get("sub"),
+                "url": p.get("url"),
+                "content": p.get("content"),
+                "score": p.get("score", "N/A"),
+            }
+            for p in final_posts
+        ]
+        
+        with open(filename_json, "w") as f:
+            json.dump(output_data, f, indent=2)
+        
+        # Extract terms from description for highlighting
+        import re
+        highlight_terms = args.description.split()
+        highlight_terms = [t.strip('.,!?()') for t in highlight_terms if len(t) > 3]
+        # Also add key terms from the generated query if available
+        if hasattr(args, '_generated_query'):
+            q_terms = re.findall(r'"([^"]+)"|([a-zA-Z]+)', args._generated_query)
+            highlight_terms.extend([t[0] or t[1] for t in q_terms if t[0] or t[1]])
+        highlight_terms = list(set([t for t in highlight_terms if t.upper() not in ('AND', 'OR', 'NOT', 'THE', 'WAS', 'WHO', 'WHILE')]))
+            
+        _generate_html_report(final_posts, args.description, filename_html, highlight_terms=highlight_terms)
+            
+        print(f"\n💾 Results saved to:")
+        print(f"   - JSON: {filename_json}")
+        print(f"   - HTML: {filename_html}")
+
     if args.json:
         output = [
             {
-                "id": p.get("id") or p.id,
-                "title": p.get("title") or p.title,
-                "subreddit": p.get("sub") or p.subreddit.display_name,
-                "url": p.get("url") or f"https://www.reddit.com{p.permalink}",
-                "content": p.get("content") or p.selftext,
+                "id": p.get("id"),
+                "title": p.get("title"),
+                "subreddit": p.get("sub"),
+                "url": p.get("url"),
+                "content": p.get("content"),
                 "score": p.get("score", "N/A"),
             }
             for p in final_posts
@@ -1230,9 +2003,9 @@ def _run_curate_command(args):
             print(f"{'-' * 60}")
             for i, p in enumerate(final_posts[:5], 1):
                 score = p.get("score", "N/A")
-                title = p.get("title", p.title)[:60]
-                sub = p.get("sub", p.subreddit.display_name)
-                url = p.get("url") or f"https://www.reddit.com{p.permalink}"
+                title = p.get("title", "")[:60]
+                sub = p.get("sub", "")
+                url = p.get("url", "")
                 print(f"\n{i}. {title}...")
                 print(f"   📌 r/{sub} | Score: {score}")
                 print(f"   🔗 {url}")
