@@ -1,0 +1,151 @@
+Research Proposal: Aligned Query Expansion (AQE) for Efficient and Effective Information Retrieval
+
+1.0 Introduction
+
+1.1 Problem Statement
+
+Query expansion is a cornerstone technique in modern Information Retrieval (IR), designed to bridge the "vocabulary mismatch" problem—the frequent discrepancy between the terms users employ in their queries and the terms used in relevant documents. By enriching the initial query with additional context, expansion methods significantly improve search outcomes. Traditionally, this was achieved through statistical methods like Pseudo-Relevance Feedback (PRF), which selected expansion terms from an initial set of top-ranked documents.
+
+The advent of Large Language Models (LLMs) has ushered in a new era of generative query expansion. Methods such as Q2D, which generates pseudo-documents, and GenQREnsemble, which creates multiple sets of keywords, leverage the generative power of LLMs to produce more dynamic and sophisticated expansions. However, these state-of-the-art techniques are predominantly built on a "generate-then-filter" paradigm. This approach is inherently inefficient, requiring the generation of multiple candidate queries or expansions, which are then evaluated by a secondary relevance model to filter out suboptimal content.
+
+The central challenge with this prevailing method is its cost and indirectness. It is computationally expensive, often demanding numerous LLM inferences per user query, which translates directly to higher latency and API costs. More fundamentally, this paradigm fails to provide a direct feedback loop to the generative model itself; it does not teach the LLM which types of expansions are actually effective for retrieval. This results in a system that is not only resource-intensive but also suboptimal, as the model continues to generate expansions without learning from the downstream performance of its outputs.
+
+To overcome these specific limitations, we propose Aligned Query Expansion (AQE), a novel framework that directly optimizes the generative process for retrieval effectiveness.
+
+1.2 Proposed Solution: Aligned Query Expansion (AQE)
+
+We introduce Aligned Query Expansion (AQE) as a new paradigm for LLM-based query expansion. The core principle of AQE is to leverage LLM alignment techniques to fine-tune a model to directly generate expansions that are optimized for retrieval effectiveness. This approach fundamentally shifts the objective from merely generating plausible related terms to generating terms that are proven to increase the rank of relevant documents. By embedding retrieval performance directly into the generative process, AQE eliminates the need for a separate, costly, and inefficient post-generation filtering step.
+
+The primary benefits of the AQE framework are:
+
+* Enhanced Efficiency: By moving away from the "generate-then-filter" model, AQE significantly reduces the computational overhead associated with generating and evaluating multiple expansion candidates. This single-pass generation process lowers latency and minimizes the number of required LLM inferences or API calls per query.
+* Improved Effectiveness: The alignment process directly teaches the model what constitutes a high-quality expansion in the context of a specific retrieval task. By optimizing for downstream retrieval outcomes, the model learns to produce more potent and relevant query expansions that are better equipped to surface relevant documents.
+* Cost-Effectiveness: The combination of reduced computational demand and improved performance makes AQE a more scalable and economically viable solution for building powerful, large-scale information retrieval systems.
+
+Our research objective is to design, implement, and validate the Aligned Query Expansion framework, demonstrating its superiority over current state-of-the-art methods in both computational efficiency and retrieval performance. A review of existing literature will further establish the novelty and critical importance of this research in advancing the field of information retrieval.
+
+2.0 Background and Related Work
+
+To fully appreciate the novelty of the Aligned Query Expansion (AQE) framework, it is essential to understand the evolution of query expansion methodologies. This section surveys key approaches, from traditional statistical models to modern generative techniques, to precisely identify the research gap that AQE is designed to fill. By analyzing the current landscape, we can highlight the architectural shift our proposed solution represents.
+
+2.1 Traditional Query Expansion
+
+Foundational query expansion techniques were developed to address the vocabulary mismatch problem through statistical means. The most prominent of these is Pseudo-Relevance Feedback (PRF), which operates on the assumption that the top-ranked documents from an initial search are relevant. PRF analyzes these documents to identify and select additional query terms. While effective to a degree, these conventional methods are limited by their reliance on static term selection from a potentially noisy initial document set, often failing to capture the full complexity and nuance of a user's underlying intent.
+
+2.2 The Emergence of LLM-Based Query Expansion
+
+The rise of LLMs has enabled a transition toward more dynamic and context-aware query rewriting. These generative methods can create novel reformulations rather than simply extracting existing terms. However, many current state-of-the-art approaches still face significant limitations:
+
+* Q2D: This method uses few-shot prompting to generate entire pseudo-documents that capture the user's information need. While this can provide rich context, the approach lacks an effective mechanism for filtering out less informative or redundant content from the generated text, potentially introducing noise into the retrieval process.
+* Q2C: Leveraging Chain-of-Thought (CoT) prompting, this technique guides an LLM to reformulate a query through a step-by-step reasoning process. A key drawback is its tendency to generate repetitive and insufficiently diverse expansions, limiting the breadth of the resulting search.
+* GenQREnsemble / GenQRFusion: These methods generate multiple (e.g., 10) sets of keywords using different prompts and then either concatenate the keywords or fuse the rankings from individual searches. This brute-force approach suffers from high computational costs, significant redundancy, and often produces narrowly focused outputs that fail to capture the full spectrum of user intent.
+
+2.3 The "Generate-then-Filter" Bottleneck
+
+The analysis of these representative methods reveals a common, inefficient architecture: the "generate-then-filter" approach. This paradigm treats query expansion as a two-stage process. First, an LLM generates a multitude of potential expansions. Second, a separate process—whether it's a relevance model, a fusion algorithm, or manual refinement—is required to filter, rank, or combine these expansions. This is a costly and indirect method for improving query quality, as it expends significant computational resources on generating candidates that will ultimately be discarded and fails to directly improve the generator's ability to produce effective expansions in the first place.
+
+AQE offers a fundamental architectural shift away from this inefficient paradigm by integrating the evaluation of an expansion's effectiveness directly into the generation process itself.
+
+3.0 Proposed Methodology: The AQE Framework
+
+The Aligned Query Expansion (AQE) framework introduces a novel, alignment-centric architecture that rethinks the role of the LLM in query expansion. Instead of using LLMs as one component in a multi-step pipeline, AQE positions a single, fine-tuned model as an end-to-end, optimized generator. It replaces the costly "generate-then-filter" paradigm with direct model alignment, ensuring that the generated expansion is optimized for retrieval performance in a single, efficient pass.
+
+3.1 Conceptual Framework: From Filtering to Alignment
+
+The core innovation of AQE is the transition from a post-hoc filtering mechanism to a proactive alignment strategy. This shift presents a fundamental rethinking of the query expansion workflow. In the prevailing paradigm, effectiveness is an afterthought, bolted on via a secondary filtering or ranking model. In contrast, AQE fine-tunes an LLM to inherently prefer expansions that have historically been proven to increase the rank of relevant documents, thereby embedding retrieval effectiveness directly into the generative process.
+
+The following table contrasts the two workflows:
+
+Feature	Generate-then-Filter (Current SOTA)	Aligned Query Expansion (AQE)
+Workflow	1. Generate multiple expansions (N LLM calls). <br> 2. Apply a secondary relevance model. <br> 3. Filter/fuse to select the best one(s).	1. Generate a single, optimized expansion (1 LLM call).
+Efficiency	Low (multiple LLM calls, secondary model)	High (single-pass generation)
+Cost	High (API calls, computational overhead)	Low (minimal LLM inference)
+Feedback Mechanism	Indirect; generator is not improved by filtering outcomes.	Direct; model is fine-tuned on retrieval performance.
+
+3.2 The Aligned Expansion Generator
+
+The central component of the AQE framework is the Aligned Expansion Generator—a single, fine-tuned LLM that performs a complex expansion task in one pass. Its architecture is not a pipeline of separate agents, but rather a unified model trained to execute a sophisticated internal reasoning process and produce a structured, machine-readable output.
+
+The generator's process is guided by two key principles integrated into its fine-tuning:
+
+1. Socratic Intent Decomposition: To ensure a deep and multi-faceted understanding of user intent, the Aligned Expansion Generator is prompted to initiate its process with a Chain-of-Thought style reasoning step. This internal monologue decomposes the user's query along Socratic dimensions—clarification, assumption probing, and implication probing—before generating any expansion terms. This structured reasoning ensures the subsequent expansion is comprehensive and aligned with the user's core information need.
+2. Direct Generation of Symbolic Syntax: The model is specifically fine-tuned to generate its output directly in Apache Lucene syntax. This is not a post-processing step; the model learns to map its internal confidence scores for expansion terms to symbolic operators. This is informed by a Keyword Efficacy Index, a knowledge store built during offline training that tracks which terms are historically correlated with high relevance. The model learns to apply:
+  * Boosting (^N): To increase the weight of high-efficacy terms that have a strong positive correlation with relevant documents.
+  * Prohibition (-): To explicitly exclude terms correlated with noise or irrelevant "meta-discussions," thereby improving precision.
+
+3.3 The Alignment and Iteration Loop (Offline Training)
+
+The high performance of the Aligned Expansion Generator is achieved through an offline training process we term the Alignment and Iteration Loop. This process uses benchmark data to continuously refine the model's ability to generate effective queries. It is distinct from the online inference process, which is the single, efficient pass a user query goes through.
+
+The loop centers on the Keyword Efficacy Index, a persistent knowledge cache that stores historical data on term effectiveness and decouples the model's internal state from external document retrieval. The iterative training process works as follows: after a query is executed during a training run, benchmark results are used to calculate a "Self-Critique Reward" for the query terms used in the expansion. This reward signal, which measures a term's contribution to improving the rank of correct documents, is used to update the Efficacy Index. This feedback loop continuously refines the generator's parameters, aligning its output with optimal retrieval outcomes.
+
+This integrated framework produces highly effective, structured queries in a single, efficient pass, directly preparing the ground for rigorous experimental validation.
+
+4.0 Experimental Design and Evaluation
+
+The objective of the experimental phase is to rigorously validate the central hypothesis of this research: that the Aligned Query Expansion (AQE) framework outperforms existing state-of-the-art query expansion methods in both retrieval effectiveness and computational efficiency.
+
+4.1 Datasets
+
+To ensure our results are robust and generalizable, the evaluation will be conducted on widely used and heterogeneous Information Retrieval benchmark collections. The selected datasets include:
+
+* BEIR Benchmark: We will use 6 datasets from this comprehensive collection, including Webis-Touche2020, SciFact, and TREC-COVID, to test performance across diverse domains and task types.
+* TREC Deep Learning Passage Datasets: We will use the 2019 and 2020 tracks to evaluate AQE's performance in challenging, large-scale retrieval scenarios.
+
+4.2 Baseline Models
+
+AQE will be benchmarked against a suite of state-of-the-art query expansion methods to provide a clear comparison. The baseline models are:
+
+* Q2D: A representative pseudo-document generation method using few-shot prompting.
+* Q2C: A query reformulation technique guided by Chain-of-Thought (CoT) prompting.
+* GenQREnsemble: A method based on concatenating multiple prompt-based keyword sets.
+* AMD: The Socratic agent framework, a representative "generate-then-filter" pipeline, operating without our proposed alignment mechanism to isolate the specific contribution of the alignment process.
+
+4.3 Evaluation Metrics
+
+Performance will be measured using a combination of standard IR metrics for effectiveness and a direct measure of computational cost.
+
+* Retrieval Effectiveness:
+  * nDCG@10 (Normalized Discounted Cumulative Gain at 10) will be the primary metric for ranking quality.
+  * R@1000 (Recall at 1000) will measure the model's ability to retrieve all relevant documents.
+* Ranking Quality:
+  * Precision@k and Recall@k will provide additional insights into ranking performance at various cutoffs.
+* Computational Cost:
+  * Efficiency will be measured by comparing the number of LLM inferences required per query. We will demonstrate that AQE reduces this from N inferences (e.g., 10 for GenQREnsemble, 3 for AMD) to just one.
+
+4.4 Implementation Plan
+
+* LLM and Retrieval Models: The AQE framework will be implemented using a powerful open-source model such as Qwen2.5-7B-Instruct. Dense retrieval tasks will utilize the multilingual-e5-base model, while BM25 will serve as the sparse retrieval baseline.
+* Retrieval Strategies: To demonstrate the flexibility of the AQE framework, the symbolically structured queries it generates will be tested across three distinct retrieval aggregation methods: sparse concatenation, dense embedding fusion, and Reciprocal Rank Fusion (RRF).
+
+This rigorous experimental setup is designed to provide comprehensive evidence of AQE's performance and efficiency, paving the way for the expected outcomes of this research.
+
+5.0 Expected Outcomes and Contributions
+
+The Aligned Query Expansion (AQE) framework is anticipated to deliver significant advancements in the field of Information Retrieval. We expect this research to not only produce a superior technical solution but also to establish a new state-of-the-art paradigm for efficient and effective LLM-based query expansion.
+
+The expected outcomes are itemized as follows:
+
+1. Demonstrable Performance Improvement: We expect AQE to significantly outperform all baseline models, including Q2D, Q2C, and GenQREnsemble, on key retrieval effectiveness metrics such as nDCG@10 and R@1000. This outperformance is anticipated across both the heterogeneous BEIR benchmarks and the large-scale TREC datasets.
+2. Validation of Efficiency Gains: We hypothesize that AQE will achieve its superior results while reducing the number of LLM inferences from N to 1 per query. By providing concrete proof of this dramatic reduction in computational cost compared to "generate-then-filter" methods like GenQREnsemble and AMD, we will validate the efficiency of the alignment-based approach.
+3. Publication of a Novel Framework: A primary contribution will be the development and open-sourcing of the complete AQE framework. This will provide the research and practitioner communities with a powerful, cost-effective, and replicable tool for advanced query expansion, fostering further innovation.
+4. Establishment of a New QE Paradigm: This research aims to shift the focus of LLM-based query expansion from inefficient, post-hoc filtering to direct model alignment. By demonstrating the clear advantages of teaching a model to optimize for retrieval tasks directly, we expect to open new and promising avenues for research into training and fine-tuning LLMs for specialized IR applications.
+
+These outcomes will be detailed in a high-impact publication, acknowledging potential limitations and outlining clear paths for future investigation.
+
+6.0 Limitations and Future Work
+
+While the Aligned Query Expansion (AQE) framework is poised to make significant contributions, we recognize that all novel research presents both limitations and opportunities for future extension. Acknowledging these aspects is crucial for contextualizing our findings and charting a path for continued innovation in the field.
+
+Potential limitations of this initial research include:
+
+* Dependency on Historical Data: The effectiveness of the Keyword Efficacy Index is contingent upon the quality, quantity, and diversity of the historical benchmark data used for the alignment process. Its performance in domains with sparse training data is an area for further investigation.
+* Alignment Technique: This proposal focuses on an initial implementation of LLM alignment, likely based on preference-based fine-tuning derived from retrieval scores. Other, more sophisticated alignment techniques could potentially yield different or superior results.
+
+Building on this foundational work, we have identified several promising directions for future research:
+
+* Advanced Alignment Methods: Future iterations could explore more sophisticated alignment techniques, such as Direct Preference Optimization (DPO), to further enhance the selectivity and noise-reduction capabilities of the Aligned Expansion Generator.
+* Hybrid Retrieval Integration: An important next step is to extend the AQE framework to generate expansions that are specifically optimized for hybrid sparse-dense retrieval systems, which are becoming increasingly prevalent in modern search architectures.
+* Qualitative Analysis: A detailed qualitative analysis of the generated expansions would offer deeper insights into the model's learned "reasoning" process, particularly the Socratic decomposition steps and the subsequent mapping to symbolic syntax.
+
+In conclusion, Aligned Query Expansion has the transformative potential to redefine the standards for efficiency and effectiveness in information retrieval. By shifting the paradigm from filtering to alignment, this research paves the way for a new generation of intelligent, cost-effective, and powerful search systems.

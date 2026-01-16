@@ -1,0 +1,56 @@
+The 'Self-Critique Guided Iterative Reasoning' paper is highly relevant. Can the _analyze_results method be expanded to perform a multi-step reasoning process, where it first critiques its own previous analysis or proposed query before generating a new one? This would allow it to learn from its past proposed_variations.
+
+Expanding the _analyze_results method into a multi-step reasoning process using the Self-Critique Guided Iterative Reasoning (SiGIR) framework is not only possible but aligns with state-of-the-art agentic retrieval strategies
+. By shifting from a linear "analyze-and-propose" step to a Reflective Feedback loop, the system can systematically identify why previous search variations failed and prevent the accumulation of cascading errors
+.
+
+Here is how you can improve the _analyze_results logic, LLM instructions, and search code to implement this multi-step reasoning:
+1. Multi-Step Reasoning within _analyze_results
+Instead of a single-pass LLM call to generate a new query, you can restructure the method to follow a three-pass internal dialogue:
+• Pass 1: Historical Critique: The LLM is first presented with the entire history of past proposed_variations and their resulting "Average Relevance Scores" from the BenchmarkRun
+. It must explicitly identify patterns of failure, such as topic drift (where scores are low despite finding posts) versus over-constraining (where 0 results are found)
+.
+
+• Pass 2: Rationale Generation: Utilizing Chain-of-Thought (CoT) prompting, the agent is instructed to generate a "self-critique reward" for its previous logic before synthesizing a new query
+.
+
+• Pass 3: Synthesized Proposal: The final output is then generated, incorporating the lessons learned from the critique to adjust Boolean operators or search parameters like is_deep_scan and sort_by
+.
+
+2. Enhancing LLM Instructions for the "Expert"
+You can transform the "Search Optimization Expert" into a Socratic Questioning Agent to refine the search intent through decomposition
+.
+
+• Decomposition Instructions: Instruct the model to break the initial --description into atomic sub-questions (e.g., "What is the primary entity?" and "What is the specific action?")
+.
+
+• Requirement-Aware Expansion: The prompt should maintain a cache of "What is Known" vs. "What is Required"
+. If a previous iteration resolved the "What is the entity" gap but failed on the "action" gap, the critique should instruct the next query to broaden only the action-related terms
+.
+
+• Symbolic Logic Mapping: Explicitly guide the LLM to map "quality feedback" to Lucene syntax modifiers
+. For example, if the judge reported "irrelevant meta-discussions," the expert should be instructed to generate a NOT group like NOT (discussion OR "what do you think")
+.
+
+3. Modifying Code to Support Branching Exploration
+The SiGIR framework relies on branching exploration rather than a single linear path
+.
+
+• Generate Multiple Variations: Modify _analyze_results to return a list of multiple distinct search strategies (e.g., one highly specific query and one broader "Discovery Mode" query) in each iteration
+.
+
+• Cumulative Process Rewards: Update the auto_optimize.py loop to calculate a cumulative reward across iterations for each branch
+. The script can then prune the low-performing branches and keep only the top-k most promising "reasoning trajectories" for the next round
+.
+
+• Stateful Memory Storage: Ensure that the BenchmarkStorage saves not just the result of the search, but also the LLM's internal critique text for each variation, allowing the next iteration to "read" its past thoughts
+.
+
+4. Implementation Example for the System Prompt
+To enable this, the sys_prompt in benchmark_module/benchmarking.py should be updated as follows:
+"You are a Reflective Feedback Agent. First, critique your previous proposed queries found in the historical data. Why did they yield low scores or zero results? Second, identify unresolved information gaps in the current results. Third, propose three new query variations using Lucene syntax, specifically using Boosting (^N) for terms that worked and Prohibition (-) for terms that introduced noise."
+.
+
+
+-------------------------------------------------------------------------------
+Analogy for the Expanded Method: Think of your current system as a student taking a test who just gets a grade back. By expanding it with SiGIR, you are turning that student into one who reviews their graded paper, writes a reflection on their mistakes ("I misunderstood question 2"), and then studies a specific chapter to prepare for the next version of the test, ensuring they don't repeat the same error twice.

@@ -1,0 +1,58 @@
+{
+  "run_id": "6a3a7701",
+  "timestamp": 1768226671.5808737,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "67b83e1d",
+      "type": "specific",
+      "config": {
+        "type": "specific",
+        "manual_query": "(title:(\"pool\" OR \"swimming pool\" OR \"public pool\" OR \"YMCA\" OR \"hotel pool\" OR \"beach club\") AND (\"assaulted\"^2 OR \"groped\"^2 OR \"molested\" OR \"sexually harassed\" OR \"violated\" OR \"felt unsafe\" OR \"touched without consent\")~5 AND (stranger OR \"random guy\" OR \"unknown man\" OR \"someone I didn\u2019t know\") AND (\"as a woman\" OR \"female\" OR \"girl\" OR \"woman\") AND (\"my experience\" OR \"this happened\" OR \"I was\") AND self:true)",
+        "rationale": "Tightens precision with proximity (~5) and boosting (^2) for core terms while expanding assault/pool terminology. Retains strict first-person framing.",
+        "proximity": 5,
+        "boosting": true,
+        "minimum_should_match": 2,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swimming pool\" OR \"public pool\" OR \"YMCA\" OR \"hotel pool\" OR \"beach club\") AND (\"assaulted\"^2 OR \"groped\"^2 OR \"molested\" OR \"sexually harassed\" OR \"violated\" OR \"felt unsafe\" OR \"touched without consent\")~5 AND (stranger OR \"random guy\" OR \"unknown man\" OR \"someone I didn\u2019t know\") AND (\"as a woman\" OR \"female\" OR \"girl\" OR \"woman\") AND (\"my experience\" OR \"this happened\" OR \"I was\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.334205627441406,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "15181b3d",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(title:(\"pool\" OR \"swim\") AND (assault OR harass OR grope OR touch OR violate) AND (stranger OR random OR unknown) AND (woman OR female OR girl) AND (experience OR happened OR story) AND self:true)",
+        "rationale": "Maximizes recall by simplifying terms and increasing proximity (~10). Captures oblique references (e.g., 'swim' + 'harass').",
+        "proximity": 10,
+        "boosting": false,
+        "minimum_should_match": 1,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swim\") AND (assault OR harass OR grope OR touch OR violate) AND (stranger OR random OR unknown) AND (woman OR female OR girl) AND (experience OR happened OR story) AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 3.887516498565674,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Both trajectories returned zero results, indicating the queries are either too restrictive or the phrasing does not match how users describe such experiences. The specific trajectory may suffer from over-constrained proximity (~5) and rigid term requirements, while the broad trajectory lacks precision in capturing first-person narratives (e.g., missing \"I was\" or \"my story\"). The intent is satisfied in terms of core keywords (pool, assault, stranger, woman) but misses nuanced phrasing (e.g., \"creep at the pool,\" \"someone grabbed me\") and alternative contexts (e.g., \"lifeguard didn\u2019t help,\" \"reported to staff\").<br><br>Remaining Question: Are there alternative terms for \"assault\" or \"public pool\" that victims use? Are first-person indicators (e.g., \"I,\" \"me\") more common than \"my experience\"?<br><br>Missing intent: Emotional aftermath (e.g., \"trauma,\" \"never went back\"), bystander reactions, or location specifics (e.g., \"locker room,\" \"shallow end\").<br><br>Drawbacks: Topic drift toward general harassment (not pool-specific) or non-first-person posts (e.g., news articles). Noise from unrelated terms (e.g., \"swim\" could match competitive swimming).<br><br>Satisfied intent: Core elements (stranger, woman, pool) are present, but phrasing is likely mismatched.<\u0002analyse><modification>Expand term coverage for assault/pool contexts, relax proximity, and prioritize first-person language while testing alternative jargon (e.g., \"creep,\" \"grabbed\").<\u0002modification>"
+}

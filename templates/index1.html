@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Enhanced Reddit Search</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom styling for aesthetics and utility -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Dark background */
+            color: #c9d1d9; /* Light text */
+        }
+        .card {
+            background-color: #161b22; /* Slightly lighter dark card */
+            border: 1px solid #30363d;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        .body-text a {
+            color: #58a6ff;
+            text-decoration: underline;
+        }
+        .loading-dot {
+            animation: dot-blink 1.5s infinite;
+        }
+        .loading-dot:nth-child(2) { animation-delay: 0.5s; }
+        .loading-dot:nth-child(3) { animation-delay: 1.0s; }
+        @keyframes dot-blink {
+            0%, 20% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #161b22;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #58a6ff;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+
+    <!-- Main Application Container -->
+    <div id="app" class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-[#58a6ff] mb-2">AI-Powered Reddit Search</h1>
+            <p class="text-gray-400">Search posts with complex Boolean queries or discover new subreddits.</p>
+        </header>
+
+        <!-- Global State/Config Panel (Hidden by default) -->
+        <div id="config-panel" class="mb-8 p-6 card rounded-xl hidden">
+            <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Configuration</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- LLM Provider -->
+                <div>
+                    <label for="llm-provider" class="block text-sm font-medium mb-1 text-gray-400">LLM Provider for Filtering/Query Generation</label>
+                    <select id="llm-provider" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700 focus:ring-[#58a6ff] focus:border-[#58a6ff]">
+                        <option value="mistral">Mistral (Backend Default)</option>
+                        <option value="gemini">Gemini</option>
+                    </select>
+                    <p class="text-xs mt-1 text-gray-500">Must be configured on the server.</p>
+                </div>
+
+                <!-- Subreddit List Management -->
+                <div>
+                    <label for="subreddit-list-input" class="block text-sm font-medium mb-1 text-gray-400">Default Subreddits (Comma Separated)</label>
+                    <textarea id="subreddit-list-input" rows="2" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700 focus:ring-[#58a6ff] focus:border-[#58a6ff]" placeholder="e.g., Python, ArtificialInteligence, LocalLLaMA"></textarea>
+                    <div class="mt-2 flex justify-end space-x-2">
+                        <button id="save-subs-btn" class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition">Save Subreddits</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saved Queries -->
+            <div class="mt-6 border-t border-gray-700 pt-4">
+                <h3 class="text-xl font-medium mb-2">Saved Queries</h3>
+                <div id="saved-queries-list" class="space-y-2">
+                    <!-- Saved queries will be loaded here -->
+                    <p id="no-saved-queries" class="text-gray-500 text-sm italic">No saved queries yet.</p>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Toggle Button for Config Panel -->
+        <div class="text-center mb-8">
+            <button id="toggle-config-btn" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg transition text-sm">
+                Show Configuration & Saved Queries
+            </button>
+        </div>
+
+
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-gray-700 mb-6">
+            <button id="tab-search" class="tab-button px-4 py-2 text-white font-semibold border-b-2 border-[#58a6ff] transition">Post Search</button>
+            <button id="tab-discovery" class="tab-button px-4 py-2 text-gray-400 font-semibold border-b-2 border-transparent hover:border-gray-500 transition ml-4">Subreddit Discovery</button>
+        </div>
+
+        <!-- Post Search Tab Content -->
+        <div id="tab-content-search" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Search Controls Column -->
+                <div class="lg:col-span-1 space-y-4">
+                    
+                    <!-- Query Generator -->
+                    <div class="p-4 card rounded-xl">
+                        <h2 class="text-xl font-semibold mb-2">1. Query Generator (AI)</h2>
+                        <textarea id="query-description" rows="3" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700 mb-2 focus:ring-yellow-500 focus:border-yellow-500" placeholder="Describe the type of posts you are looking for... (e.g., Short personal stories about funny programming bugs)"></textarea>
+                        <button id="generate-query-btn" class="w-full py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded-lg transition">Generate Boolean Query</button>
+                        <p id="query-generator-status" class="text-xs mt-2 text-center text-gray-400 hidden">Generating query...</p>
+                    </div>
+
+                    <!-- Keywords/Boolean Query Input -->
+                    <div class="p-4 card rounded-xl">
+                        <h2 class="text-xl font-semibold mb-2">2. Search Keywords (Boolean)</h2>
+                        <input type="text" id="keywords-input" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700 focus:ring-red-500 focus:border-red-500" placeholder="(Term1 OR Term2) AND (TermA OR TermB)">
+                        <p class="text-xs mt-1 text-gray-500">Ensure terms are grouped in parenthesis with AND/OR.</p>
+                        <div class="mt-2 flex space-x-2">
+                             <button id="save-query-btn" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition">Save Query</button>
+                             <input type="text" id="save-query-name" placeholder="Query Name" class="p-1 rounded-lg bg-[#0d1117] border border-gray-700 text-sm w-full">
+                        </div>
+                    </div>
+
+                    <!-- AI Filter Criteria -->
+                    <div class="p-4 card rounded-xl">
+                        <h2 class="text-xl font-semibold mb-2">3. AI Filter Criteria (Optional)</h2>
+                        <textarea id="criteria-input" rows="3" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700 focus:ring-purple-500 focus:border-purple-500" placeholder="e.g., Must contain code snippets and mention Python 3."></textarea>
+                        <p class="text-xs mt-1 text-gray-500">The LLM will scan results for this deep criteria.</p>
+                    </div>
+
+                    <!-- Execution Button -->
+                    <button id="start-search-btn" class="w-full py-3 bg-[#58a6ff] hover:bg-blue-600 text-black font-extrabold rounded-xl text-lg transition shadow-xl shadow-blue-900/50">
+                        Start Search
+                    </button>
+                    <p id="search-status" class="text-sm text-center text-red-400 hidden">Searching...</p>
+
+                </div>
+
+                <!-- Settings/Results Column -->
+                <div class="lg:col-span-2 space-y-4">
+
+                    <!-- Subreddit/Settings/Stats -->
+                    <div class="p-4 card rounded-xl">
+                         <h2 class="text-xl font-semibold mb-3 border-b border-gray-700 pb-2">Search Settings & Target</h2>
+                         
+                         <div class="mb-4">
+                             <label for="subreddits-search-input" class="block text-sm font-medium mb-1 text-gray-400">Target Subreddits (Comma Separated)</label>
+                             <input type="text" id="subreddits-search-input" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700" placeholder="r/all or list of subreddits">
+                             <p class="text-xs mt-1 text-gray-500">Uses the default list from configuration if empty.</p>
+                         </div>
+
+                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                             <div>
+                                 <label for="target-posts" class="block font-medium mb-1 text-gray-400">Target Posts</label>
+                                 <input type="number" id="target-posts" value="10" min="1" max="100" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700">
+                             </div>
+                             <div>
+                                 <label for="sort-by" class="block font-medium mb-1 text-gray-400">Sort By</label>
+                                 <select id="sort-by" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700">
+                                     <option value="new">New</option>
+                                     <option value="hot">Hot</option>
+                                     <option value="top">Top</option>
+                                     <option value="relevance">Relevance</option>
+                                 </select>
+                             </div>
+                             <div>
+                                 <label for="time-filter" class="block font-medium mb-1 text-gray-400">Timeframe</label>
+                                 <select id="time-filter" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700">
+                                     <option value="all">All Time</option>
+                                     <option value="year">Past Year</option>
+                                     <option value="month">Past Month</option>
+                                     <option value="week">Past Week</option>
+                                     <option value="day">Past Day</option>
+                                 </select>
+                             </div>
+                             <div>
+                                 <label for="post-type" class="block font-medium mb-1 text-gray-400">Type</label>
+                                 <select id="post-type" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700">
+                                     <option value="any">Any</option>
+                                     <option value="text">Text Only</option>
+                                     <option value="media">Link/Media</option>
+                                 </select>
+                             </div>
+                         </div>
+                         
+                         <div class="mt-4 flex items-center space-x-4 text-sm">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="deep-scan" class="rounded text-[#58a6ff] bg-gray-700 border-gray-600 focus:ring-[#58a6ff]">
+                                <span class="ml-2">Deep Scan (More posts per sub, slower)</span>
+                            </label>
+                             <label class="flex items-center">
+                                <input type="checkbox" id="debug-mode" class="rounded text-[#58a6ff] bg-gray-700 border-gray-600 focus:ring-[#58a6ff]">
+                                <span class="ml-2">Debug Output</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Streaming Log/Progress -->
+                    <div class="p-4 card rounded-xl">
+                        <h2 class="text-xl font-semibold mb-2">Search Progress Log</h2>
+                        <div id="search-log" class="h-40 overflow-y-auto p-2 text-xs bg-[#0d1117] border border-gray-700 rounded-lg whitespace-pre-wrap text-gray-400">
+                            (Log will appear here when search starts...)
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Results Display -->
+            <div class="mt-8">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Results (<span id="result-count">0</span> Posts)</h2>
+                <div id="search-results-container" class="space-y-6">
+                    <p id="no-results-msg" class="text-gray-500 italic text-center p-8 card rounded-xl">Click 'Start Search' to begin.</p>
+                </div>
+            </div>
+            
+            <!-- Blacklist Management -->
+            <div class="mt-8 p-6 card rounded-xl">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Search History / Blacklist</h2>
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-sm text-gray-400">The last batch of approved posts is automatically added to this list for history and to prevent duplicates in future searches.</p>
+                    <button id="clear-blacklist-btn" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition">Clear History/Blacklist</button>
+                </div>
+                <div id="blacklist-log" class="h-40 overflow-y-auto p-2 text-xs bg-[#0d1117] border border-gray-700 rounded-lg whitespace-pre-wrap text-gray-400">
+                    Loading blacklist...
+                </div>
+            </div>
+
+        </div> <!-- End of Post Search Tab Content -->
+        
+        <!-- Subreddit Discovery Tab Content -->
+        <div id="tab-content-discovery" class="tab-content hidden">
+             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Discovery Controls Column -->
+                <div class="lg:col-span-1 space-y-4">
+                    
+                    <!-- Search Keywords Input -->
+                    <div class="p-4 card rounded-xl">
+                        <h2 class="text-xl font-semibold mb-2">1. Subreddit Keywords</h2>
+                        <input type="text" id="discovery-keywords-input" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700 focus:ring-red-500 focus:border-red-500" placeholder="(Term1 OR Term2) AND (TermA OR TermB)">
+                        <p class="text-xs mt-1 text-gray-500">A simpler query is best for discovery.</p>
+                    </div>
+
+                    <!-- AI Filter Criteria -->
+                    <div class="p-4 card rounded-xl">
+                        <h2 class="text-xl font-semibold mb-2">2. AI Filter Criteria (Optional)</h2>
+                        <textarea id="discovery-criteria-input" rows="3" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700 focus:ring-purple-500 focus:border-purple-500" placeholder="e.g., Must focus on new AI tools and not general machine learning theory."></textarea>
+                        <p class="text-xs mt-1 text-gray-500">The LLM will analyze subreddit descriptions for this criteria.</p>
+                    </div>
+                    
+                    <!-- Discovery Settings -->
+                    <div class="p-4 card rounded-xl">
+                        <h2 class="text-xl font-semibold mb-2">3. Discovery Settings</h2>
+                        <label for="discovery-limit" class="block font-medium mb-1 text-gray-400 text-sm">Max Subreddits to Discover</label>
+                        <input type="number" id="discovery-limit" value="10" min="1" max="50" class="w-full p-2 rounded-lg bg-[#0d1117] border border-gray-700">
+                    </div>
+
+                    <!-- Execution Button -->
+                    <button id="start-discovery-btn" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-extrabold rounded-xl text-lg transition shadow-xl shadow-green-900/50">
+                        Start Discovery
+                    </button>
+                    <p id="discovery-status" class="text-sm text-center text-red-400 hidden">Searching...</p>
+                </div>
+
+                <!-- Discovery Log and Results Column -->
+                <div class="lg:col-span-2 space-y-4">
+                     <!-- Streaming Log/Progress -->
+                    <div class="p-4 card rounded-xl">
+                        <h2 class="text-xl font-semibold mb-2">Discovery Progress Log</h2>
+                        <div id="discovery-log" class="h-40 overflow-y-auto p-2 text-xs bg-[#0d1117] border border-gray-700 rounded-lg whitespace-pre-wrap text-gray-400">
+                            (Log will appear here when discovery starts...)
+                        </div>
+                    </div>
+                    
+                    <!-- Discovery Results -->
+                    <div class="p-4 card rounded-xl">
+                        <h2 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">Discovered Subreddits</h2>
+                        <div id="discovery-results-container" class="space-y-4">
+                            <p id="no-discovery-msg" class="text-gray-500 italic text-center p-4">Click 'Start Discovery' to find communities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End of Subreddit Discovery Tab Content -->
+
+    </div>
+
+    <!-- Modal for displaying simple messages -->
+    <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4 z-50">
+        <div class="bg-[#161b22] p-6 rounded-xl shadow-2xl max-w-sm w-full border border-gray-700">
+            <h3 id="modal-title" class="text-xl font-bold mb-3 text-white"></h3>
+            <p id="modal-body" class="text-gray-300 mb-4"></p>
+            <button onclick="document.getElementById('message-modal').classList.add('hidden')" class="w-full py-2 bg-[#58a6ff] hover:bg-blue-600 text-black font-semibold rounded-lg transition">Close</button>
+        </div>
+    </div>
+
+
+<script>
+    // --- STATE & CONSTANTS ---
+    let eventSource = null;
+    let currentTab = 'search';
+    const STATE = {
+        subreddits: [],
+        savedQueries: {},
+        blacklist: {},
+        isSearching: false
+    };
+
+    // --- DOM ELEMENTS ---
+    const D = {
+        // Tabs
+        tabSearch: document.getElementById('tab-search'),
+        tabDiscovery: document.getElementById('tab-discovery'),
+        contentSearch: document.getElementById('tab-content-search'),
+        contentDiscovery: document.getElementById('tab-content-discovery'),
+
+        // Config
+        configPanel: document.getElementById('config-panel'),
+        toggleConfigBtn: document.getElementById('toggle-config-btn'),
+        llmProvider: document.getElementById('llm-provider'),
+        subredditListInput: document.getElementById('subreddit-list-input'),
+        saveSubsBtn: document.getElementById('save-subs-btn'),
+        savedQueriesList: document.getElementById('saved-queries-list'),
+        noSavedQueries: document.getElementById('no-saved-queries'),
+        
+        // Post Search (Search Tab)
+        queryDescription: document.getElementById('query-description'),
+        generateQueryBtn: document.getElementById('generate-query-btn'),
+        queryGeneratorStatus: document.getElementById('query-generator-status'),
+        keywordsInput: document.getElementById('keywords-input'),
+        criteriaInput: document.getElementById('criteria-input'),
+        saveQueryBtn: document.getElementById('save-query-btn'),
+        saveQueryName: document.getElementById('save-query-name'),
+        startSearchBtn: document.getElementById('start-search-btn'),
+        searchStatus: document.getElementById('search-status'),
+        searchLog: document.getElementById('search-log'),
+        searchResultsContainer: document.getElementById('search-results-container'),
+        resultCount: document.getElementById('result-count'),
+        noResultsMsg: document.getElementById('no-results-msg'),
+        subredditsSearchInput: document.getElementById('subreddits-search-input'),
+        targetPosts: document.getElementById('target-posts'),
+        sortBy: document.getElementById('sort-by'),
+        timeFilter: document.getElementById('time-filter'),
+        postType: document.getElementById('post-type'),
+        deepScan: document.getElementById('deep-scan'),
+        debugMode: document.getElementById('debug-mode'),
+        blacklistLog: document.getElementById('blacklist-log'),
+        clearBlacklistBtn: document.getElementById('clear-blacklist-btn'),
+
+        // Subreddit Discovery (Discovery Tab)
+        discoveryKeywordsInput: document.getElementById('discovery-keywords-input'),
+        discoveryCriteriaInput: document.getElementById('discovery-criteria-input'),
+        discoveryLimit: document.getElementById('discovery-limit'),
+        startDiscoveryBtn: document.getElementById('start-discovery-btn'),
+        discoveryStatus: document.getElementById('discovery-status'),
+        discoveryLog: document.getElementById('discovery-log'),
+        discoveryResultsContainer: document.getElementById('discovery-results-container'),
+        noDiscoveryMsg: document.getElementById('no-discovery-msg'),
+
+        // Modal
+        messageModal: document.getElementById('message-modal'),
+        modalTitle: document.getElementById('modal-title'),
+        modalBody: document.getElementById('modal-body'),
+    };
+
+    // --- UTILITY FUNCTIONS ---
+
+    /** Displays a custom modal message. */
+    function showMessage(title, body) {
+        D.modalTitle.textContent = title;
+        D.modalBody.textContent = body;
+        D.messageModal.classList.remove('hidden');
+        D.messageModal.classList.add('flex');
+    }
+
+    /** Handles exponential backoff for fetch calls. */
+    async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
+        for (let i = 0; i < retries; i++) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response;
+            } catch (error) {
+                if (i < retries - 1) {
+                    console.log(`Fetch failed, retrying in ${delay / 1000}s...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2; // Exponential backoff
+                } else {
+                    throw error;
+                }
+            }
+        }
+    }
+
+    // --- API & DATA FETCHERS ---
+
+    async function loadInitialData() {
+        try {
+            // Load Subreddits
+            const subsResponse = await fetchWithRetry('/api/subreddits');
+            const subsData = await subsResponse.json();
+            STATE.subreddits = subsData;
+            D.subredditListInput.value = subsData.join(', ');
+            
+            // Load Saved Queries
+            await loadSavedQueries();
+
+            // Load Blacklist
+            await loadBlacklist();
+
+        } catch (error) {
+            console.error('Failed to load initial data:', error);
+            showMessage('Setup Error', 'Could not load configuration data (subreddits, queries, blacklist) from the backend. Check server logs.');
+        }
+    }
+
+    async function loadSavedQueries() {
+         try {
+            const queriesResponse = await fetchWithRetry('/api/queries');
+            STATE.savedQueries = await queriesResponse.json();
+            renderSavedQueries();
+        } catch (error) {
+            console.error('Failed to load saved queries:', error);
+        }
+    }
+
+    async function loadBlacklist() {
+         try {
+            const blacklistResponse = await fetchWithRetry('/api/blacklist');
+            STATE.blacklist = await blacklistResponse.json();
+            renderBlacklist();
+        } catch (error) {
+            console.error('Failed to load blacklist:', error);
+        }
+    }
+
+    async function generateBooleanQuery() {
+        const description = D.queryDescription.value.trim();
+        if (!description) {
+            showMessage('Input Required', 'Please provide a description of the posts you are looking for.');
+            return;
+        }
+
+        D.queryGeneratorStatus.textContent = 'Generating query...';
+        D.queryGeneratorStatus.classList.remove('hidden');
+        D.generateQueryBtn.disabled = true;
+
+        try {
+            const response = await fetchWithRetry('/api/generate_query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    description: description,
+                    provider: D.llmProvider.value
+                })
+            });
+
+            const data = await response.json();
+            if (data.error) {
+                showMessage('Generation Error', data.error);
+            } else {
+                D.keywordsInput.value = data.query;
+            }
+        } catch (error) {
+            console.error('Query generation failed:', error);
+            showMessage('Server Error', 'Failed to generate query. Check console for details.');
+        } finally {
+            D.queryGeneratorStatus.classList.add('hidden');
+            D.generateQueryBtn.disabled = false;
+        }
+    }
+
+    // --- RENDER FUNCTIONS ---
+
+    /** Renders the list of saved queries in the config panel. */
+    function renderSavedQueries() {
+        const list = D.savedQueriesList;
+        list.innerHTML = ''; // Clear existing list
+
+        const queryNames = Object.keys(STATE.savedQueries).sort();
+
+        if (queryNames.length === 0) {
+            D.noSavedQueries.classList.remove('hidden');
+            return;
+        }
+        D.noSavedQueries.classList.add('hidden');
+
+        queryNames.forEach(name => {
+            const query = STATE.savedQueries[name];
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between p-2 rounded-lg bg-[#0d1117] border border-gray-700';
+            
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'text-sm font-medium truncate';
+            nameSpan.textContent = name;
+
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'flex space-x-2 ml-4 flex-shrink-0';
+            
+            const loadBtn = document.createElement('button');
+            loadBtn.textContent = 'Load';
+            loadBtn.className = 'px-2 py-1 bg-yellow-600 hover:bg-yellow-700 text-white text-xs rounded transition';
+            loadBtn.onclick = () => loadQuery(query);
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '&#x2715;'; // X mark
+            deleteBtn.className = 'w-6 h-6 bg-red-600 hover:bg-red-700 text-white text-xs rounded transition';
+            deleteBtn.onclick = () => deleteQuery(name);
+
+            actionsDiv.appendChild(loadBtn);
+            actionsDiv.appendChild(deleteBtn);
+            div.appendChild(nameSpan);
+            div.appendChild(actionsDiv);
+            list.appendChild(div);
+        });
+    }
+
+    /** Loads a saved query into the search form. */
+    function loadQuery(query) {
+        D.keywordsInput.value = query.keywords || '';
+        D.criteriaInput.value = query.criteria || '';
+        D.subredditsSearchInput.value = query.subreddits || '';
+        D.targetPosts.value = query.target_posts || 10;
+        D.sortBy.value = query.sort_by || 'new';
+        D.timeFilter.value = query.time_filter || 'all';
+        D.postType.value = query.post_type || 'any';
+        D.deepScan.checked = query.deep_scan || false;
+        
+        // Hide config panel after loading
+        D.configPanel.classList.add('hidden');
+        D.toggleConfigBtn.textContent = 'Show Configuration & Saved Queries';
+        showMessage('Query Loaded', `The query parameters have been loaded into the Post Search form.`);
+    }
+
+    /** Renders the search history/blacklist. */
+    function renderBlacklist() {
+        const blLog = D.blacklistLog;
+        blLog.innerHTML = ''; // Clear existing log
+
+        const postIds = Object.keys(STATE.blacklist);
+        if (postIds.length === 0) {
+            blLog.textContent = 'Blacklist is empty.';
+            return;
+        }
+
+        let logContent = `Total Blacklisted Posts: ${postIds.length}\n\n`;
+        // Show 20 most recent
+        const sortedIds = postIds.sort((a, b) => STATE.blacklist[b].timestamp - STATE.blacklist[a].timestamp);
+        
+        for (let i = 0; i < Math.min(20, sortedIds.length); i++) {
+            const post = STATE.blacklist[sortedIds[i]];
+            const date = new Date(post.timestamp * 1000).toLocaleString();
+            logContent += `[${date}] ${post.title.substring(0, 50)}... | Keywords: ${post.keywords.substring(0, 30)}...\n`;
+        }
+
+        if (postIds.length > 20) {
+            logContent += `\n...and ${postIds.length - 20} older posts.`;
+        }
+
+        blLog.textContent = logContent;
+        blLog.scrollTop = 0; // Show recent ones at the top
+    }
+    
+    // --- EVENT LISTENERS & HANDLERS ---
+    
+    /** Switches between the Search and Discovery tabs. */
+    function switchTab(tabName) {
+        currentTab = tabName;
+        D.tabSearch.classList.remove('border-[#58a6ff]', 'text-white');
+        D.tabSearch.classList.add('border-transparent', 'text-gray-400', 'hover:border-gray-500');
+        D.tabDiscovery.classList.remove('border-[#58a6ff]', 'text-white');
+        D.tabDiscovery.classList.add('border-transparent', 'text-gray-400', 'hover:border-gray-500');
+
+        D.contentSearch.classList.add('hidden');
+        D.contentDiscovery.classList.add('hidden');
+
+        if (tabName === 'search') {
+            D.tabSearch.classList.add('border-[#58a6ff]', 'text-white');
+            D.tabSearch.classList.remove('border-transparent', 'text-gray-400', 'hover:border-gray-500');
+            D.contentSearch.classList.remove('hidden');
+        } else {
+            D.tabDiscovery.classList.add('border-[#58a6ff]', 'text-white');
+            D.tabDiscovery.classList.remove('border-transparent', 'text-gray-400', 'hover:border-gray-500');
+            D.contentDiscovery.classList.remove('hidden');
+        }
+    }
+
+
+    /** Handles the Search button click, initializing the SSE stream. */
+    function startSearch() {
+        if (STATE.isSearching) {
+            // Stop existing search
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
+            }
+            STATE.isSearching = false;
+            D.startSearchBtn.textContent = 'Start Search';
+            D.startSearchBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+            D.startSearchBtn.classList.add('bg-[#58a6ff]', 'hover:bg-blue-600');
+            D.searchStatus.classList.add('hidden');
+            return;
+        }
+
+        const keywords = D.keywordsInput.value.trim();
+        if (!keywords) {
+            showMessage('Input Required', 'Please enter search keywords (Boolean Query) or use the Query Generator.');
+            return;
+        }
+
+        // Clear previous results and logs
+        D.searchResultsContainer.innerHTML = '';
+        D.searchLog.textContent = '--- Search Started ---\n';
+        D.noResultsMsg.classList.add('hidden');
+        D.resultCount.textContent = '0';
+        let resultCount = 0;
+
+        // Build URL parameters
+        const params = new URLSearchParams({
+            keywords: keywords,
+            criteria: D.criteriaInput.value.trim(),
+            provider: D.llmProvider.value,
+            target_posts: D.targetPosts.value || 10,
+            sort: D.sortBy.value,
+            time: D.timeFilter.value,
+            post_type: D.postType.value,
+            deep_scan: D.deepScan.checked,
+            debug: D.debugMode.checked
+        });
+
+        // Add subreddits if provided, otherwise backend uses default
+        const subsInput = D.subredditsSearchInput.value.trim();
+        if (subsInput) {
+             params.append('subreddits', subsInput);
+        } else if (STATE.subreddits.length > 0) {
+            params.append('subreddits', STATE.subreddits.join(', '));
+        }
+
+
+        // Update UI for loading state
+        STATE.isSearching = true;
+        D.startSearchBtn.textContent = 'Stop Search';
+        D.startSearchBtn.classList.remove('bg-[#58a6ff]', 'hover:bg-blue-600');
+        D.startSearchBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+        D.searchStatus.textContent = 'Searching...';
+        D.searchStatus.classList.remove('hidden');
+
+        // Start SSE
+        const url = '/stream?' + params.toString();
+        eventSource = new EventSource(url);
+
+        eventSource.onmessage = function(event) {
+            const data = event.data;
+            if (data.startsWith('<<<HTML_RESULT>>>')) {
+                // Final HTML output received
+                const htmlContent = data.substring(17).replace(/\|\|NEWLINE\|\|/g, '\n');
+                D.searchResultsContainer.innerHTML = htmlContent;
+                D.noResultsMsg.classList.add('hidden');
+                
+                // Finalize search
+                eventSource.close();
+                eventSource = null;
+                STATE.isSearching = false;
+                D.startSearchBtn.textContent = 'Start Search';
+                D.startSearchBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                D.startSearchBtn.classList.add('bg-[#58a6ff]', 'hover:bg-blue-600');
+                D.searchStatus.classList.add('hidden');
+                
+                // Reload blacklist to show newly saved history
+                loadBlacklist();
+                
+                // Update final count
+                const cardCount = D.searchResultsContainer.querySelectorAll('.card').length;
+                D.resultCount.textContent = cardCount;
+                
+            } else {
+                // Log message
+                const log = D.searchLog;
+                log.textContent += data + '\n';
+                log.scrollTop = log.scrollHeight; // Auto-scroll to bottom
+                
+                // Update post count dynamically based on the "✅ Found" messages
+                if (data.includes('✅ Found:')) {
+                    resultCount++;
+                    D.resultCount.textContent = resultCount;
+                }
+            }
+        };
+
+        eventSource.onerror = function() {
+            D.searchLog.textContent += '\n--- Connection Error. Retrying... ---\n';
+            D.searchLog.scrollTop = D.searchLog.scrollHeight;
+        };
+    }
+    
+    /** Handles the Discovery button click, initializing the SSE stream. */
+    function startDiscovery() {
+        if (STATE.isSearching) { // Use the same flag to prevent concurrent API calls
+            // Stop existing search
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
+            }
+            STATE.isSearching = false;
+            D.startDiscoveryBtn.textContent = 'Start Discovery';
+            D.startDiscoveryBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+            D.startDiscoveryBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+            D.discoveryStatus.classList.add('hidden');
+            return;
+        }
+
+        const keywords = D.discoveryKeywordsInput.value.trim();
+        if (!keywords) {
+            showMessage('Input Required', 'Please enter search keywords for subreddit discovery.');
+            return;
+        }
+
+        // Clear previous results and logs
+        D.discoveryResultsContainer.innerHTML = '';
+        D.discoveryLog.textContent = '--- Discovery Started ---\n';
+        D.noDiscoveryMsg.classList.add('hidden');
+
+        // Build URL parameters
+        const params = new URLSearchParams({
+            keywords: keywords,
+            criteria: D.discoveryCriteriaInput.value.trim(),
+            provider: D.llmProvider.value,
+            limit: D.discoveryLimit.value || 10
+        });
+
+        // Update UI for loading state
+        STATE.isSearching = true;
+        D.startDiscoveryBtn.textContent = 'Stop Discovery';
+        D.startDiscoveryBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+        D.startDiscoveryBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+        D.discoveryStatus.textContent = 'Searching...';
+        D.discoveryStatus.classList.remove('hidden');
+
+        // Start SSE
+        const url = '/stream_discovery?' + params.toString();
+        eventSource = new EventSource(url);
+
+        eventSource.onmessage = function(event) {
+            const data = event.data;
+            const log = D.discoveryLog;
+            log.textContent += data + '\n';
+            log.scrollTop = log.scrollHeight; // Auto-scroll to bottom
+
+            if (data.startsWith('<<<JSON_CARD>>>')) {
+                const jsonStr = data.substring(15);
+                try {
+                    const sub = JSON.parse(jsonStr);
+                    const card = createSubredditCard(sub);
+                    D.discoveryResultsContainer.appendChild(card);
+                } catch (e) {
+                    log.textContent += `\nError parsing JSON card: ${e}\n`;
+                }
+            } else if (data === '<<<DONE>>>') {
+                // Finalize search
+                eventSource.close();
+                eventSource = null;
+                STATE.isSearching = false;
+                D.startDiscoveryBtn.textContent = 'Start Discovery';
+                D.startDiscoveryBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                D.startDiscoveryBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                D.discoveryStatus.classList.add('hidden');
+                if (D.discoveryResultsContainer.children.length === 0) {
+                     D.noDiscoveryMsg.classList.remove('hidden');
+                } else {
+                     D.noDiscoveryMsg.classList.add('hidden');
+                }
+            }
+        };
+
+        eventSource.onerror = function() {
+            D.discoveryLog.textContent += '\n--- Connection Error. Retrying... ---\n';
+            D.discoveryLog.scrollTop = D.discoveryLog.scrollHeight;
+        };
+    }
+    
+    /** Creates a DOM element for a discovered subreddit. */
+    function createSubredditCard(sub) {
+        const div = document.createElement('div');
+        div.className = 'card p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'flex-grow';
+        
+        const nameLink = document.createElement('a');
+        nameLink.href = `https://www.reddit.com/r/${sub.name}`;
+        nameLink.target = '_blank';
+        nameLink.className = 'text-xl font-bold text-[#58a6ff] hover:underline';
+        nameLink.textContent = `r/${sub.name}`;
+        
+        const hitsSpan = document.createElement('span');
+        hitsSpan.className = 'ml-3 text-sm text-yellow-500 font-mono';
+        hitsSpan.textContent = `(${sub.hits} matches)`;
+        
+        const descP = document.createElement('p');
+        descP.className = 'text-gray-400 text-sm mt-1';
+        descP.textContent = sub.description || 'No public description available.';
+
+        contentDiv.appendChild(nameLink);
+        contentDiv.appendChild(hitsSpan);
+        contentDiv.appendChild(descP);
+        
+        // Action button to add to default list
+        const addBtn = document.createElement('button');
+        addBtn.textContent = 'Add to Default List';
+        addBtn.className = 'px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition flex-shrink-0 mt-2 sm:mt-0';
+        addBtn.onclick = () => addSubreddit(sub.name);
+
+        div.appendChild(contentDiv);
+        div.appendChild(addBtn);
+        return div;
+    }
+    
+    /** Adds a subreddit to the default list in the config panel. */
+    function addSubreddit(name) {
+        let subs = D.subredditListInput.value.split(',').map(s => s.trim()).filter(s => s);
+        if (!subs.includes(name)) {
+            subs.push(name);
+            D.subredditListInput.value = subs.join(', ');
+            showMessage('Subreddit Added', `r/${name} has been added to your default subreddit list in the Configuration panel. Remember to click 'Save Subreddits'.`);
+        } else {
+            showMessage('Already Present', `r/${name} is already in your default subreddit list.`);
+        }
+    }
+
+
+    /** Saves the current subreddits list to the backend. */
+    async function saveSubreddits() {
+        const rawInput = D.subredditListInput.value.trim();
+        const newSubs = rawInput.split(',').map(s => s.trim()).filter(s => s);
+        
+        try {
+            D.saveSubsBtn.textContent = 'Saving...';
+            D.saveSubsBtn.disabled = true;
+            
+            const response = await fetchWithRetry('/api/subreddits', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newSubs)
+            });
+
+            if (response.ok) {
+                STATE.subreddits = newSubs;
+                showMessage('Success', 'Default subreddits updated successfully!');
+            } else {
+                 showMessage('Error', 'Failed to save subreddits on the server.');
+            }
+        } catch (error) {
+            console.error('Save subreddits failed:', error);
+            showMessage('Server Error', 'Failed to save subreddits. Check console for details.');
+        } finally {
+            D.saveSubsBtn.textContent = 'Save Subreddits';
+            D.saveSubsBtn.disabled = false;
+        }
+    }
+
+    /** Saves the current search parameters as a named query. */
+    async function saveQuery() {
+        const queryName = D.saveQueryName.value.trim();
+        const keywords = D.keywordsInput.value.trim();
+
+        if (!queryName || !keywords) {
+            showMessage('Input Required', 'Please provide a name and search keywords to save the query.');
+            return;
+        }
+        
+        const payload = {
+            keywords: keywords,
+            criteria: D.criteriaInput.value.trim(),
+            subreddits: D.subredditsSearchInput.value.trim(),
+            target_posts: D.targetPosts.value,
+            sort_by: D.sortBy.value,
+            time_filter: D.timeFilter.value,
+            post_type: D.postType.value,
+            deep_scan: D.deepScan.checked
+        };
+        
+        try {
+            const response = await fetchWithRetry('/api/queries', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: queryName, payload: payload })
+            });
+
+            if (response.ok) {
+                showMessage('Success', `Query '${queryName}' saved successfully.`);
+                D.saveQueryName.value = '';
+                await loadSavedQueries(); // Refresh the list
+            } else {
+                 showMessage('Error', 'Failed to save query on the server.');
+            }
+        } catch (error) {
+            console.error('Save query failed:', error);
+            showMessage('Server Error', 'Failed to save query. Check console for details.');
+        }
+    }
+
+    /** Deletes a saved query by name. */
+    async function deleteQuery(name) {
+        if (!confirm(`Are you sure you want to delete the query "${name}"?`)) return;
+
+        try {
+            const response = await fetchWithRetry(`/api/queries/${encodeURIComponent(name)}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                showMessage('Deleted', `Query '${name}' deleted.`);
+                await loadSavedQueries(); // Refresh the list
+            } else {
+                 showMessage('Error', 'Failed to delete query on the server.');
+            }
+        } catch (error) {
+            console.error('Delete query failed:', error);
+            showMessage('Server Error', 'Failed to delete query. Check console for details.');
+        }
+    }
+
+    /** Clears the search history/blacklist. */
+    async function clearBlacklist() {
+        if (!confirm('Are you sure you want to clear the entire search history/blacklist?')) return;
+
+        try {
+            const response = await fetchWithRetry('/api/blacklist/clear', { method: 'POST' });
+            if (response.ok) {
+                showMessage('Cleared', 'Search history/blacklist successfully cleared.');
+                STATE.blacklist = {};
+                renderBlacklist();
+            } else {
+                showMessage('Error', 'Failed to clear blacklist on the server.');
+            }
+        } catch (error) {
+            console.error('Clear blacklist failed:', error);
+            showMessage('Server Error', 'Failed to clear blacklist. Check console for details.');
+        }
+    }
+    
+    // --- INITIALIZATION ---
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadInitialData();
+        
+        // Tab Handlers
+        D.tabSearch.addEventListener('click', () => switchTab('search'));
+        D.tabDiscovery.addEventListener('click', () => switchTab('discovery'));
+        
+        // Search Handlers
+        D.generateQueryBtn.addEventListener('click', generateBooleanQuery);
+        D.startSearchBtn.addEventListener('click', startSearch);
+        D.saveSubsBtn.addEventListener('click', saveSubreddits);
+        D.saveQueryBtn.addEventListener('click', saveQuery);
+        D.clearBlacklistBtn.addEventListener('click', clearBlacklist);
+        
+        // Discovery Handler
+        D.startDiscoveryBtn.addEventListener('click', startDiscovery);
+        
+        // Config Panel Toggle
+        D.toggleConfigBtn.addEventListener('click', () => {
+            const isHidden = D.configPanel.classList.toggle('hidden');
+            D.toggleConfigBtn.textContent = isHidden ? 'Show Configuration & Saved Queries' : 'Hide Configuration & Saved Queries';
+        });
+
+        // Initial tab state
+        switchTab('search');
+    });
+
+</script>
+</body>
+</html>

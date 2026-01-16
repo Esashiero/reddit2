@@ -1,0 +1,57 @@
+{
+  "run_id": "5770f2da",
+  "timestamp": 1768226048.5468836,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "7a82a481",
+      "type": "specific",
+      "config": {
+        "type": "specific",
+        "manual_query": "(title:\"public pool\" OR title:\"swimming pool\" OR title:\"pool locker room\") AND (body:\"first person\" OR body:\"my story\" OR body:\"I was\") AND (body:\"assaulted\"^2 OR body:\"groped\"^2 OR body:\"attacked\" OR body:\"harassed\") AND (body:\"woman\" OR body:\"girl\" OR body:\"female\") AND -body:\"fiction\" -body:\"story idea\"",
+        "rationale": "Strict proximity and mandatory terms ensure precision, while boosting 'assaulted' and 'groped' prioritizes direct accounts. Excluding 'fiction' filters out irrelevant narratives.",
+        "proximity": 10,
+        "boost_core_terms": true,
+        "exclude_fiction": true,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:\"public pool\" OR title:\"swimming pool\" OR title:\"pool locker room\") AND (body:\"first person\" OR body:\"my story\" OR body:\"I was\") AND (body:\"assaulted\"^2 OR body:\"groped\"^2 OR body:\"attacked\" OR body:\"harassed\") AND (body:\"woman\" OR body:\"girl\" OR body:\"female\") AND -body:\"fiction\" -body:\"story idea\"",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 3.7589073181152344,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "679e12e4",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(title:\"pool\"~5) AND (body:\"I was\" OR body:\"my experience\") AND (body:\"assault\" OR body:\"harassment\" OR body:\"abuse\") AND (body:\"woman\" OR body:\"female\") AND -subreddit:\"WritingPrompts\" -subreddit:\"TwoXChromosomes\"",
+        "rationale": "Wider proximity and fewer mandatory terms increase recall. Excluding high-noise subreddits (e.g., WritingPrompts) reduces irrelevant results.",
+        "proximity": 15,
+        "exclude_high_noise_subreddits": true,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:\"pool\"~5) AND (body:\"I was\" OR body:\"my experience\") AND (body:\"assault\" OR body:\"harassment\" OR body:\"abuse\") AND (body:\"woman\" OR body:\"female\") AND -subreddit:\"WritingPrompts\" -subreddit:\"TwoXChromosomes\"",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 3.7281181812286377,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks: Both trajectories returned zero results, indicating over-constrained queries or topic drift (e.g., 'pool' may be too ambiguous, 'first person' may not be explicitly stated). Satisfied intent: Core elements (assault, woman, public pool) are present, but missing intent includes alternative phrasing (e.g., 'molested', 'violated'), emotional descriptors (e.g., 'traumatized', 'shaken'), or location variations (e.g., 'aquatic center', 'natatorium'). Remaining Question: Are there first-person accounts using less direct language or focusing on emotional aftermath rather than the event itself?<\\/analyse><modification>Expand recall by incorporating emotional and alternative event descriptors while maintaining proximity for context.<\\/modification>"
+}

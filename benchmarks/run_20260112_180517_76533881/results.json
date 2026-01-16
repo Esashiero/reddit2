@@ -1,0 +1,61 @@
+{
+  "run_id": "76533881",
+  "timestamp": 1768237517.050083,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "09dc3e28",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(selftext:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\" OR \"hotel pool\") AND (\"assaulted\" OR \"groped\" OR \"touched\" OR \"grabbed\" OR \"molested\" OR \"harassed\" OR \"felt up\" OR \"violated\" OR \"attacked\") AND (\"stranger\" OR \"random guy\" OR \"unknown man\" OR \"some guy\" OR \"creep\" OR \"didn\u2019t know him\") AND (\"woman\" OR \"female\" OR \"girl\" OR \"lady\" OR \"as a woman\") AND self:true)",
+        "rationale": "Expands synonyms for assault and stranger while removing strict proximity to capture varied phrasing. Focuses on selftext to prioritize first-person narratives.",
+        "proximity": 15,
+        "boosting": false,
+        "prohibition": false,
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\" OR \"hotel pool\") AND (\"assaulted\" OR \"groped\" OR \"touched\" OR \"grabbed\" OR \"molested\" OR \"harassed\" OR \"felt up\" OR \"violated\" OR \"attacked\") AND (\"stranger\" OR \"random guy\" OR \"unknown man\" OR \"some guy\" OR \"creep\" OR \"didn\u2019t know him\") AND (\"woman\" OR \"female\" OR \"girl\" OR \"lady\" OR \"as a woman\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 8.927731990814209,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "99dd7ffd",
+      "type": "exploratory",
+      "config": {
+        "type": "exploratory",
+        "manual_query": "(title:(\"pool story\" OR \"pool experience\" OR \"at the pool\" OR \"swimming pool incident\") OR selftext:(\"I was at the pool\" OR \"while swimming\" OR \"pool locker room\")) AND (\"groped\" OR \"touched\" OR \"assaulted\" OR \"harassed\" OR \"violated\" OR \"creepy\") AND (\"stranger\" OR \"random\" OR \"unknown\") AND (\"woman\" OR \"female\" OR \"girl\") AND self:true",
+        "rationale": "Targets narrative-style titles/phrasing (e.g., \"My pool story\") and alternative jargon (e.g., \"creepy\") to uncover less explicit accounts. Boosts first-person cues.",
+        "proximity": 20,
+        "boosting": true,
+        "boost_terms": [
+          "\"I was at the pool\"^2",
+          "\"pool story\"^2"
+        ],
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool story\" OR \"pool experience\" OR \"at the pool\" OR \"swimming pool incident\") OR selftext:(\"I was at the pool\" OR \"while swimming\" OR \"pool locker room\")) AND (\"groped\" OR \"touched\" OR \"assaulted\" OR \"harassed\" OR \"violated\" OR \"creepy\") AND (\"stranger\" OR \"random\" OR \"unknown\") AND (\"woman\" OR \"female\" OR \"girl\") AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.103034734725952,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks in previous iterations include over-reliance on explicit terms (e.g., \"assaulted\", \"molested\") which may not match first-person storytelling language. Topic drift is minimal, but intent is partially satisfied\u2014missing softer phrasing (e.g., \"unwanted attention\", \"made me uncomfortable\") and spatial context (e.g., \"in the water\", \"while changing\"). Remaining Question: Are victims using euphemisms or situational details instead of direct assault terminology?<\\/analyse><modification>Expand vocabulary to include implicit assault descriptions and pool-specific scenarios while tightening proximity for narrative coherence.<\\/modification>"
+}

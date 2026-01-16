@@ -1,0 +1,57 @@
+The 'Query Expansion in the Age of Pre-trained and Large Language Models' survey and 'Efficient Query Expansion' paper are key. How can our system go beyond simple boolean query expansion and explore:
+*   Context-aware query expansion (e.g., identifying related concepts from highly relevant posts).
+*   Semantic search techniques if our LLMs have embedding capabilities (though this might be a larger code change).
+
+To evolve the Reddit AI Curator beyond simple Boolean query expansion, you can integrate advanced neural query expansion (QE) and semantic search techniques. Drawing from the provided sources, particularly the survey on LLM-driven expansion and the AMD and AQE frameworks, here is how the system can be improved:
+
+1. Context-Aware Query Expansion
+Instead of just adding synonyms to a Boolean string, the system can use Retrieval-Conditioned QE to bridge the "vocabulary mismatch" between user intent and niche Reddit jargon
+.
+
+• Socratic Intent Decomposition (AMD Framework): Before searching, use a Socratic Questioning Agent to reformulate the user description into three sub-dimensions: clarification (refining intent), assumption probing (surfacing implicit needs), and implication probing (exploring downstream effects)
+. This prevents "homogeneous" expansions by capturing the full complexity of user intent
+.
+
+• Corpus-Steered Expansion (CSQE): Once the first results are found, the system should not just score them. It should use the LLM to identify "pivotal sentences" or unique entities within high-relevance posts to "steer" the next query
+. This anchors the model’s world knowledge in the actual "folksonomy" (community-specific slang) of the subreddit
+.
+
+• Knowledge-Aware Iterative Loops: Transition to a loop that maintains a dedicated internal cache of "What is Known" vs. "What is Required"
+. At each step, the system extracts verified facts from the results and identifies unresolved information gaps. Subsequent Lucene queries are then formulated to specifically target these remaining gaps rather than repeating the initial search
+.
+
+• Feature-Based PRF (PromptPRF): Instead of issuing a new full-text query, extract structured features (entities, chain-of-thought keywords, and focused summaries) from top-ranked documents and encode them into the next search pass
+.
+
+2. Semantic Search and Embedding Capabilities
+If the system moves toward a Dense Retrieval or Hybrid Search model, it can leverage high-dimensional vector representations to find relevance that keyword matching misses
+.
+
+• Gaussian Kernel Semantic Enhancement (LSDRGs): To prevent "topic drift" (where expansions lose the original intent), you can map generated query variations into a Gaussian kernel semantic space
+. This technique mathematically "pulls together" semantically similar optimized queries while "pushing away" variants that exhibit drift, ensuring the final retrieval remains aligned with the original user description
+.
+
+• Hybrid Retrieval Integration: Reddit’s Lucene engine is excellent for high recall, but a dense retriever (like all-MiniLM-L6-v2 or jina-embeddings-v3) can be used for neural re-ranking
+. You can implement a Reciprocal Rank Fusion (RRF) strategy to aggregate rankings from the Boolean Lucene search and the semantic embedding search
+.
+
+• Aligned Query Expansion (AQE): Move away from a "generate-then-filter" approach toward Alignment. Use Direct Preference Optimization (DPO) to train the model to prefer expansions that historically raised the rank of known relevant documents in the search results
+. This teaches the model which expansions are "effective" for the Reddit API specifically
+.
+
+3. Practical Implementation Enhancements
+To support these techniques, the code in app.py and benchmarking.py would require these specific adjustments:
+• Rationale-First Prompting: Modify LLMFilter.generate_boolean_string to require the model to generate a rationale or reasoning chain before outputting the final Lucene string
+. This "slow thinking" improves the logical structure of mandatory (AND) vs. synonymous (OR) terms
+.
+
+• Symbolic Operator Optimization: Direct the LLM to use advanced Lucene operators like Proximity Searches (~N) to ensure terms appear near each other, or Boosting (^N) to increase the weight of high-signal terms identified in previous iterations
+.
+
+• Chronological Batching: To bypass the 1,000-item API limit, the agent should be taught to partition queries into chronological batches using UNIX timestamps (e.g., after:1672531200)
+.
+
+Information outside of the sources: Implementing a full vector database (like Chroma or Pinecone) alongside PRAW would be a significant architectural change. However, you can achieve "pseudo-semantic" search by using your LLM to generate "Hypothetical Document Embeddings" (HyDE), where the model writes a "fake" perfect post and you use those keywords to find real ones
+.
+
+Analogy for Advanced Query Expansion: Think of the current Boolean search as a librarian looking only for titles. The improved system is a detective. The detective doesn't just look at the title; they decompose the crime into sub-questions (Socratic), gather clues from the first few files they find (CSQE/PRF), ignore red herrings based on their case notes (Known vs. Required), and use fingerprint matching (embeddings) to find evidence that doesn't share the same name but has the same "DNA" as the original request.

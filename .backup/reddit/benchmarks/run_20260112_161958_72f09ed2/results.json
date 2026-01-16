@@ -1,0 +1,52 @@
+{
+  "run_id": "72f09ed2",
+  "timestamp": 1768231198.06256,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "e2fb8ad2",
+      "type": "standard",
+      "config": {
+        "type": "standard",
+        "limit": 10,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\") AND (assaulted OR groped OR \"grabbed me\" OR \"touched me\" OR \"molested\" OR \"sexually assaulted\") AND (stranger OR \"random guy\" OR \"random man\" OR \"unknown man\" OR \"some guy\") AND (female OR woman OR girl OR \"as a woman\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.620306015014648,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "6aee1962",
+      "type": "deep_scan",
+      "config": {
+        "type": "deep_scan",
+        "limit": 10,
+        "is_deep_scan": true,
+        "sort_by": "top",
+        "eval_limit": 3
+      },
+      "generated_query": "((\"groped\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"felt up\")~5 (\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"lap pool\" OR \"community pool\")^2) AND ((\"stranger\" OR \"random guy\" OR \"unknown man\" OR \"some guy\" OR \"creep\")~3 (\"approached\" OR \"grabbed\" OR \"cornered\" OR \"followed\")) AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 117.08343744277954,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks: Overly restrictive term combinations (e.g., requiring both 'stranger' and assault verbs in proximity) may exclude relevant narratives where the perpetrator is described differently (e.g., 'a guy I didn\u2019t know'). Missing intent: First-person storytelling cues (e.g., 'I was', 'my experience') and emotional aftermath (e.g., 'shocked', 'traumatized') are absent. Topic drift: Focus on physical descriptors may miss posts framed as advice-seeking or venting (e.g., 'Has this happened to anyone else?').<\\/analyse><modification>Expand recall by incorporating storytelling phrases, emotional language, and alternative perpetrator descriptors while maintaining proximity constraints.<\\/modification>"
+}

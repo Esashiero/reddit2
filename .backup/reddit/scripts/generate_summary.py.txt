@@ -1,0 +1,38 @@
+import os
+import json
+import time
+
+def update_summary(base_dir="benchmarks"):
+    summary_file = os.path.join(base_dir, "SUMMARY.md")
+    runs = []
+    
+    for d in os.listdir(base_dir):
+        if d.startswith("run_") and os.path.isdir(os.path.join(base_dir, d)):
+            res_path = os.path.join(base_dir, d, "results.json")
+            if os.path.exists(res_path):
+                with open(res_path, 'r') as f:
+                    runs.append(json.load(f))
+    
+    # Sort by timestamp
+    runs.sort(key=lambda x: x.get('timestamp', 0), reverse=True)
+    
+    with open(summary_file, 'w') as f:
+        f.write("# 📈 Benchmark Optimization Summary\n\n")
+        f.write("| Date | Description | Best Score | Variations | Link |\n")
+        f.write("|------|-------------|------------|------------|------|\n")
+        
+        for r in runs:
+            date_str = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(r['timestamp']))
+            best_score = 0
+            if r['variations']:
+                best_score = max(v['metrics']['average_score'] for v in r['variations'])
+            
+            run_id = r['run_id'][:8]
+            # Find the directory name (we don't have it in JSON easily but we can infer or pass it)
+            # Actually, let's just use the run_id in the link if we can.
+            # But the folder name has the date too.
+            
+            f.write(f"| {date_str} | {r['description']} | {best_score:.1f} | {len(r['variations'])} | [View Results](./run_{time.strftime('%Y%m%d_%H%M%S', time.localtime(r['timestamp']))}_{run_id}/results.json) |\n")
+
+if __name__ == "__main__":
+    update_summary()

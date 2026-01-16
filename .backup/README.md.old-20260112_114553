@@ -1,0 +1,85 @@
+# 🤖 Reddit AI Curator
+
+> **🤖 For AI Agents:** Please refer to [`AGENTS.md`](AGENTS.md) for build instructions, code style, and testing workflows.
+
+**Reddit AI Curator** is a self-hosted, intelligent search tool that finds high-quality Reddit discussions based on your specific needs using a two-step filtering process.
+
+---
+
+## 🕵️ The "Reddit Detective" Framework
+
+This project implements an advanced retrieval strategy inspired by forensic analysis. Instead of simple keyword matching, it uses a multi-agent system to hunt for specific scenarios.
+
+### 1. Socratic Intent Decomposition
+Before searching, the AI deconstructs your description into three logical layers:
+- **Clarification**: What is the core event?
+- **Assumption Probing**: What implicit details must be present (e.g., gender, relationship)?
+- **Implication Probing**: What linguistic markers or "aftermath jargon" would a user naturally use?
+
+### 2. Advanced Lucene Mastery
+The engine uses professional search operators to maximize precision:
+- **Proximity Search (`~10`)**: Finds words within 10 words of each other, perfect for catching conversational stories.
+- **Boosting (`^2`)**: Increases the importance of mandatory terms.
+- **Prohibition (`-`)**: Explicitly excludes "meta-discussions" or common noise.
+
+### 3. Domain-Aware Memory (KEI)
+The tool builds a **Keyword Efficacy Index**. It learns that words have different meanings in different subreddits (e.g., "broke" in r/finance vs r/relationship_advice) and adjusts its "search signal" accordingly.
+
+### 4. Subreddit Profiling
+When high-relevance posts (score ≥ 8) are found, the system automatically profiles new subreddits:
+- Fetches metadata (subscribers, description)
+- Generates 3 descriptive tags
+- Stores profile for future targeting
+
+### 5. Branching Trajectory Optimization
+The optimization loop explores multiple search strategies in parallel:
+- **Specific**: High precision, strict proximity, mandatory terms
+- **Broad**: High recall, fewer terms, larger proximity
+- **Exploratory**: Alternative jargon or related concepts
+
+Uses cumulative rewards to prune underperforming branches and focus on successful patterns.
+
+### 6. The "Magnifying Glass" (Sliding Windows)
+Reddit APIs restrict searches to 1,000 posts. Our tool bypasses this by using **30-day chronological windows**, allowing for true multi-year historical scanning without losing data.
+
+---
+
+## 🚀 Usage
+
+### 1. Start the Server
+```bash
+python app.py
+```
+
+### 2. Autonomous Optimization Loop (AI Query Refinement)
+This is the core "self-improving machine." It iteratively refines its own search strategy until it hits a target relevance score.
+
+**How the Iteration Loop Works:**
+1. **Analyze**: The "Optimization Expert" reviews results from the previous pass.
+2. **Critique**: It identifies *why* results failed (e.g., "too many news articles," "wrong relationship type").
+3. **Refine**: It modifies the search query and parameters (e.g., narrowing proximity, adding NOT terms).
+4. **Repeat**: The loop continues for the specified number of `iterations`.
+
+**To Start the Loop:**
+```bash
+python scripts/auto_optimize.py \
+  --description "First-person story by a woman who was assaulted in a public pool by a stranger..." \
+  --iterations 5 \
+  --limit 10 \
+  --provider mistral
+```
+
+**Features:**
+- **🌿 Intelligent Pruning**: Uses cumulative rewards to keep only top-performing trajectories
+- **🔍 Auto-Profiling**: Subreddits with high-relevance posts are profiled automatically
+- **📊 Visual Reporting**: Run `python scripts/generate_summary.py` to see trends and performance
+
+---
+
+## 🛠️ Prerequisites & Configuration
+- **Python 3.10+**
+- **Reddit API Credentials** (Client ID, Secret, User Agent)
+- **AI Provider Keys** (Mistral or Gemini) in a `.env` file.
+
+**License:** MIT  
+**Created by:** You & Sisyphus (OhMyOpenCode)

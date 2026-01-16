@@ -1,0 +1,68 @@
+{
+  "run_id": "649fc8a9",
+  "timestamp": 1768229756.3868327,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "1254c81a",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(title:(pool OR swimming OR aquatic OR \"public pool\" OR \"community pool\" OR \"recreation center\" OR \"natatorium\") OR selftext:(pool~15 OR swimming~15 OR \"public pool\"~15 OR \"community pool\"~15 OR \"recreation center\"~15 OR natatorium~15))\nAND\n(title:(assaulted OR groped OR \"unwanted touch\" OR harassed OR molested OR \"felt up\" OR violated OR \"sexual assault\") OR selftext:(assaulted~15 OR groped~15 OR \"unwanted touch\"~15 OR harassed~15 OR molested~15 OR \"felt up\"~15 OR violated~15 OR \"sexual assault\"~15))\nAND\n(selftext:(I OR me OR my) AND (selftext:(woman OR girl OR female)^3 OR (selftext:(she OR her) AND selftext:(told OR said OR shared))))\nAND\n(selftext:(stranger OR unknown OR random OR \"some guy\" OR \"some man\" OR \"someone I didn\u2019t know\")~10)\nAND\nself:true",
+        "rationale": "Prioritizes recall by including alternative location terms (e.g., \"natatorium\") and stranger phrasing (e.g., \"some guy\") with relaxed proximity (~15). Retains first-person filters to exclude secondhand accounts.",
+        "proximity": 15,
+        "boost": {
+          "first_person": 3,
+          "female_terms": 3
+        },
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(pool OR swimming OR aquatic OR \"public pool\" OR \"community pool\" OR \"recreation center\" OR \"natatorium\") OR selftext:(pool~15 OR swimming~15 OR \"public pool\"~15 OR \"community pool\"~15 OR \"recreation center\"~15 OR natatorium~15))\nAND\n(title:(assaulted OR groped OR \"unwanted touch\" OR harassed OR molested OR \"felt up\" OR violated OR \"sexual assault\") OR selftext:(assaulted~15 OR groped~15 OR \"unwanted touch\"~15 OR harassed~15 OR molested~15 OR \"felt up\"~15 OR violated~15 OR \"sexual assault\"~15))\nAND\n(selftext:(I OR me OR my) AND (selftext:(woman OR girl OR female)^3 OR (selftext:(she OR her) AND selftext:(told OR said OR shared))))\nAND\n(selftext:(stranger OR unknown OR random OR \"some guy\" OR \"some man\" OR \"someone I didn\u2019t know\")~10)\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 2.5038623809814453,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "520ff9ef",
+      "type": "exploratory",
+      "config": {
+        "type": "exploratory",
+        "manual_query": "(selftext:(pool~10 OR swimming~10 OR \"public baths\" OR \"municipal pool\" OR \"hotel pool\")\nAND\nselftext:(groped~5 OR \"grabbed me\" OR \"touched me\" OR \"hands on me\" OR \"reached for me\")\nAND\n(selftext:(I OR me OR my) AND (selftext:(woman OR girl OR female)^2)))\nAND\n(selftext:(stranger OR \"didn\u2019t know\" OR \"never seen\" OR \"random person\" OR \"someone new\")~8)\nAND\n-(selftext:boyfriend OR husband OR partner OR friend OR acquaintance)\nAND\nself:true",
+        "rationale": "Targets implicit stranger language (e.g., \"didn\u2019t know\") and prohibits known perpetrators. Uses tighter proximity (~5) for action terms (e.g., \"grabbed me\") to capture visceral first-person phrasing.",
+        "proximity": {
+          "core_terms": 10,
+          "action_terms": 5
+        },
+        "prohibition": [
+          "boyfriend",
+          "husband",
+          "partner",
+          "friend",
+          "acquaintance"
+        ],
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(pool~10 OR swimming~10 OR \"public baths\" OR \"municipal pool\" OR \"hotel pool\")\nAND\nselftext:(groped~5 OR \"grabbed me\" OR \"touched me\" OR \"hands on me\" OR \"reached for me\")\nAND\n(selftext:(I OR me OR my) AND (selftext:(woman OR girl OR female)^2)))\nAND\n(selftext:(stranger OR \"didn\u2019t know\" OR \"never seen\" OR \"random person\" OR \"someone new\")~8)\nAND\n-(selftext:boyfriend OR husband OR partner OR friend OR acquaintance)\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.074280500411987,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks: Both trajectories returned zero results, indicating either overly restrictive filters or insufficient coverage of relevant terminology. The broad trajectory may suffer from topic drift due to loose proximity (~15) and lack of strict term co-occurrence, while the exploratory trajectory, though more focused on action-oriented phrases (e.g., 'grabbed me'), still misses nuanced first-person narratives. Satisfied intent: Core elements (public pool, assault, woman, stranger) are addressed. Missing intent: Emotional/descriptive language (e.g., 'shocked', 'trapped', 'humiliated') and contextual details (e.g., 'lifeguard', 'locker room', 'crowded') are absent. Remaining Question: How to balance precision (e.g., first-person pronouns) with recall (e.g., alternative phrasing for assault)?<\\/analyse><modification>Refine trajectories to prioritize first-person emotional descriptors and stricter proximity for assault-related terms while expanding pool-related synonyms.<\\/modification>"
+}

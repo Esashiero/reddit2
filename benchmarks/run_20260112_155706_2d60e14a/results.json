@@ -1,0 +1,58 @@
+{
+  "run_id": "2d60e14a",
+  "timestamp": 1768229826.8308983,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "f8c7d9a2",
+      "type": "exploratory",
+      "config": {
+        "type": "exploratory",
+        "manual_query": "(title:(pool OR \"public pool\" OR \"swimming pool\" OR natatorium OR \"recreation center\" OR \"hotel pool\" OR \"water park\" OR \"public baths\")^2 OR selftext:(\"public pool\"~15 OR pool~15 OR \"swimming pool\"~15 OR natatorium~15 OR \"recreation center\"~15 OR \"hotel pool\"~15 OR \"water park\"~15 OR \"public baths\"~15))\nAND\n(selftext:(assaulted OR groped OR \"unwanted touch\" OR \"touched me\" OR \"grabbed me\" OR molested OR violated OR fondled OR \"felt up\" OR \"inappropriate touch\" OR harassed OR \"sexual advance\")^2 AND selftext:(I OR me OR my OR \"my story\" OR recounted OR shared OR told)^3)\nAND\n(selftext:(woman OR girl OR female OR she OR her)^3)\nAND\n(selftext:(stranger OR \"didn\u2019t know\" OR \"never met\" OR \"random guy\" OR \"some man\" OR \"unknown person\" OR \"someone I didn\u2019t know\" OR \"some guy\")~5)\nAND\n(selftext:(shocked OR terrified OR humiliated OR violated OR \"couldn\u2019t move\" OR \"froze\" OR traumatized OR \"didn\u2019t react\" OR \"too scared\" OR \"felt powerless\")~8)\nAND\n-(selftext:boyfriend OR husband OR partner OR friend OR coworker OR classmate OR acquaintance OR colleague OR ex)\nAND\nself:true",
+        "rationale": "Introduces alternative jargon for assault (e.g., 'fondled,' 'sexual advance') and public spaces (e.g., 'hotel pool,' 'water park') while expanding emotional context (e.g., 'traumatized,' 'felt powerless'). Relaxes proximity to 15 to capture broader narratives and boosts first-person indicators (e.g., 'my story,' 'recounted').",
+        "proximity": 15,
+        "boost_core_terms": true,
+        "exclude_relationships": true,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(pool OR \"public pool\" OR \"swimming pool\" OR natatorium OR \"recreation center\" OR \"hotel pool\" OR \"water park\" OR \"public baths\")^2 OR selftext:(\"public pool\"~15 OR pool~15 OR \"swimming pool\"~15 OR natatorium~15 OR \"recreation center\"~15 OR \"hotel pool\"~15 OR \"water park\"~15 OR \"public baths\"~15))\nAND\n(selftext:(assaulted OR groped OR \"unwanted touch\" OR \"touched me\" OR \"grabbed me\" OR molested OR violated OR fondled OR \"felt up\" OR \"inappropriate touch\" OR harassed OR \"sexual advance\")^2 AND selftext:(I OR me OR my OR \"my story\" OR recounted OR shared OR told)^3)\nAND\n(selftext:(woman OR girl OR female OR she OR her)^3)\nAND\n(selftext:(stranger OR \"didn\u2019t know\" OR \"never met\" OR \"random guy\" OR \"some man\" OR \"unknown person\" OR \"someone I didn\u2019t know\" OR \"some guy\")~5)\nAND\n(selftext:(shocked OR terrified OR humiliated OR violated OR \"couldn\u2019t move\" OR \"froze\" OR traumatized OR \"didn\u2019t react\" OR \"too scared\" OR \"felt powerless\")~8)\nAND\n-(selftext:boyfriend OR husband OR partner OR friend OR coworker OR classmate OR acquaintance OR colleague OR ex)\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 2.8355555534362793,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "22a512e2",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(selftext:(pool OR swimming OR aquatic OR \"public space\" OR \"municipal pool\" OR \"hotel pool\" OR \"water park\" OR \"public baths\" OR \"recreation center\")~20)\nAND\n(selftext:(assaulted OR groped OR \"unwanted touch\" OR molested OR harassed OR \"inappropriate\" OR violated OR \"sexual harassment\" OR \"felt up\")~20)\nAND\n(selftext:(I OR me OR my OR \"my experience\" OR \"I was\") AND (woman OR girl OR female OR she OR her))\nAND\n(selftext:(stranger OR unknown OR \"some guy\" OR \"random person\" OR \"someone I didn\u2019t know\" OR \"some man\")~10)\nAND\n-(selftext:boyfriend OR husband OR partner OR friend OR coworker OR classmate OR acquaintance)\nAND\nself:true",
+        "rationale": "Maximizes recall by using loose proximity (20) and minimal mandatory terms, while introducing broader concepts like 'public space' and 'sexual harassment.' Focuses on first-person language (e.g., 'my experience,' 'I was') to prioritize narrative-driven results.",
+        "proximity": 20,
+        "min_should_match": 2,
+        "exclude_relationships": true,
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(pool OR swimming OR aquatic OR \"public space\" OR \"municipal pool\" OR \"hotel pool\" OR \"water park\" OR \"public baths\" OR \"recreation center\")~20)\nAND\n(selftext:(assaulted OR groped OR \"unwanted touch\" OR molested OR harassed OR \"inappropriate\" OR violated OR \"sexual harassment\" OR \"felt up\")~20)\nAND\n(selftext:(I OR me OR my OR \"my experience\" OR \"I was\") AND (woman OR girl OR female OR she OR her))\nAND\n(selftext:(stranger OR unknown OR \"some guy\" OR \"random person\" OR \"someone I didn\u2019t know\" OR \"some man\")~10)\nAND\n-(selftext:boyfriend OR husband OR partner OR friend OR coworker OR classmate OR acquaintance)\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 2.390848398208618,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks in previous iterations include: (1) **Topic drift**\u2014overly broad terms like \"public space\" or \"aquatic\" dilute precision, while strict proximity may exclude relevant phrasing variations. (2) **Noise**\u2014prohibited terms (e.g., \"boyfriend\") are correct but may inadvertently filter out tangential discussions. (3) **Missing intent**\u2014first-person narratives may use indirect language (e.g., \"I froze\" vs. \"I was shocked\") or omit explicit terms like \"stranger.\" (4) **Satisfied intent**\u2014core elements (female narrator, pool setting, assault) are well-targeted, but **remaining question** logic suggests refining emotional/behavioral descriptors (e.g., dissociation, reporting to staff) and alternative jargon (e.g., \"creep,\" \"pervert\").<\\/analyse><modification>Narrow emotional/behavioral filters while expanding jargon for perpetrator and assault descriptors, and introduce proximity-based flexibility for first-person indicators.<\\/modification>"
+}

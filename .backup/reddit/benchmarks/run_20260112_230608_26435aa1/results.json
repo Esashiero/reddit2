@@ -1,0 +1,52 @@
+{
+  "run_id": "26435aa1",
+  "timestamp": 1768255568.2345507,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "652f9b87",
+      "type": "standard",
+      "config": {
+        "type": "standard",
+        "limit": 10,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\") AND (assaulted OR groped OR \"grabbed me\" OR \"touched me\" OR molested OR \"sexually assaulted\") AND (stranger OR \"didn\u2019t know\" OR \"random guy\" OR \"unknown man\") AND (female OR woman OR girl OR \"as a woman\") AND (locker~5 room OR changing~5 room OR \"in the water\" OR \"while swimming\")) self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.935149431228638,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "7e4c6e0a",
+      "type": "deep_scan",
+      "config": {
+        "type": "deep_scan",
+        "limit": 10,
+        "is_deep_scan": true,
+        "sort_by": "top",
+        "eval_limit": 3
+      },
+      "generated_query": "(assaulted OR attacked OR groped OR \"touched without consent\" OR molested OR \"sexually assaulted\")~5\nAND\n(\"public pool\" OR \"community pool\" OR \"swimming pool\" OR \"pool locker room\" OR \"pool changing room\" OR \"pool shower\" OR \"municipal pool\" OR \"hotel pool\" OR \"apartment pool\")\nAND\n(stranger OR \"random guy\" OR \"random man\" OR \"unknown man\" OR \"unknown guy\" OR \"some guy\" OR \"some man\" OR \"some dude\")\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 102.09337258338928,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "Analysis failed: Expecting value: line 1 column 1 (char 0)"
+}

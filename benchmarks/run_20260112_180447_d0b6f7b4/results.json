@@ -1,0 +1,52 @@
+{
+  "run_id": "d0b6f7b4",
+  "timestamp": 1768237487.6032913,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "ac40eac4",
+      "type": "standard",
+      "config": {
+        "type": "standard",
+        "limit": 10,
+        "eval_limit": 3
+      },
+      "generated_query": "((\"groped\" OR \"touched\" OR \"grabbed\" OR \"assaulted\" OR \"molested\")~5 (\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"lap pool\" OR \"hotel pool\" OR \"community pool\")) AND ((\"stranger\" OR \"random guy\" OR \"unknown man\" OR \"some guy\" OR \"creep\")~3 (\"approached\" OR \"came up\" OR \"cornered\" OR \"followed\")) AND (selftext:\"woman\" OR selftext:\"female\" OR selftext:\"girl\" OR selftext:\"lady\") AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.749945878982544,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "8bffa362",
+      "type": "deep_scan",
+      "config": {
+        "type": "deep_scan",
+        "limit": 10,
+        "is_deep_scan": true,
+        "sort_by": "top",
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\") AND (assaulted OR groped OR \"grabbed me\" OR \"touched me\" OR \"molested\" OR \"sexually assaulted\") AND (stranger OR \"didn\u2019t know\" OR \"random guy\" OR \"unknown man\") AND (female OR woman OR girl OR \"as a woman\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 134.87128853797913,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Both previous queries returned zero results, indicating either overly restrictive filters or mismatched terminology. The intent is satisfied in terms of core keywords (assault, pool, stranger, woman), but the phrasing may be too rigid or miss alternative expressions (e.g., \"harassed,\" \"felt up,\" \"violated\"). Topic drift is minimal, but noise could arise from unrelated pool incidents (e.g., accidents). The remaining question logic suggests exploring less direct synonyms or narrative-style phrasing (e.g., \"I was at the pool when...\").<\\/analyse><modification>Broaden terminology and relax proximity constraints while introducing narrative-style phrasing to capture first-person accounts.<\\/modification>"
+}

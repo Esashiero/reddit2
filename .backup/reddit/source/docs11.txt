@@ -1,0 +1,84 @@
+Semantic Similarity for Contextual Transfer:
+
+        How can the system efficiently determine semantic similarity between a new benchmark's --description and past benchmark descriptions, to ensure that only relevant historical keyword intelligence is applied? What tools or techniques (e.g., embedding-based similarity, LLM classification) would be most suitable here?
+
+
+    Architectural Integration and Scalability:
+
+        What modifications are required in scripts/auto_optimize.py, benchmark_module/benchmarking.py, and potentially new utility modules to:
+
+            Access and efficiently process the growing archive of benchmark_results/*.json files.
+
+            Maintain and update the derived 'keyword efficacy index' (e.g., as a persistent JSON file or simple database).
+
+            Integrate this learning into the iterative optimization loop without significantly increasing computational cost per iteration?
+
+
+
+    LLM Instruction Refinement:
+
+        How would the system prompt for the "Search Optimization Expert" (_analyze_results) need to evolve to incorporate this historical keyword intelligence, allowing it to provide even more informed and strategic advice for query and configuration adjustments?
+
+
+
+
+
+
+To implement a dynamic, adaptive prompt optimization system for the Reddit AI Curator, you should transition from a linear optimization loop to an Agent-Mediated Dialogic (AMD) framework that utilizes Cumulative Process Rewards and Contextual Prompt Routing
+.
+
+3. Semantic Similarity for Contextual Transfer
+To ensure only relevant historical intelligence is applied to a new search, the system must bridge the "vocabulary mismatch" between the new description and past benchmarks
+.
+
+• Embedding-Based Similarity: Use a lightweight model like all-MiniLM-L6-v2 for rapid semantic clustering or Qwen3-Embedding-4B for high-precision mapping of community-specific jargon
+. Map the new --description into a Gaussian kernel semantic space to mathematically "pull together" similar past benchmark intents while "pushing away" those that exhibit topic drift
+.
+
+• Topic Community Detection: Apply the Leiden algorithm to your archive of descriptions to uncover latent "communities of practice" (e.g., clusters of "Personal Finance" vs. "Biomedical Advice")
+. This allows the system to retrieve keywords from the specific "folksonomy" or community-driven language of that cluster
+.
+
+• Contextual Prompt Routing: Dynamically route the search intent into category-specific bins (e.g., "Real Estate" or "Vehicles")
+. This prevents the "Search Optimization Expert" from applying irrelevant historical constraints (like "location accuracy" for a query about "Python code")
+.
+
+4. Architectural Integration and Scalability
+Your architecture must evolve to maintain an internal "knowledge cache" while managing Reddit's structural API limits
+.
+
+• Modifications to auto_optimize.py:
+    ◦ Branching Exploration: Transition the loop from testing one query at a time to a branching search. Generate multiple sub-queries in parallel (e.g., one specific, one "Discovery Mode") and retain only the top-k most promising paths based on their cumulative rewards
+.
+
+    ◦ Chronological Batching: To bypass Reddit's 1,000-item limit, the script should automatically partition searches into chronological windows using UNIX timestamps (e.g., after:30d)
+.
+
+• Modifications to benchmarking.py:
+    ◦ Stateful Knowledge Cache: Decouple external document retrieval from internal state. Maintain a persistent index of "What is Known" (verified facts from previous hits) versus "Unresolved Gaps" (missing pieces of the user description)
+.
+
+    ◦ Efficacy Tracking: Implement an automated module to process the benchmarks/ archive. It should calculate a "Self-Critique Reward" for every query term, identifying which tokens (from either queries or post content) consistently raise the relevance score
+.
+
+• Scalability via Persistence: Maintain a persistent Keyword Efficacy Index (JSON or database). This allows the system to perform Aligned Query Expansion (AQE), where the model is "aligned" to prefer keywords that historically raised the rank of relevant documents without needing a fresh LLM call for every term
+.
+
+5. LLM Instruction Refinement
+The "Search Optimization Expert" (_analyze_results) should be transformed from a passive analyzer into a Reflective Feedback Agent
+.
+
+• Socratic Intent Decomposition: Instruct the expert to first decompose the user's description into atomic sub-questions (clarification, assumption probing, and implication probing)
+. This prevents the model from generating homogeneous, narrow expansions
+.
+
+• Symbolic Mapping of Rewards: The prompt should explicitly guide the model to map "efficacy rewards" into Lucene syntax modifiers. If a historical term has high correlation with success, instruct the expert to apply Boosting (^N); if a term correlates with "meta-discussion" noise, instruct it to use Prohibition (-) or NOT operators
+.
+
+• Rationale-First Reasoning: Require the model to output a historical critique of past proposed_variations before synthesizing the next string
+. The instruction should be: "Analyze why previous iterations hit zero results (over-constrained) or plateaued (topic drift) before suggesting the next configuration"
+.
+
+
+-------------------------------------------------------------------------------
+Analogy for Adaptive Prompt Optimization: Think of your current system as a pathfinder in a forest who only remembers the last step they took. By integrating historical intelligence and semantic similarity, you are giving that pathfinder a topographical map and a shared radio. The Similarity Transfer is the radio telling them where other pathfinders (past benchmarks) found clear trails; the Efficacy Index is the map highlighting which types of terrain (keywords) are easiest to cross; and the Refined Instructions are a seasoned guide who reviews every wrong turn (failed query) to ensure the team never walks into the same thicket twice.

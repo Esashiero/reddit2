@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+import sys
+import os
+import argparse
+import json
+from pprint import pprint
+
+# Add project root to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from benchmark_module.benchmarking import BenchmarkRunner
+
+def main():
+    parser = argparse.ArgumentParser(description="Auto-Optimize Reddit Search Queries")
+    parser.add_argument("--description", type=str, required=True, help="Description of what you are looking for")
+    parser.add_argument("--provider", type=str, default="mistral", choices=["mistral", "gemini"], help="LLM Provider")
+    parser.add_argument("--limit", type=int, default=10, help="Number of posts to fetch per variation")
+    parser.add_argument("--iterations", type=int, default=1, help="Number of optimization iterations")
+    parser.add_argument("--out", type=str, default="benchmarks", help="Output directory")
+    
+    args = parser.parse_args()
+
+    runner = BenchmarkRunner(provider=args.provider, storage_dir=args.out)
+
+    # Initial variations
+    current_variations = [
+        {
+            "type": "standard", 
+            "limit": args.limit
+        },
+        {
+            "type": "deep_scan",
+            "limit": args.limit,
+            "is_deep_scan": True,
+            "sort_by": "top"
+        }
+    ]
+    
+    print(f"🚀 Starting Auto-Optimization for: '{args.description}'")
+    print(f"   Provider: {args.provider}")
+    
+    for i in range(args.iterations):
+        print(f"\n--- 🔄 Iteration {i+1}/{args.iterations} ---")
+        print(f"   Variations to test: {len(current_variations)}")
+        
+        saved_path, analysis_data = runner.run_benchmark_suite(args.description, current_variations)
+        
+        print(f"\n✅ Iteration complete!")
+        print(f"📂 Results: {saved_path}")
+        
+        # Load and display summary
+        run = runner.storage.load_run(os.path.basename(saved_path))
+        if run:
+            print("\n📊 Summary:")
+            best_score = -1
+            for var in run.variations:
+                m = var['metrics']
+                score = m['average_score']
+                print(f"   Variation: {var['type']:<15} | Found: {m['found_count']:<2} | Avg Score: {score:.1f}")
+                best_score = max(best_score, score)
+
+        # Prepare next iteration
+        if analysis_data.get("proposed_variations"):
+            print("\n🧠 AI Analysis:")
+            print(f"   {analysis_data.get('text')}")
+            
+            # Keep the best historical variation + the new AI optimized one?
+            # For simplicity, let's just try the new AI ones.
+            current_variations = analysis_data["proposed_variations"]
+            print(f"   Next proposed query: {current_variations[0].get('manual_query')[:100]}...")
+        else:
+            print("\n🛑 No more improvements suggested. Converged.")
+            break
+            
+        if best_score >= 9.0:
+            print("\n🎯 High relevance achieved (9.0+). Stopping early.")
+            break
+
+if __name__ == "__main__":
+    main()

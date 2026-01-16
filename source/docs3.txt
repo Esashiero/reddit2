@@ -1,0 +1,53 @@
+How can we modify the LLMFilter.generate_boolean_string prompt to not just consider the initial --description, but also incorporate negative examples (e.g., common irrelevant terms found in previous low-score results) or positive examples (keywords from high-score results) from the current BenchmarkRun?
+
+To modify the LLMFilter.generate_boolean_string prompt to incorporate positive and negative feedback from a BenchmarkRun, you should transition from a zero-shot approach to a Few-Shot Chain-of-Thought (CoT) or Agent-Mediated Dialogic (AMD) framework. This involves extracting term-level evidence from previous results and instructing the LLM to apply symbolic Boolean logic (e.g., boosting and exclusion) based on those examples
+.
+
+Here is a comprehensive approach to improving the prompt and underlying logic:
+1. Update the Prompt Template for "Example-Aware" Generation
+The modified prompt should include specific sections for contextual evidence retrieved from high-scoring and low-scoring posts. Research suggests that providing a model with a "rationale" before it outputs the final string allows it to better weigh mandatory (AND) versus synonymous (OR) terms
+.
+
+Proposed Prompt Structure:
+• Initial Goal: {user_description}
+• Positive Evidence (High Relevance): Keywords or themes extracted from posts with scores > 8/10.
+• Negative Evidence (Irrelevant/Noisy): Terms or "concept drift" patterns identified in posts with scores < 3/10.
+• Instruction: "Synthesize a Boolean string using Lucene syntax. Use OR groups for synonyms found in positive evidence, and NOT groups to exclude recurring noise found in negative evidence. Apply Boosting (^N) to terms that are uniquely present in high-score results"
+.
+
+2. Implement Symbolic Logic for Feedback
+To effectively utilize the examples from the current iteration, the prompt must guide the LLM on how to translate "quality" into "syntax":
+• Positive Reinforcement (OR/Boosting): When specific keywords are identified in high-score results (e.g., a "Perfect match" scored 10/10), the LLM should add them to the query using the OR operator or the ^ boost factor to increase their relevance weight in the Lucene engine
+.
+
+• Negative Constraint (NOT/Exclusion): Terms frequently found in low-score "irrelevant/spam" results (scored 0-2/10) should be explicitly excluded using the NOT or - operator
+. For example, if a search for "Python jobs" keeps returning "beginner questions," the prompt should trigger a NOT "beginner" constraint
+.
+
+• Proximity and Phrasing: For multifaceted descriptions, instruct the LLM to use Proximity Searches (~N) to ensure terms from positive examples appear near each other, reducing false positives
+.
+
+3. Adopt the SiGIR or AMD Framework for Iteration
+To improve the "Autonomous Optimization Loop," you can refine the logic in scripts/auto_optimize.py to act as a Reflective Feedback Agent
+.
+
+• Self-Critique Guided Iterative Reasoning (SiGIR): Instead of just proposing a new query, the "Optimization Expert" LLM should first generate a Self-Critique Reward
+. It analyzes why a previous query failed—distinguishing between "over-constrained logic" (0 results) and "topic drift" (low scores)—and provides this analysis as a direct instruction to the LLMFilter for the next pass
+.
+
+• Contextual Filtering: The code should take the top-10 results from the current pass and use a "Dialogic Answering Agent" to extract "verified facts" versus "unresolved gaps"
+. The gaps then become the primary focus of the expanded keywords in the next iteration
+.
+
+4. Technical Execution and Constraints
+When modifying the code to pass these examples, keep the following Reddit API constraints in mind:
+• Character Limits: Complex Boolean strings with many "OR" variations can hit URL-based character limits (typically ~2,000 on desktop)
+.
+
+• Syntax Sensitivity: Ensure the LLM is instructed to capitalize Boolean operators (AND, OR, NOT) as required by Lucene and to avoid leading spaces in field filters (e.g., author:reddit is valid; author: reddit is not)
+.
+
+• Token Consumption: Few-shot prompting with many examples increases token costs; use "Contextual Evaluation Prompt Routing" to only include examples from the specific subreddit or topic domain being searched
+.
+
+Analogy for Incorporating Examples: Think of your search script as a sculptor. The initial --description is the rough block of marble. The positive examples are the artist’s reference sketches showing which details to emphasize. The negative examples are the flawed pieces chipped off earlier; by looking at them, the sculptor knows exactly where not to strike the chisel next time, ensuring the final statue (the refined query) is a perfect likeness.

@@ -1,0 +1,57 @@
+{
+  "run_id": "6eb111bf",
+  "timestamp": 1768229787.5816467,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "279ed9fb",
+      "type": "specific",
+      "config": {
+        "type": "specific",
+        "manual_query": "(title:(pool OR \"public pool\" OR \"swimming pool\" OR natatorium OR \"recreation center\")^2 OR selftext:(\"public pool\"~5 OR pool~5 OR \"swimming pool\"~5 OR natatorium~5))\nAND\n(selftext:(assaulted OR groped OR \"unwanted touch\" OR \"touched me\" OR \"grabbed me\" OR molested OR violated)^2 AND selftext:(I OR me OR my)^3)\nAND\n(selftext:(woman OR girl OR female)^3 OR (selftext:(she OR her) AND selftext:(told OR recounted OR shared)))\nAND\n(selftext:(stranger OR \"didn\u2019t know\" OR \"never met\" OR \"random guy\" OR \"some man\")~3)\nAND\n(selftext:(shocked OR terrified OR humiliated OR violated OR \"couldn\u2019t move\" OR \"froze\")~5)\nAND\n-(selftext:boyfriend OR husband OR partner OR friend OR coworker OR classmate)\nAND\nself:true",
+        "rationale": "Strict proximity (~5) for assault terms and first-person pronouns ensures precision, while emotional descriptors (e.g., 'shocked') capture narrative depth. Excludes non-stranger perpetrators.",
+        "proximity": 5,
+        "boost_first_person": 3,
+        "boost_emotional_terms": 2,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(pool OR \"public pool\" OR \"swimming pool\" OR natatorium OR \"recreation center\")^2 OR selftext:(\"public pool\"~5 OR pool~5 OR \"swimming pool\"~5 OR natatorium~5))\nAND\n(selftext:(assaulted OR groped OR \"unwanted touch\" OR \"touched me\" OR \"grabbed me\" OR molested OR violated)^2 AND selftext:(I OR me OR my)^3)\nAND\n(selftext:(woman OR girl OR female)^3 OR (selftext:(she OR her) AND selftext:(told OR recounted OR shared)))\nAND\n(selftext:(stranger OR \"didn\u2019t know\" OR \"never met\" OR \"random guy\" OR \"some man\")~3)\nAND\n(selftext:(shocked OR terrified OR humiliated OR violated OR \"couldn\u2019t move\" OR \"froze\")~5)\nAND\n-(selftext:boyfriend OR husband OR partner OR friend OR coworker OR classmate)\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 2.568068504333496,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "7a9f85e2",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(selftext:(pool OR swimming OR aquatic OR \"public baths\" OR \"municipal pool\" OR \"hotel pool\" OR \"water park\")~10)\nAND\n(selftext:(assaulted OR groped OR \"unwanted advance\" OR harassed OR molested OR \"touched inappropriately\" OR \"felt up\")~10)\nAND\n(selftext:(I OR me OR my) AND (selftext:(woman OR girl OR female) OR (selftext:(she OR her) AND selftext:(said OR told))))\nAND\n(selftext:(stranger OR unknown OR \"some guy\" OR \"random person\" OR \"someone I didn\u2019t know\")~8)\nAND\n-(selftext:boyfriend OR husband OR acquaintance OR colleague)\nAND\nself:true",
+        "rationale": "Wider proximity (~10) and expanded synonyms for pool/assault terms improve recall, while gender terms are boosted to prioritize female narratives.",
+        "proximity": 10,
+        "boost_gender_terms": 1.5,
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(pool OR swimming OR aquatic OR \"public baths\" OR \"municipal pool\" OR \"hotel pool\" OR \"water park\")~10)\nAND\n(selftext:(assaulted OR groped OR \"unwanted advance\" OR harassed OR molested OR \"touched inappropriately\" OR \"felt up\")~10)\nAND\n(selftext:(I OR me OR my) AND (selftext:(woman OR girl OR female) OR (selftext:(she OR her) AND selftext:(said OR told))))\nAND\n(selftext:(stranger OR unknown OR \"some guy\" OR \"random person\" OR \"someone I didn\u2019t know\")~8)\nAND\n-(selftext:boyfriend OR husband OR acquaintance OR colleague)\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 2.4500041007995605,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Both trajectories returned zero results, indicating the queries are either too restrictive or the topic is rarely discussed in the exact phrasing used. The specific trajectory may suffer from over-constrained proximity and mandatory terms, while the broad trajectory lacks precision in capturing the emotional and situational nuances (e.g., 'first-person,' 'public pool,' 'stranger'). The intent is satisfied in terms of core keywords (assault, pool, woman, stranger) but misses implicit emotional context (e.g., 'first-person narrative,' 'detailed recount') and alternative jargon (e.g., 'fondled,' 'violated,' 'public space').<\\/analyse><modification>Expand recall by incorporating emotional and narrative cues while relaxing proximity constraints and introducing alternative terminology for assault and public spaces.<\\/modification>"
+}

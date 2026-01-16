@@ -1,0 +1,72 @@
+{
+  "run_id": "242bfd75",
+  "timestamp": 1768226730.2103465,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "a916fdd3",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(title:(\"pool\" OR \"swim\") AND (\"assault\" OR \"attack\" OR \"groped\" OR \"touched\" OR \"grabbed\" OR \"harassed\" OR \"violated\" OR \"felt unsafe\" OR \"creepy guy\" OR \"pervert\") AND (stranger OR random OR guy OR man OR dude) AND (\"I\" OR \"me\" OR \"my\" OR \"mine\") AND (\"story\" OR \"experience\" OR \"happened\" OR \"trauma\" OR \"never went back\" OR \"scared\" OR \"anxiety\") AND self:true)",
+        "rationale": "Prioritizes recall by expanding assault-related terms (e.g., \"felt unsafe\") and emotional aftermath (e.g., \"anxiety\"), while using loose proximity to capture narrative flow. Excludes fictional content.",
+        "proximity": 15,
+        "boost_phrases": [
+          "groped me",
+          "touched me without consent",
+          "creepy guy at the pool"
+        ],
+        "exclude_terms": [
+          "-fiction",
+          "-imaginary",
+          "-what if"
+        ],
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swim\") AND (\"assault\" OR \"attack\" OR \"groped\" OR \"touched\" OR \"grabbed\" OR \"harassed\" OR \"violated\" OR \"felt unsafe\" OR \"creepy guy\" OR \"pervert\") AND (stranger OR random OR guy OR man OR dude) AND (\"I\" OR \"me\" OR \"my\" OR \"mine\") AND (\"story\" OR \"experience\" OR \"happened\" OR \"trauma\" OR \"never went back\" OR \"scared\" OR \"anxiety\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 7.832068920135498,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "306361f4",
+      "type": "exploratory",
+      "config": {
+        "type": "exploratory",
+        "manual_query": "(title:(\"pool\" OR \"swim\" OR \"locker room\" OR \"changing room\" OR \"shallow end\" OR \"deep end\") AND (\"weird\" OR \"uncomfortable\" OR \"sketchy\" OR \"made me leave\" OR \"didn\u2019t feel safe\" OR \"reported\" OR \"lifeguard ignored\") AND (stranger OR random OR guy) AND (\"I\" OR \"me\") AND (\"first time\" OR \"never again\" OR \"avoid\") AND self:true)",
+        "rationale": "Targets implicit narratives (e.g., \"sketchy\") and contextual details (e.g., \"locker room\") to surface stories where assault isn\u2019t explicitly named. Focuses on behavioral outcomes (e.g., avoidance).",
+        "proximity": 20,
+        "boost_phrases": [
+          "made me leave the pool",
+          "lifeguard didn\u2019t help"
+        ],
+        "exclude_terms": [
+          "-advice",
+          "-question"
+        ],
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swim\" OR \"locker room\" OR \"changing room\" OR \"shallow end\" OR \"deep end\") AND (\"weird\" OR \"uncomfortable\" OR \"sketchy\" OR \"made me leave\" OR \"didn\u2019t feel safe\" OR \"reported\" OR \"lifeguard ignored\") AND (stranger OR random OR guy) AND (\"I\" OR \"me\") AND (\"first time\" OR \"never again\" OR \"avoid\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.475358724594116,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks in previous iterations include: (1) **Topic drift**\u2014terms like \"felt unsafe\" or \"creepy guy\" may capture general unease rather than a specific assault incident; (2) **Noise**\u2014broad terms like \"harassed\" or \"violated\" could return workplace harassment or non-physical incidents; (3) **Missing intent**\u2014lack of proximity constraints (e.g., assault + pool context) dilutes precision. **Satisfied intent**: First-person perspective (\"I\", \"me\") and pool-related terms. **Remaining Question logic**: Need stricter filters for *physical assault* (e.g., groping, grabbing) in a *public pool* by a *stranger*, with emotional aftermath (e.g., trauma, avoidance).<\\/analyse><modification>Narrow to high-precision terms for *physical assault* with proximity constraints, boost first-person trauma language, and prohibit non-relevant contexts (e.g., workplace, domestic).<\\/modification>"
+}

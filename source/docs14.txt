@@ -1,0 +1,99 @@
+
+    "How should the Keyword Efficacy Index handle different subreddits? Should keywords be global, or should a keyword like 'broke' be weighted differently in r/finance vs r/relationship_advice?"
+
+The Keyword Efficacy Index (KEI) should handle subreddits as distinct semantic domains rather than applying a one-size-fits-all global weighting
+. While a global index is simpler to maintain, it is highly susceptible to topic drift, where a keyword effectively retrieves relevant content in one community but introduces significant noise in another
+.
+1. Subreddit-Specific Weighting (r/finance vs. r/relationship_advice)
+As evidenced by the research on semantic interplay between taxonomies and folksonomies, terms carry different "signal strengths" depending on the established community of practice
+.
+• Contextual Weighting: In r/finance, the term "broke" likely correlates with financial insolvency or debt
+. In this domain, the KEI should assign it a high Positive Efficacy reward for queries related to "wealth management" or "poverty"
+.
+• Topic Drift: In r/relationship_advice, "broke" might refer to a "broken heart" or a "broken trust"
+. If the tool applies the r/finance weight globally, it would result in cascading errors, retrieving interpersonal stories for a financial query
+.
+• Recommendation: Weighting must be local. The index should store keywords as a tuple of (keyword, subreddit, efficacy_score) to ensure that the "Search Optimization Expert" applies the correct Boosting (^N) or Prohibition (-) operators based on the target community
+.
+2. Implementation via Contextual Evaluation Prompt Routing
+To handle these differences efficiently, you should implement Contextual Evaluation Prompt Routing
+.
+• Routing Logic: Instead of a monolithic prompt, the system should use the subreddit field or a top-level category (e.g., "Personal Finance" vs. "Social Relationships") to route the search intent to a specialized "KEI slice"
+.
+• Domain-Specific Rubrics: Each route should have its own rating rubric and few-shot examples
+. For example, the r/finance route would include exemplars where "broke" correctly identified relevant financial posts, while the r/relationship_advice route would treat it as a potential distractor for financial queries
+.
+3. Bridging the Vocabulary Mismatch with Embeddings
+Because subreddits act as a taxonomy and user-generated jargon acts as a folksonomy, you can use embedding models like all-MiniLM-L6-v2 to bridge the "vocabulary mismatch"
+.
+• Semantic Proximity: The KEI can calculate the Euclidean distance between a new query and historical high-relevance posts within a specific subreddit
+.
+• Transferability: If a keyword like "broke" has high efficacy in r/investing, the system can "transfer" that intelligence to r/finance if the two subreddits occupy the same Gaussian kernel semantic space, but it should "push away" that intelligence when searching r/relationship_advice
+.
+4. Automated Pruning and "Reasoning Noise"
+The _analyze_results method should monitor for semantic narrowing—a trend where certain keywords begin to consolidate around too narrow a set of themes over time
+.
+• If the term "broke" consistently yields meta-discussions (e.g., users complaining about being broke) rather than the "direct stories" requested by the user, the KEI should trigger automated pruning for that specific keyword-subreddit pair
+.
+• This reduces "reasoning noise" and prevents the system from hitting the same "dead ends" in future iterations
+.
+
+--------------------------------------------------------------------------------
+Analogy for Subreddit Weighting: Think of each subreddit as a specialized department in a library. If you walk into the Accounting department and ask for a book on being "broke," the librarian (the KEI) will point you to bankruptcy law. If you walk into the Poetry department and ask for the same thing, the librarian will point you to sonnets about loss. A global weighting is like a librarian who only knows one department; a contextual index gives you a team of specialist librarians who know exactly what your words mean in the room you are standing in.
+How does Agent-Mediated Dialogic Inquiry decompose initial user queries?
+Explain the role of the Leiden algorithm in subreddit discovery.
+Contrast the pointwise and pairwise approaches to relevance judging.
+
+
+    "What is the optimal Proximity Value (~N) for Reddit stories? Does the research suggest ~5 or ~10 is better for matching actions to entities in social media posts?"
+
+Based on the sources, the optimal Proximity Value (~N) for Reddit stories is generally suggested to be ~10, although ~5 is frequently utilized for tighter, more specific status-driven matches. Proximity searching allows you to find words within a specific distance of each other, regardless of their exact order, which is essential for capturing the informal and linguistically varied nature of social media text
+.
+Here is the breakdown of how to choose between these values for your system:
+1. The Case for Proximity ~10 (General Semantic Relevance)
+The research and standard Lucene documentation consistently use ~10 as the illustrative "gold standard" for matching related entities and concepts in general text or social media discourse
+.
+• Capturing Informal Language: In Reddit posts, users often separate entities from their actions with conversational filler, adjectives, or sub-clauses
+. A value of ~10 provides a large enough window to capture these relationships (e.g., "Python jobs"~10 would catch "Python is great for finding new coding jobs")
+.
+• Decompositional Reasoning: When your "Search Optimization Expert" identifies "pivotal sentences" from high-relevance results, using ~10 helps bind those key terms together while allowing for the "word salad" patterns typical of user-generated content
+.
+2. The Case for Proximity ~5 (Precision and Logic)
+A value of ~5 is recommended when you need to match highly specific logical states or tight entity-action pairs where a larger window would introduce too much noise.
+• Specific Identifiers: Source documentation for logs and technical monitoring suggests ~5 for catching immediate relationships like "failed status"~5
+.
+• Reducing False Positives: In your Curator's "Autonomous Optimization Loop," if a query for a niche topic (like "cryptocurrency security") is returning too many general discussions, narrowing the proximity to ~5 can force the engine to find posts where the specific terms are used in the same breath, thereby filtering out "red herrings"
+.
+3. Implementing Proximity in Your Boolean Strings
+To optimize retrieval in your LLMFilter.generate_boolean_string method, you should instruct the LLM to apply these values strategically based on the user's --description:
+• For multifaceted intents: Use Proximity Searches (~10) to ensure terms from positive evidence appear near each other, which reduces false positives in complex stories
+.
+• For exact-match requirements: If the user requests a very specific action (e.g., "how to fix a specific error"), ~5 is superior for anchoring the "how to" or "fix" action directly to the error code
+.
+
+--------------------------------------------------------------------------------
+Analogy for Proximity Values: Think of Proximity Search as a "Conversation Window." A value of ~5 is like a private elevator conversation: the participants must be standing right next to each other to be heard, making the match very intense and specific. A value of ~10 is like a small dinner table conversation: people can be separated by a few plates and centerpieces (filler words), but they are still clearly part of the same discussion, allowing for a more natural and inclusive search.
+What retrieval unit outperforms traditional passage or sentence-based methods?
+How many samples per iteration are needed for prompt optimization?
+Which specific Lucene operator restricts Reddit searches to text-only posts?
+
+
+    "For Chronological Batching, what is the safest 'time-step' to avoid Reddit API rate limits while performing a multi-year scan?"
+
+For chronological batching during a multi-year scan, the sources suggest that a 30-day window (after:30d) is the standard and safest time-step to ensure consistent retrieval while navigating API constraints
+. This technique is essential because the Reddit search API imposes a strict 1,000-item limit on the total number of results accessible for a single query. By partitioning a search into discrete 30-day segments using UNIX timestamps, the system can surface longitudinal data that would otherwise be hidden behind this 1,000-item horizon
+.
+While the PRAW library is designed to handle rate limits automatically by pausing requests when the API becomes saturated, aggressive scanning across multiple years can still cause the script to slow down significantly
+. Utilizing a 30-day step helps manage the request slices, which default to 25 items but can reach a maximum of 100
+.
+However, the "Search Optimization Expert" can be instructed to adjust this time-step dynamically based on the volume of results found:
+• For High-Frequency Topics: If a search window returns near 1,000 items, the LLM should suggest narrowing the time filter (e.g., to a week or a day) to maintain precision and avoid missing data
+.
+• For Niche/Low-Recall Topics: If the "Found Count" is too low, the agent can trigger a deep_scan using a broader time filter like time: all combined with sort_by: top to maximize historical recall
+.
+
+--------------------------------------------------------------------------------
+Analogy for Chronological Batching: Think of a multi-year Reddit scan as trying to read a massive scroll through a tiny magnifying glass that can only show 1,000 words at a time. If you just look at the whole scroll at once, you’ll only see the first 1,000 words and miss the rest of the history. Chronological batching is like marking the scroll into one-inch sections (the 30-day time-steps) and moving the magnifying glass systematically from one mark to the next. This ensures you read every word of the history without the glass "fogging up" (hitting a rate limit) from moving too fast.
+What conditions trigger the termination of the autonomous optimization loop?
+How does the system bypass Reddit's 1,000-item search result limit?
+What role does the "Relevance Judge" perform during search iterations?

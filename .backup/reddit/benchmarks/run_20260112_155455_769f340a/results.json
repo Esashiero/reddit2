@@ -1,0 +1,52 @@
+{
+  "run_id": "769f340a",
+  "timestamp": 1768229695.502018,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "78c659d4",
+      "type": "standard",
+      "config": {
+        "type": "standard",
+        "limit": 10,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\") OR selftext:(\"pool\"~5 OR \"public pool\"~5 OR \"swimming pool\"~5 OR \"community pool\"~5))\nAND\n(title:(\"assaulted\" OR \"attacked\" OR \"groped\" OR \"molested\" OR \"touched\" OR \"grabbed\") OR selftext:(\"assaulted\"~5 OR \"attacked\"~5 OR \"groped\"~5 OR \"molested\"~5 OR \"touched without consent\"~5 OR \"grabbed\"~5))\nAND\n(title:(\"stranger\" OR \"unknown man\" OR \"random guy\" OR \"some guy\") OR selftext:(\"stranger\"~5 OR \"unknown man\"~5 OR \"random guy\"~5 OR \"some guy\"~5 OR \"man I didn\u2019t know\"~5))\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 2.8287041187286377,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "a711ed82",
+      "type": "deep_scan",
+      "config": {
+        "type": "deep_scan",
+        "limit": 10,
+        "is_deep_scan": true,
+        "sort_by": "top",
+        "eval_limit": 3
+      },
+      "generated_query": "((\"groped\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"felt up\")~5 (\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"lap pool\" OR \"hotel pool\" OR \"community pool\")) AND ((\"stranger\" OR \"random guy\" OR \"unknown man\" OR \"some guy\" OR \"creep\") AND (\"locker room\" OR \"changing room\" OR \"shower area\" OR \"pool deck\" OR \"underwater\")) AND (selftext:\"she\" OR selftext:\"her\" OR selftext:\"woman\" OR selftext:\"girl\" OR selftext:\"female\")^2",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 115.47770404815674,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks: The previous queries failed to retrieve any results, indicating potential over-constraint (e.g., strict proximity, mandatory terms like 'stranger' or 'public pool' may exclude relevant narratives). The intent is satisfied for core elements (pool, assault, first-person female perspective) but missing flexibility in terminology (e.g., 'harassed' instead of 'assaulted') or context (e.g., 'pool party' or 'aquatic center'). Noise is minimal, but recall is zero, suggesting a need for broader or alternative trajectories.<\u0002analyse><modification>Relax constraints by expanding synonyms, reducing proximity, and introducing exploratory jargon (e.g., 'harassment', 'unsafe') while preserving the first-person female perspective.<\u0002modification>"
+}

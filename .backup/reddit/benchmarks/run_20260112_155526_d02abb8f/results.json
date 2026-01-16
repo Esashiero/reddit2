@@ -1,0 +1,61 @@
+{
+  "run_id": "d02abb8f",
+  "timestamp": 1768229726.975521,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "a7864a5d",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(title:(\"pool\" OR \"swim\" OR \"aquatic\" OR \"pool party\" OR \"public swim\") OR selftext:(\"pool\"~10 OR \"swimming\"~10 OR \"aquatic center\"~10 OR \"pool party\"~10 OR \"public swim\"~10))\nAND\n(title:(\"assaulted\" OR \"harassed\" OR \"groped\" OR \"molested\" OR \"violated\" OR \"felt up\" OR \"unwanted touch\") OR selftext:(\"assaulted\"~10 OR \"harassed\"~10 OR \"groped\"~10 OR \"molested\"~10 OR \"violated\"~10 OR \"felt up\"~10 OR \"unwanted touch\"~10))\nAND\n(selftext:(\"I\" OR \"me\" OR \"my\") AND (selftext:(\"woman\" OR \"girl\" OR \"female\")^3 OR (selftext:(\"she\" OR \"her\") AND selftext:(\"told\" OR \"said\" OR \"shared\"))))\nAND\nself:true",
+        "rationale": "High recall trajectory to capture broader narratives, using relaxed proximity and expanded synonyms for 'assault' and 'pool'. Boosts female perspective terms to prioritize first-person accounts.",
+        "proximity": 10,
+        "boost_female_perspective": 3,
+        "exclude_terms": [
+          "-title:\"advice\"",
+          "-selftext:\"advice\""
+        ],
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swim\" OR \"aquatic\" OR \"pool party\" OR \"public swim\") OR selftext:(\"pool\"~10 OR \"swimming\"~10 OR \"aquatic center\"~10 OR \"pool party\"~10 OR \"public swim\"~10))\nAND\n(title:(\"assaulted\" OR \"harassed\" OR \"groped\" OR \"molested\" OR \"violated\" OR \"felt up\" OR \"unwanted touch\") OR selftext:(\"assaulted\"~10 OR \"harassed\"~10 OR \"groped\"~10 OR \"molested\"~10 OR \"violated\"~10 OR \"felt up\"~10 OR \"unwanted touch\"~10))\nAND\n(selftext:(\"I\" OR \"me\" OR \"my\") AND (selftext:(\"woman\" OR \"girl\" OR \"female\")^3 OR (selftext:(\"she\" OR \"her\") AND selftext:(\"told\" OR \"said\" OR \"shared\"))))\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 2.592040538787842,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "ceac3a42",
+      "type": "specific",
+      "config": {
+        "type": "specific",
+        "manual_query": "(selftext:(\"pool\"~3 AND (\"groped\"~3 OR \"touched\"~3 OR \"assaulted\"~3) AND (\"stranger\"~3 OR \"unknown\"~3 OR \"random\"~3)))\nAND\n(selftext:(\"I\" OR \"me\" OR \"my\") AND (selftext:(\"woman\" OR \"girl\" OR \"female\")^2))\nAND\n(selftext:(\"locker room\" OR \"changing room\" OR \"pool deck\" OR \"underwater\" OR \"shower\")~5)^1.5\nAND\nself:true",
+        "rationale": "Strict proximity and mandatory terms to target precise narratives about pool-related assaults by strangers, with location context (e.g., 'locker room') to filter noise.",
+        "proximity": 3,
+        "boost_female_perspective": 2,
+        "boost_location_context": 1.5,
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(\"pool\"~3 AND (\"groped\"~3 OR \"touched\"~3 OR \"assaulted\"~3) AND (\"stranger\"~3 OR \"unknown\"~3 OR \"random\"~3)))\nAND\n(selftext:(\"I\" OR \"me\" OR \"my\") AND (selftext:(\"woman\" OR \"girl\" OR \"female\")^2))\nAND\n(selftext:(\"locker room\" OR \"changing room\" OR \"pool deck\" OR \"underwater\" OR \"shower\")~5)^1.5\nAND\nself:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 6.5681047439575195,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Both trajectories returned zero results, indicating the queries are either too restrictive or misaligned with the language used in first-person accounts. The broad query casts a wide net but may lack specificity in capturing the *public* and *stranger* aspects, while the specific query enforces strict proximity but risks over-filtering (e.g., \"locker room\" may exclude pool-area assaults). The intent for a *first-person narrative* is satisfied, but the *public pool* and *stranger* contexts are likely missing due to rigid term requirements or insufficient alternative phrasing (e.g., \"public pool\" vs. \"community pool\").<\\/analyse><modification>Expand recall by diversifying location/jargon terms and relax proximity for core concepts while preserving first-person filters.<\\/modification>"
+}

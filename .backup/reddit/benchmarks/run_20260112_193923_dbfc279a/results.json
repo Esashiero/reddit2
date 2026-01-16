@@ -1,0 +1,56 @@
+{
+  "run_id": "dbfc279a",
+  "timestamp": 1768243163.8132544,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "00d74c5b",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(selftext:(\"pool\" OR \"swimming\" OR \"public pool\" OR \"locker room\" OR \"changing area\" OR \"aquatic center\") AND (\"grabbed\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"harassed\" OR \"violated\" OR \"felt up\" OR \"hands on\" OR \"inappropriate\") AND (\"I\" OR \"me\" OR \"my\" OR \"was\") AND (\"woman\" OR \"female\" OR \"girl\" OR \"lady\") AND (\"stranger\" OR \"random\" OR \"some guy\" OR \"unknown\" OR \"no idea\")) AND self:true",
+        "rationale": "Expands location and action terms to improve recall while maintaining gender/stranger filters. Proximity relaxed to 15 to accommodate narrative variability.",
+        "proximity": 15,
+        "boost_emotional": true,
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(\"pool\" OR \"swimming\" OR \"public pool\" OR \"locker room\" OR \"changing area\" OR \"aquatic center\") AND (\"grabbed\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"harassed\" OR \"violated\" OR \"felt up\" OR \"hands on\" OR \"inappropriate\") AND (\"I\" OR \"me\" OR \"my\" OR \"was\") AND (\"woman\" OR \"female\" OR \"girl\" OR \"lady\") AND (\"stranger\" OR \"random\" OR \"some guy\" OR \"unknown\" OR \"no idea\")) AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 5.992004156112671,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "e122d24a",
+      "type": "exploratory",
+      "config": {
+        "type": "exploratory",
+        "manual_query": "(selftext:(\"pool\" OR \"swim\") AND (\"creepy\" OR \"uncomfortable\" OR \"scary\" OR \"weird\" OR \"violated\" OR \"unsafe\") AND (\"guy\" OR \"man\" OR \"dude\" OR \"stranger\") AND (\"touched\" OR \"brushed\" OR \"reached\" OR \"cornered\") AND (\"first person\" OR \"my story\" OR \"I experienced\")) AND self:true",
+        "rationale": "Targets implicit descriptions of assault (e.g., 'creepy,' 'unsafe') and first-person storytelling, while excluding legal/advice-focused posts.",
+        "boost_first_person": "^2",
+        "prohibit_legal": "-selftext:(\"police\" OR \"report\" OR \"lawsuit\")",
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(\"pool\" OR \"swim\") AND (\"creepy\" OR \"uncomfortable\" OR \"scary\" OR \"weird\" OR \"violated\" OR \"unsafe\") AND (\"guy\" OR \"man\" OR \"dude\" OR \"stranger\") AND (\"touched\" OR \"brushed\" OR \"reached\" OR \"cornered\") AND (\"first person\" OR \"my story\" OR \"I experienced\")) AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 5.887256145477295,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks in previous iterations include over-reliance on explicit assault terminology (e.g., 'assaulted', 'molested'), which may not match the nuanced or euphemistic language victims use in first-person narratives. Topic drift is minimal, but intent is partially satisfied\u2014core elements (public pool, stranger, female perspective) are present, but missing softer phrasing (e.g., 'I froze', 'didn\u2019t know what to do') and contextual cues (e.g., 'lifeguard didn\u2019t see', 'other people around'). Remaining Question logic: How do victims describe the incident without legal/jargon terms, and what situational details (e.g., time of day, pool layout) are emphasized?<\\/analyse><modification>Refocus on implicit trauma language, situational context, and first-person emotional reactions while preserving core constraints.<\\/modification>"
+}

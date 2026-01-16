@@ -1,0 +1,58 @@
+{
+  "run_id": "b8b8a8a7",
+  "timestamp": 1768243074.9444664,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "c9c552ca",
+      "type": "specific",
+      "config": {
+        "type": "specific",
+        "manual_query": "(selftext:(\"I was\" OR \"I felt\" OR \"he did\" OR \"they touched\") AND (\"assaulted\" OR \"groped\" OR \"molested\" OR \"violated\" OR \"harassed\" OR \"grabbed\") AND (\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\" OR \"lap pool\" OR \"water\")~10 AND (\"stranger\" OR \"random guy\" OR \"unknown man\" OR \"someone I didn\u2019t know\" OR \"creep\") AND (selftext:\"woman\" OR selftext:\"girl\" OR selftext:\"female\" OR selftext:\"lady\") AND self:true)",
+        "rationale": "Tightens first-person language and assault terms while allowing flexible spatial references. Boosts narrative indicators (e.g., \"I was\") to prioritize personal accounts.",
+        "proximity": 10,
+        "boost": {
+          "selftext:\"I was\"^2": 2
+        },
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(\"I was\" OR \"I felt\" OR \"he did\" OR \"they touched\") AND (\"assaulted\" OR \"groped\" OR \"molested\" OR \"violated\" OR \"harassed\" OR \"grabbed\") AND (\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\" OR \"lap pool\" OR \"water\")~10 AND (\"stranger\" OR \"random guy\" OR \"unknown man\" OR \"someone I didn\u2019t know\" OR \"creep\") AND (selftext:\"woman\" OR selftext:\"girl\" OR selftext:\"female\" OR selftext:\"lady\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 13.75357961654663,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "3e9b3bf6",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(title:(\"pool\" OR \"swimming\") OR selftext:(\"pool\" OR \"swimming\")) AND (\"assault\" OR \"groped\" OR \"harassed\" OR \"attacked\" OR \"violated\") AND (\"woman\" OR \"girl\" OR \"female\") AND self:true",
+        "rationale": "Expands recall by reducing mandatory terms and widening proximity. Captures less explicit language (e.g., \"attacked while swimming\").",
+        "proximity": 15,
+        "minimum_should_match": 2,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swimming\") OR selftext:(\"pool\" OR \"swimming\")) AND (\"assault\" OR \"groped\" OR \"harassed\" OR \"attacked\" OR \"violated\") AND (\"woman\" OR \"girl\" OR \"female\") AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.733598232269287,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Both trajectories returned zero results, indicating the queries are either too restrictive (specific) or lack the necessary narrative context (broad). The specific query enforces strict proximity and mandatory terms that may not align with how survivors phrase their experiences (e.g., indirect language like 'something happened' or 'I froze'). The broad query misses first-person storytelling cues and fails to filter for stranger-perpetrated assaults, introducing noise (e.g., workplace harassment or domestic incidents).<br><br>Satisfied intent: Location (pool), gender (woman), and assault terminology. Missing intent: First-person narrative framing, stranger perpetrator, and emotional/behavioral descriptors (e.g., 'shock', 'fear', 'reported').<br><br>Remaining Question: How do survivors describe the *sequence* of events (e.g., 'while swimming', 'underwater') and their *reaction* (e.g., 'I didn\u2019t know what to do') in pool assaults?<br><br>Key drawbacks: Over-reliance on direct assault verbs (e.g., 'groped') and lack of alternative jargon (e.g., 'felt hands', 'someone touched me').<br><br>Opportunity: Use exploratory trajectories to test implicit language (e.g., 'I was alone', 'no one helped') and stricter filters for stranger dynamics (e.g., 'didn\u2019t know him').<br><br><modification>Expand narrative context with implicit first-person cues and emotional reactions while tightening stranger-perpetrator filters.<\u0002modification>"
+}

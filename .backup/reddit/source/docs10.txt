@@ -1,0 +1,91 @@
+Given the accumulated historical BenchmarkRun data stored in the benchmarks/ directory (including description, generated_query, and detailed results with individual post score and post_content), how can we implement a dynamic system for adaptive prompt optimization that learns from previous runs?
+
+Specifically, address the following:
+
+    Automated Keyword Efficacy Analysis:
+
+        How can we develop a mechanism (either programmatic or LLM-driven, leveraging relevant documents like 'Query Expansion via LLM Preference Alignment' or 'Context-Aware Search') to extract and prioritize effective keywords/phrases?
+
+        This mechanism should identify terms (from both generated_query and the post_content of high-scoring results) that demonstrate a strong positive correlation with high relevance scores within specific topic clusters.
+
+        Conversely, how can we identify and penalize terms (both in queries and content) that are consistently associated with low relevance scores or found_count=0?
+
+
+    Dynamic Prompt Injection:
+
+        Once keyword efficacy is determined, how can this intelligence be dynamically injected into the system_prompt of LLMFilter.generate_boolean_string (the AI Query Generator) for subsequent benchmark runs?
+
+        Consider different strategies for prompt conditioning:
+
+            Explicitly recommending "high-efficacy terms to include."
+
+            Explicitly warning against "low-efficacy terms to avoid."
+
+            Providing "exemplar query structures" from top-performing past runs.
+
+
+
+
+
+
+To implement a dynamic system for adaptive prompt optimization using your historical BenchmarkRun data, you can integrate Aligned Query Expansion (AQE) with an Agent-Mediated Dialogic (AMD) framework
+. This approach allows the system to systematically learn from past retrieval successes and failures to refine the logic of your search generator
+.
+
+1. Automated Keyword Efficacy Analysis
+A hybrid mechanism combining programmatic statistical analysis and LLM-driven "reflective feedback" is the most robust way to prioritize keywords
+.
+
+• Positive Efficacy (High-Scoring Correlation):
+    ◦ Programmatic Extraction: Use a Similarity Thesaurus approach to identify terms in high-scoring post content (scores > 8/10) that have a high Term Frequency relative to the overall corpus
+. You can map these words to vectors using a Word2Vec model to identify semantic clusters of effective jargon
+.
+
+    ◦ LLM-Driven Prioritization (AQE): Use the LLM to perform "pivotal sentence identification" within the top-ranked documents
+. The model evaluates which specific phrases in a high-relevance post actually distinguish it from distractors, assigning a higher weight to those terms in the internal knowledge cache
+.
+
+• Negative Efficacy (Low-Scoring and Zero-Result Penalties):
+    ◦ Zero-Result Analysis: If a generated_query returns found_count=0, the Search Optimization Expert must perform an error analysis to identify over-constrained logic (e.g., too many AND groups) and flag those specific keyword combinations as "too restrictive"
+.
+
+    ◦ Topic Drift Detection: Identify terms associated with low relevance scores (scores < 3/10) or "meta-discussions" [Previous Turns]. These terms are classified as "noise" or "static" and are added to a Negative Evidence pool for future exclusion [832, Previous Turns].
+
+2. Implementation of the Analytics Pipeline
+You can develop a background agent, grounded in the Self-Critique Guided Iterative Reasoning (SiGIR) framework, to process the benchmarks/ directory
+.
+
+1. Iterative Rationale Synthesis: The agent reads past results.json files and generates a "self-critique reward" for each past query based on its average_score
+.
+
+2. Reward-Guided Clustering: Terms are grouped into "What is Known" (verified effective keywords) and "Unresolved Gaps" (intents that failed to find results)
+.
+
+3. Symbolic Mapping: The agent translates these qualitative rewards into Lucene syntax requirements (e.g., "Boosting" for high-efficacy terms and "Prohibition" for low-efficacy ones)
+.
+
+3. Dynamic Prompt Injection Strategies
+Once efficacy is determined, you can inject this "intelligence" into the LLMFilter.generate_boolean_string system prompt using Follow the Format (FF) or f-String prompting styles to ensure the LLM adheres to the new evidence [665, Previous Turns].
+• Explicit Recommendations ("Include"): Inject a dynamic section titled ### High-Efficacy Keywords. Instruct the model to use these terms in OR groups or apply Boosting (^N) to increase their weight in the search engine
+.
+
+    ◦ Example Instruction: "Synthesize the search string using the following verified terms: {positive_keywords}. Apply a boost factor of ^2 to terms with the highest historical relevance" [53, Previous Turns].
+
+• Explicit Warnings ("Avoid"): Inject a ### Negative Evidence section. Instruct the model to use the NOT or - operator to exclude recurring irrelevant terms
+.
+
+    ◦ Example Instruction: "Explicitly exclude the following noisy terms found in previous failed runs using the NOT operator: {negative_keywords}"
+.
+
+• Exemplar Query Structures: Use Few-Shot Learning by providing 2–3 of the best-performing past generated_query strings as "Gold Standard" templates in the prompt
+. This helps the model emulate the logical nesting (parentheses usage) and field identifiers (e.g., title:, flair:) that successfully yielded high-relevance scores in that topic cluster
+.
+
+4. Integration with the Optimization Loop
+By decoupling the Internal Knowledge Cache from the Query Formulation, your system avoids "bias-reinforcement loops" where the model keeps searching for the same incorrect terms
+. Instead, the system uses the "Remaining Question" logic to identify what it hasn't found yet, ensuring that each subsequent benchmark run explores new facets of the user's description
+.
+
+
+-------------------------------------------------------------------------------
+Analogy for Adaptive Optimization: Think of your historical data as a flight recorder for a search drone. The Keyword Efficacy Analysis is a mechanic reviewing the logs to see which maneuvers (keywords) gained altitude (relevance) and which caused stalls (zero results). Dynamic Prompt Injection is the mechanic updating the autopilot's code for the next flight, telling it: "In these conditions, use more of this thrust (Boosting) and steer clear of that mountain range (Exclusion), just like you did in your best flight yesterday (Exemplar)."

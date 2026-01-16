@@ -1,0 +1,52 @@
+{
+  "run_id": "903c7e67",
+  "timestamp": 1768245264.663429,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "1732bd71",
+      "type": "standard",
+      "config": {
+        "type": "standard",
+        "limit": 10,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\") AND (assaulted OR groped OR \"grabbed me\" OR \"touched me\" OR \"molested me\" OR \"felt me up\") AND (stranger OR \"random guy\" OR \"unknown man\" OR \"some guy\" OR \"some dude\") AND (woman OR girl OR female OR \"as a woman\") AND self:true)^2",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 5.930038690567017,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "83ea5e46",
+      "type": "deep_scan",
+      "config": {
+        "type": "deep_scan",
+        "limit": 10,
+        "is_deep_scan": true,
+        "sort_by": "top",
+        "eval_limit": 3
+      },
+      "generated_query": "((\"groped\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"felt up\")~5 (\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"lap pool\" OR \"community pool\" OR \"hotel pool\")) AND ((\"stranger\" OR \"random guy\" OR \"unknown man\" OR \"some guy\" OR \"some dude\")~3 (\"approached\" OR \"grabbed\" OR \"came up\" OR \"cornered\" OR \"followed\")) AND (selftext:\"woman\" OR selftext:\"female\" OR selftext:\"girl\" OR selftext:\"lady\") AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 252.55402874946594,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "Analysis failed: Expecting value: line 1 column 1 (char 0)"
+}

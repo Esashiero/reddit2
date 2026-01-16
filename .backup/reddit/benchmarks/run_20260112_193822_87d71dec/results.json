@@ -1,0 +1,63 @@
+{
+  "run_id": "87d71dec",
+  "timestamp": 1768243102.1390824,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "e4d46824",
+      "type": "specific",
+      "config": {
+        "type": "specific",
+        "manual_query": "(selftext:(\"I was\" OR \"I felt\" OR \"he just\" OR \"someone\" OR \"a guy\") AND (\"touched\" OR \"grabbed\" OR \"hands\" OR \"felt\" OR \"something\"~2) AND (\"pool\" OR \"swimming\" OR \"water\" OR \"lane\" OR \"locker room\")~5 AND (\"stranger\" OR \"random\" OR \"didn\u2019t know\" OR \"unknown\" OR \"creep\") AND (\"shocked\" OR \"froze\" OR \"scared\" OR \"didn\u2019t react\" OR \"reported\") AND (selftext:\"woman\" OR selftext:\"girl\" OR author_gender:\"female\")) AND self:true",
+        "rationale": "Targets first-person narratives with tighter proximity (5) for spatial context (e.g., 'felt hands in the water'). Uses implicit assault language ('something', 'hands') and emotional reactions ('froze') to capture indirect storytelling. Stranger terms are mandatory and boosted to exclude known perpetrators.",
+        "proximity": 5,
+        "boost": {
+          "first_person_terms": 2,
+          "stranger_terms": 1.5
+        },
+        "min_should_match": 3,
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(\"I was\" OR \"I felt\" OR \"he just\" OR \"someone\" OR \"a guy\") AND (\"touched\" OR \"grabbed\" OR \"hands\" OR \"felt\" OR \"something\"~2) AND (\"pool\" OR \"swimming\" OR \"water\" OR \"lane\" OR \"locker room\")~5 AND (\"stranger\" OR \"random\" OR \"didn\u2019t know\" OR \"unknown\" OR \"creep\") AND (\"shocked\" OR \"froze\" OR \"scared\" OR \"didn\u2019t react\" OR \"reported\") AND (selftext:\"woman\" OR selftext:\"girl\" OR author_gender:\"female\")) AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 5.035297632217407,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "1692a5ca",
+      "type": "exploratory",
+      "config": {
+        "type": "exploratory",
+        "manual_query": "(selftext:(\"while swimming\" OR \"in the pool\" OR \"underwater\" OR \"at the pool\") AND (\"someone\" OR \"a man\" OR \"a guy\") AND (\"touched\" OR \"grabbed\" OR \"brushed\" OR \"reached\" OR \"hands\")~3 AND (\"didn\u2019t know\" OR \"random\" OR \"stranger\" OR \"no idea who\") AND (\"I didn\u2019t\" OR \"I couldn\u2019t\" OR \"I froze\" OR \"I was scared\") AND (selftext:\"woman\" OR selftext:\"female\")) AND self:true",
+        "rationale": "Leverages spatial/temporal phrases ('while swimming') and subtle assault verbs ('brushed', 'reached') to uncover narratives where survivors avoid direct language. Focuses on reaction phrases ('I couldn\u2019t') to filter for first-person accounts. Stranger terms are mandatory but phrased colloquially ('no idea who').",
+        "proximity": 3,
+        "boost": {
+          "spatial_terms": 2,
+          "reaction_terms": 1.5
+        },
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(\"while swimming\" OR \"in the pool\" OR \"underwater\" OR \"at the pool\") AND (\"someone\" OR \"a man\" OR \"a guy\") AND (\"touched\" OR \"grabbed\" OR \"brushed\" OR \"reached\" OR \"hands\")~3 AND (\"didn\u2019t know\" OR \"random\" OR \"stranger\" OR \"no idea who\") AND (\"I didn\u2019t\" OR \"I couldn\u2019t\" OR \"I froze\" OR \"I was scared\") AND (selftext:\"woman\" OR selftext:\"female\")) AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.793092966079712,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks: Both queries returned zero results, indicating overly restrictive filters (e.g., strict proximity, mandatory terms like 'stranger' or 'reported') or topic drift (e.g., 'locker room' may not align with pool-specific assaults). Satisfied intent: First-person narrative, female author, and pool context. Missing intent: Broader emotional reactions (e.g., 'trauma', 'violated'), alternative phrasing for 'stranger' (e.g., 'someone I didn\u2019t know'), and less rigid proximity for actions (e.g., 'grabbed me' vs. 'grabbed' AND 'me').<\\/analyse><modification>Relax proximity constraints, expand emotional/behavioral terms, and introduce alternative jargon for 'stranger' while maintaining female-author focus.<\\/modification>"
+}

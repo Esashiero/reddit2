@@ -1,0 +1,392 @@
+{
+  "bro rape": {
+    "groups": [
+      [
+        "brother"
+      ],
+      [
+        "grope",
+        "abuse",
+        "fondle",
+        "assault",
+        "violated"
+      ],
+      [
+        "sleep",
+        "passed out",
+        "drunk",
+        "drug",
+        "pills",
+        "knocked out",
+        "smoke",
+        "alcohol"
+      ]
+    ],
+    "criteria": "",
+    "batch_size": "5",
+    "num_batches": "1",
+    "provider": "mistral"
+  },
+  "sleep abuse": {
+    "groups": [
+      [
+        "sleep",
+        "passed out",
+        "drunk",
+        "unconscious",
+        "woke up"
+      ],
+      [
+        "grope",
+        "abuse",
+        "fondle",
+        "assault",
+        "violated",
+        "rape"
+      ]
+    ],
+    "criteria": "female pretended to sleep during assault, must have graphic details",
+    "target_posts": "100",
+    "deep_scan": true,
+    "ai_chunk": "5",
+    "scan_limit": "100",
+    "provider": "mistral",
+    "subreddits": [
+      "offmychest",
+      "sexualassault",
+      "TwoXChromosomes",
+      "amiwrong",
+      "relationship_advice",
+      "confessions",
+      "india",
+      "indiasocial",
+      "advice",
+      "relationships",
+      "lifeadvice",
+      "trueoffmychest",
+      "self",
+      "rapecounseling",
+      "vent",
+      "questions",
+      "familyissues",
+      "family"
+    ]
+  },
+  "drug abuse": {
+    "groups": [
+      [
+        "drug",
+        "drugged"
+      ],
+      [
+        "friend",
+        "brother",
+        "sleepover",
+        "party"
+      ]
+    ],
+    "criteria": "female drugged and assaulted",
+    "target_posts": "100",
+    "deep_scan": true,
+    "ai_chunk": "5",
+    "scan_limit": "100",
+    "provider": "mistral",
+    "subreddits": [
+      "offmychest",
+      "sexualassault",
+      "TwoXChromosomes",
+      "amiwrong",
+      "relationship_advice",
+      "confessions",
+      "india",
+      "indiasocial",
+      "advice",
+      "relationships",
+      "lifeadvice",
+      "trueoffmychest",
+      "self",
+      "rapecounseling",
+      "vent",
+      "questions",
+      "familyissues",
+      "family"
+    ]
+  },
+  "bro rape2": {
+    "groups": [
+      [
+        "brother"
+      ],
+      [
+        "grope",
+        "abuse",
+        "fondle",
+        "assault",
+        "violated",
+        "rape",
+        "touch",
+        "touching",
+        "poking",
+        "molesting",
+        "molested",
+        "finger",
+        "ass",
+        "boobs",
+        "thigh"
+      ]
+    ],
+    "criteria": "woman sexually assaulted by her brother",
+    "target_posts": "200",
+    "deep_scan": true,
+    "ai_chunk": "5",
+    "scan_limit": "100",
+    "provider": "mistral",
+    "subreddits": [
+      "offmychest",
+      "sexualassault",
+      "TwoXChromosomes",
+      "amiwrong",
+      "relationship_advice",
+      "confessions",
+      "india",
+      "indiasocial",
+      "advice",
+      "relationships",
+      "lifeadvice",
+      "trueoffmychest",
+      "self",
+      "rapecounseling",
+      "vent",
+      "questions",
+      "familyissues",
+      "family"
+    ],
+    "sort": "relevance",
+    "time": "month",
+    "post_type": "any"
+  },
+  "sleep assault": {
+    "groups": [
+      [
+        "assaulted",
+        "raped",
+        "molested",
+        "violated",
+        "touched",
+        "touching",
+        "rubbing",
+        "fingered",
+        "fingering",
+        "penetrated",
+        "inserted"
+      ],
+      [
+        "sleep",
+        "asleep",
+        "sleeping",
+        "woke",
+        "drunk",
+        "passed",
+        "drug",
+        "smoked",
+        "alcohol",
+        "pills",
+        "xanax",
+        "ketamine",
+        "unconscious"
+      ]
+    ],
+    "criteria": "Select only first-person posts from females describing sexual assault during sleep/unconscious.",
+    "target_posts": "300",
+    "deep_scan": true,
+    "ai_chunk": "5",
+    "scan_limit": "100",
+    "provider": "mistral",
+    "subreddits": [
+      "offmychest",
+      "sexualassault",
+      "TwoXChromosomes",
+      "amiwrong",
+      "relationship_advice",
+      "confessions",
+      "india",
+      "indiasocial",
+      "advice",
+      "relationships",
+      "lifeadvice",
+      "trueoffmychest",
+      "self",
+      "rapecounseling",
+      "vent",
+      "questions",
+      "familyissues",
+      "family"
+    ],
+    "sort": "relevance",
+    "time": "all",
+    "post_type": "any"
+  },
+  "drugged rape": {
+    "groups": [
+      [
+        "assaulted",
+        "raped",
+        "molested",
+        "violated",
+        "touched",
+        "touching",
+        "rubbing",
+        "fingered",
+        "fingering",
+        "penetrated",
+        "inserted"
+      ],
+      [
+        "drugged",
+        "drugs",
+        "sleeping pills",
+        "rohypnol",
+        "roofied",
+        "date rape drug",
+        "roofie",
+        "GHB",
+        "ketamine",
+        "knocked out",
+        "unconscious",
+        "passed out"
+      ]
+    ],
+    "criteria": "Select only first-person posts from females describing being drugged and sexually assaulted. Ignore non-personal stories, advice requests, or unrelated content.",
+    "target_posts": "300",
+    "deep_scan": true,
+    "ai_chunk": "5",
+    "scan_limit": "100",
+    "provider": "mistral",
+    "subreddits": [
+      "offmychest",
+      "sexualassault",
+      "TwoXChromosomes",
+      "amiwrong",
+      "relationship_advice",
+      "confessions",
+      "india",
+      "indiasocial",
+      "advice",
+      "relationships",
+      "lifeadvice",
+      "trueoffmychest",
+      "self",
+      "rapecounseling",
+      "vent",
+      "questions",
+      "familyissues",
+      "family"
+    ],
+    "sort": "relevance",
+    "time": "all",
+    "post_type": "any"
+  },
+  "brother sleep": {
+    "groups": [
+      [
+        "assaulted",
+        "raped",
+        "molested",
+        "violated",
+        "touched",
+        "touching",
+        "rubbing",
+        "fingered",
+        "fingering",
+        "penetrated",
+        "inserted"
+      ],
+      [
+        "sleep",
+        "asleep",
+        "sleeping",
+        "woke",
+        "woken",
+        "nap",
+        "passed"
+      ],
+      [
+        "brother",
+        "sibling"
+      ]
+    ],
+    "criteria": "Select only first-person posts from females describing sexual assault during sleep by brother. Ignore non-personal stories, advice requests, or unrelated content.",
+    "target_posts": "300",
+    "deep_scan": true,
+    "ai_chunk": "5",
+    "scan_limit": "100",
+    "provider": "mistral",
+    "subreddits": [
+      "offmychest",
+      "sexualassault",
+      "TwoXChromosomes",
+      "amiwrong",
+      "relationship_advice",
+      "confessions",
+      "india",
+      "indiasocial",
+      "advice",
+      "relationships",
+      "lifeadvice",
+      "trueoffmychest",
+      "self",
+      "rapecounseling",
+      "vent",
+      "questions",
+      "familyissues",
+      "family"
+    ],
+    "sort": "relevance",
+    "time": "all",
+    "post_type": "any"
+  },
+  "brother pull down short while sleeping assault": {
+    "groups": [
+      [
+        "brother"
+      ],
+      [
+        "pull down",
+        "take off",
+        "pulling"
+      ],
+      [
+        "sleep"
+      ]
+    ],
+    "criteria": "brother pull down short/pants/pj while sleeping ",
+    "target_posts": "500",
+    "deep_scan": true,
+    "ai_chunk": "5",
+    "scan_limit": "100",
+    "provider": "mistral",
+    "subreddits": [
+      "offmychest",
+      "sexualassault",
+      "TwoXChromosomes",
+      "amiwrong",
+      "relationship_advice",
+      "confessions",
+      "india",
+      "indiasocial",
+      "advice",
+      "relationships",
+      "lifeadvice",
+      "trueoffmychest",
+      "self",
+      "rapecounseling",
+      "vent",
+      "questions",
+      "familyissues",
+      "family"
+    ],
+    "sort": "new",
+    "time": "all",
+    "post_type": "any"
+  }
+}

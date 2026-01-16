@@ -1,0 +1,1702 @@
+DEBUG: PRAW Initialized with ID: y_nw..., Secret: xoev..., Agent: script:postfilter:v1.0 (by /u/Shiroo_)
+DEBUG: PRAW Initialized with ID: y_nw..., Secret: xoev..., Agent: script:postfilter:v1.0 (by /u/Shiroo_)
+DEBUG: DEBUG: Performing fetch with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true' in subreddits: ['sexualassault', 'TwoXChromosomes', 'offmychest', 'trueoffmychest', 'rapecounseling', 'confessions', 'amiwrong', 'relationship_advice', 'advice', 'relationships', 'lifeadvice', 'self', 'vent', 'questions', 'familyissues', 'family', 'india', 'indiasocial']
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'
+DEBUG: DEBUG: Found post: 1qbamp3 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qb99e6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qau5s4 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa9fe6 in r/sexualassault
+DEBUG: DEBUG: Found post: 1qa4hsg in r/sexualassault
+DEBUG: DEBUG: Attempting search in r/sexualassault with query: '("assault" OR "sexual assault" OR "groped" OR "touched") AND ("sleep" OR "woke up" OR "asleep") AND self:true'

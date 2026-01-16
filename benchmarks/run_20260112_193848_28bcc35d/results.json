@@ -1,0 +1,60 @@
+{
+  "run_id": "28bcc35d",
+  "timestamp": 1768243128.641778,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "a8b3baa8",
+      "type": "specific",
+      "config": {
+        "type": "specific",
+        "manual_query": "(selftext:(\"I was\" OR \"I felt\" OR \"he\" OR \"someone\") AND (\"grabbed\" OR \"touched\" OR \"brushed\" OR \"reached for\" OR \"hands on\") AND (\"pool\" OR \"swimming\" OR \"water\" OR \"public pool\")~10 AND (\"didn\u2019t know\" OR \"random\" OR \"stranger\" OR \"no idea who\" OR \"some guy\") AND (\"froze\" OR \"scared\" OR \"shocked\" OR \"didn\u2019t react\" OR \"trauma\")^2 AND (selftext:\"woman\" OR selftext:\"girl\" OR author_gender:\"female\")) AND self:true",
+        "rationale": "Maintains precision with relaxed proximity (~10) and boosts emotional terms to capture nuanced reactions. Keeps female-author filter but broadens 'stranger' phrasing.",
+        "proximity": 10,
+        "boost_emotional_terms": true,
+        "strict_gender_filter": true,
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(\"I was\" OR \"I felt\" OR \"he\" OR \"someone\") AND (\"grabbed\" OR \"touched\" OR \"brushed\" OR \"reached for\" OR \"hands on\") AND (\"pool\" OR \"swimming\" OR \"water\" OR \"public pool\")~10 AND (\"didn\u2019t know\" OR \"random\" OR \"stranger\" OR \"no idea who\" OR \"some guy\") AND (\"froze\" OR \"scared\" OR \"shocked\" OR \"didn\u2019t react\" OR \"trauma\")^2 AND (selftext:\"woman\" OR selftext:\"girl\" OR author_gender:\"female\")) AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 5.336995840072632,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "644ec015",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(selftext:(\"pool\" OR \"swimming\" OR \"public pool\") AND (\"grabbed\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"harassed\") AND (\"I\" OR \"me\" OR \"my\") AND (\"woman\" OR \"female\" OR \"girl\")) AND self:true",
+        "rationale": "Prioritizes recall by reducing mandatory terms, expanding action verbs, and excluding known-person scenarios. Uses larger proximity (~15) to capture varied phrasing.",
+        "proximity": 15,
+        "min_should_match": 3,
+        "exclude_terms": [
+          "-selftext:(\"friend\" OR \"boyfriend\" OR \"husband\")"
+        ],
+        "eval_limit": 3
+      },
+      "generated_query": "(selftext:(\"pool\" OR \"swimming\" OR \"public pool\") AND (\"grabbed\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"harassed\") AND (\"I\" OR \"me\" OR \"my\") AND (\"woman\" OR \"female\" OR \"girl\")) AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.590509414672852,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Both trajectories returned zero results, indicating the queries are either too restrictive or misaligned with how users phrase such experiences. The specific query may suffer from over-constraint (e.g., strict proximity, mandatory emotional terms like 'trauma'), while the broad query lacks precision to filter irrelevant content (e.g., generic pool stories). Missing intent includes alternative phrasing for 'assault' (e.g., 'violated,' 'felt up'), emotional responses (e.g., 'panicked,' 'humiliated'), and pool-specific contexts (e.g., 'locker room,' 'changing area'). Satisfied intent: core terms like 'pool,' 'grabbed,' and 'woman' are present, but may need expansion.<\u0002analyse><modification>Broaden term coverage for assault-related actions and emotional responses while relaxing proximity constraints to capture varied narratives.<\u0002modification>"
+}

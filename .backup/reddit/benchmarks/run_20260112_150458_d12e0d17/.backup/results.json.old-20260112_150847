@@ -1,0 +1,57 @@
+{
+  "run_id": "d12e0d17",
+  "timestamp": 1768226698.3647668,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "dda889be",
+      "type": "specific",
+      "config": {
+        "type": "specific",
+        "manual_query": "(title:(\"pool\" OR \"swimming pool\" OR \"public pool\" OR \"YMCA\" OR \"hotel pool\" OR \"beach club\" OR \"community pool\" OR \"apartment pool\" OR \"rec center\" OR \"water park\") AND (\"assaulted\"^3 OR \"groped\"^3 OR \"molested\" OR \"sexually harassed\" OR \"violated\" OR \"touched without consent\" OR \"someone grabbed me\" OR \"creep at the pool\" OR \"felt violated\" OR \"inappropriate touch\")~8 AND (stranger OR \"random guy\" OR \"unknown man\" OR \"someone I didn\u2019t know\" OR \"a guy\" OR \"some dude\") AND (\"I was\" OR \"this happened to me\" OR \"my story\" OR \"I experienced\" OR \"I felt\") AND self:true)",
+        "rationale": "Tightens pool contexts (e.g., \"rec center\") and assault phrasing (e.g., \"someone grabbed me\") while relaxing proximity to 8. Boosts critical terms (^3) and ensures first-person language (e.g., \"I was\"). Tests whether broader assault terms improve recall without sacrificing precision.",
+        "proximity": 8,
+        "boost_assault_terms": 3,
+        "min_should_match": 2,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swimming pool\" OR \"public pool\" OR \"YMCA\" OR \"hotel pool\" OR \"beach club\" OR \"community pool\" OR \"apartment pool\" OR \"rec center\" OR \"water park\") AND (\"assaulted\"^3 OR \"groped\"^3 OR \"molested\" OR \"sexually harassed\" OR \"violated\" OR \"touched without consent\" OR \"someone grabbed me\" OR \"creep at the pool\" OR \"felt violated\" OR \"inappropriate touch\")~8 AND (stranger OR \"random guy\" OR \"unknown man\" OR \"someone I didn\u2019t know\" OR \"a guy\" OR \"some dude\") AND (\"I was\" OR \"this happened to me\" OR \"my story\" OR \"I experienced\" OR \"I felt\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 2.894902229309082,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "f7a82ed1",
+      "type": "exploratory",
+      "config": {
+        "type": "exploratory",
+        "manual_query": "(title:(\"pool\" OR \"swim\") AND (\"creep\" OR \"pervert\" OR \"grabbed\" OR \"touched\" OR \"harassed\" OR \"assault\") AND (stranger OR random OR guy OR man) AND (\"I\" OR \"me\" OR \"my\") AND (\"never went back\" OR \"trauma\" OR \"reported\" OR \"lifeguard\" OR \"staff didn\u2019t help\") AND self:true)",
+        "rationale": "Targets alternative jargon (e.g., \"creep,\" \"pervert\") and emotional/aftermath terms (e.g., \"trauma,\" \"never went back\") to capture posts where assault is implied but not explicitly stated. Uses looser proximity (10) and first-person pronouns (\"I,\" \"me\") to prioritize narrative posts.",
+        "proximity": 10,
+        "boost_emotional_terms": 2,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swim\") AND (\"creep\" OR \"pervert\" OR \"grabbed\" OR \"touched\" OR \"harassed\" OR \"assault\") AND (stranger OR random OR guy OR man) AND (\"I\" OR \"me\" OR \"my\") AND (\"never went back\" OR \"trauma\" OR \"reported\" OR \"lifeguard\" OR \"staff didn\u2019t help\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.418907403945923,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Both trajectories returned zero results, indicating the queries are too restrictive or mismatched with how users phrase such experiences. The specific trajectory likely suffers from over-constrained proximity (~8) and mandatory terms, while the exploratory trajectory may lack precise assault-related terminology (e.g., \"assault\" is too formal for first-person narratives). Missing intent includes emotional/psychological aftermath (e.g., fear, avoidance) and contextual details (e.g., location descriptors like \"shallow end\" or \"locker room\"). Satisfied intent: focus on first-person perspective and stranger perpetrators.<\u0002analyse><modification>Broaden terminology to capture colloquial phrasing and relax proximity while adding emotional/aftermath filters to align with narrative intent.<\u0002modification>"
+}

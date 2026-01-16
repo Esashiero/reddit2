@@ -1,0 +1,286 @@
+import sys
+import os
+import time
+import uuid
+import json
+from typing import List, Dict, Generator
+from app import RedditSearchEngine, LLMFilter
+from benchmark_module.storage import BenchmarkRun, BenchmarkStorage
+
+
+# Re-use evaluation logic, adapted for the runner
+class BenchmarkRunner:
+    def __init__(self, provider="mistral", storage_dir="benchmarks"):
+        self.provider = provider
+        self.engine = RedditSearchEngine(provider=provider, debug=False)
+        self.storage = BenchmarkStorage(base_dir=storage_dir)
+        self.llm_filter = self.engine.llm  # Access to LLM for generating queries
+
+    def _evaluate_relevance(self, user_request: str, post_content: str) -> int:
+        # Wrapper around the existing LLM logic or re-implementation
+        # For now, let's re-implement similar to benchmarks/benchmark_semantic.py
+        # but using the existing LLMFilter if possible, or direct calls.
+
+        # Actually, LLMFilter in app.py parses JSON arrays.
+        # We need a scalar score. Let's add a helper method here or reuse the one from script if we move it to a library.
+        # Im defining it here cleanly.
+
+        sys_prompt = (
+            "You are a Search Optimization Expert. "
+            "Analyze the results and suggest improvements. "
+            "IMPORTANT RULES:\n"
+            "1. If 0 results were found, do NOT suggest adding more constraints (AND groups, more subreddits). Instead, suggest making the query BROADER or using DIFFERENT keywords.\n"
+            "2. If some results were found, suggest tuning the existing query.\n"
+            "3. Return a JSON object with keys: \n"
+            "- 'analysis': concise text explaining what was wrong and what to try\n"
+            "- 'proposed_variations': list of objects, each with:\n"
+            "  - 'type': 'ai_optimized' or 'manual'\n"
+            "  - 'manual_query': new boolean string\n"
+            "  - 'proposed_config': dict of search parameter overrides (e.g., {'sort_by': 'top', 'is_deep_scan': True})\n"
+            "- 'expected_improvement': what you expect this change to fix\n"
+        )
+        user_prompt = (
+            f"Goal: {description}\n\n"
+            f"Previous Results:\n{json.dumps(summary, indent=2)}\n\n"
+            "Return ONLY the raw JSON."
+        )
+                content = str(res.choices[0].message.content).strip()
+                # filter digits
+                digits = "".join(filter(str.isdigit, content))
+                return int(digits) if digits else 0
+            else:
+                # Gemini logic
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={self.llm_filter.api_key}"
+                payload = {
+                    "contents": [{"parts": [{"text": user_prompt}]}],
+                    "system_instruction": {"parts": [{"text": sys_prompt}]},
+                }
+                import requests
+
+                res = requests.post(
+                    url, json=payload, headers={"Content-Type": "application/json"}
+                )
+                txt = res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                digits = "".join(filter(str.isdigit, txt))
+                return int(digits) if digits else 0
+        except Exception as e:
+            print(f"Evaluation error: {e}", file=sys.stderr)
+            return 0
+
+    def run_variation(self, description: str, config: Dict) -> Dict:
+        """Run a single variation of the search."""
+        var_id = config.get("id", str(uuid.uuid4())[:8])
+        var_type = config.get("type", "default")
+        limit = config.get("limit", 10)
+
+        # Config overrides
+        manual_query = config.get("manual_query", "")
+
+        # Generate Query
+        if manual_query:
+            query = manual_query
+        else:
+            query = self.llm_filter.generate_boolean_string(description)
+
+        start_time = time.time()
+
+        # Search
+        # We accept some overrides for the engine's search method
+        search_kwargs = {
+            "keywords": query,
+            "criteria": "",  # No criteria filtering for raw benchmark, we want to see what strict search returns
+            "subreddits": config.get("subreddits", ["all"]),
+            "target_posts": limit,
+            "manual_limit": limit * 2,
+            "is_deep_scan": config.get("is_deep_scan", False),
+            "sort_by": config.get("sort_by", "new"),
+        }
+
+        gen = self.engine.search(**search_kwargs)
+
+        raw_results = []
+        try:
+            while True:
+                # consume generator
+                next(gen)
+        except StopIteration as e:
+            raw_results = e.value
+        except Exception:
+            pass  # Handle errors gracefully
+
+        elapsed = time.time() - start_time
+
+        # Evaluate
+        scored_results = []
+        total_score = 0
+        for p in raw_results:
+            score = self._evaluate_relevance(description, f"{p.title}\n{p.selftext}")
+            scored_results.append(
+                {"id": p.id, "title": p.title, "url": p.permalink, "score": score}
+            )
+            total_score += score
+
+        avg_score = (total_score / len(scored_results)) if scored_results else 0
+
+        return {
+            "id": var_id,
+            "type": var_type,
+            "config": config,
+            "generated_query": query,
+            "results": scored_results,
+            "metrics": {
+                "found_count": len(scored_results),
+                "average_score": avg_score,
+                "elapsed_seconds": elapsed
+            }
+        }
+
+    def run_benchmark_suite(self, description: str, variations: List[Dict]) -> str:
+        """Run multiple variations and save complete run."""
+        run_id = str(uuid.uuid4())[:8])
+
+        results = []
+
+        print(f"Starting Benchmark Suite: {run_id}")
+        for i, var_conf in enumerate(variations):
+            print(f"Running variation {i+1}/{len(variations)}: {var_conf.get('type')}")
+
+            res = self.run_variation(description, var_conf)
+
+            results.append(res)
+
+        analysis_data = self._analyze_results(description, results)
+
+        run_data = BenchmarkRun(
+            run_id=run_id,
+            timestamp=time.time(),
+            description=description,
+            variations=results,
+            analysis=analysis_data.get("text", "")
+        )
+
+        saved_path = self.storage.save_run(run_data)
+
+        return saved_path, analysis_data
+
+    def run_benchmark_suite(self, description: str, variations: List[Dict]) -> str:
+        """Run multiple variations and save the complete run."""
+        run_id = str(uuid.uuid4())
+        results = []
+
+        print(f"Starting Benchmark Suite: {run_id}")
+        for i, var_conf in enumerate(variations):
+            print(
+                f"Running variation {i + 1}/{len(variations)}: {var_conf.get('type')}"
+            )
+            res = self.run_variation(description, var_conf)
+            results.append(res)
+
+        # Analysis: Ask LLM to compare variants and suggest improvements
+        analysis_data = self._analyze_results(description, results)
+
+        run_data = BenchmarkRun(
+            run_id=run_id,
+            timestamp=time.time(),
+            description=description,
+            variations=results,
+            analysis=analysis_data.get("text", ""),
+        )
+
+        saved_path = self.storage.save_run(run_data)
+        return saved_path, analysis_data
+
+    def _analyze_results(self, description: str, results: List[Dict]) -> Dict:
+        """Analyze benchmark results and suggest improvements."""
+        summary = []
+        for r in results:
+            summary.append(
+                {
+                    "type": r["type"],
+                    "query": r["generated_query"],
+                    "found": r["metrics"]["found_count"],
+                    "avg_score": r["metrics"]["average_score"],
+                }
+            )
+
+        sys_prompt = (
+            "You are a Search Optimization Expert. "
+            "Analyze the results and suggest improvements. "
+            "IMPORTANT RULES:\n"
+            "1. If 0 results were found, do NOT suggest adding more constraints (AND groups, more subreddits). Instead, suggest making the query BROADER or using DIFFERENT keywords.\n"
+            "2. If some results were found, suggest tuning the existing query.\n"
+            "3. Return a JSON object with keys: \n"
+            "- 'analysis': concise text explaining what was wrong and what to try\n"
+            "- 'proposed_variations': list of objects, each with:\n"
+            "  - 'type': 'ai_optimized' or 'manual'\n"
+            "  - 'manual_query': new boolean string\n"
+            "  - 'proposed_config': dict of search parameter overrides (e.g., {'sort_by': 'top', 'is_deep_scan': True})\n"
+            "- 'expected_improvement': what you expect this change to fix\n"
+        )
+        user_prompt = (
+            f"Goal: {description}\n\n"
+            f"Previous Results:\n{json.dumps(summary, indent=2)}\n\n"
+            "Return ONLY the raw JSON."
+        )
+        user_prompt = (
+            f"Goal: {description}\n\n"
+            f"Previous Results:\n{json.dumps(summary, indent=2)}\n\n"
+            "Return ONLY the raw JSON."
+        )
+
+        try:
+            if self.provider == "mistral":
+                res = self.llm_filter.client.chat.complete(
+                    model="mistral-large-latest",  # Use large for analysis
+                    messages=[
+                        {"role": "system", "content": sys_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    response_format={"type": "json_object"},
+                )
+                data = json.loads(str(res.choices[0].message.content))
+                return {
+                    "text": data.get("analysis", ""),
+                    "proposed_variations": [
+                        {
+                            "type": "ai_optimized",
+                            "manual_query": data.get("proposed_query"),
+                            **data.get("proposed_config", {}),
+                        }
+                    ],
+                }
+            else:
+                # Gemini logic
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={self.llm_filter.api_key}"
+                payload = {
+                    "contents": [{"parts": [{"text": user_prompt}]}],
+                    "system_instruction": {"parts": [{"text": sys_prompt}]},
+                    "generationConfig": {"response_mime_type": "application/json"},
+                }
+                import requests
+
+                res = requests.post(
+                    url, json=payload, headers={"Content-Type": "application/json"}
+                )
+                data = res.json()["candidates"][0]["content"]["parts"][0]["text"]
+                data = json.loads(data)
+                return {
+                    "text": data.get("analysis", ""),
+                    "proposed_variations": [
+                        {
+                            "type": "ai_optimized",
+                            "manual_query": data.get("proposed_query"),
+                            **data.get("proposed_config", {}),
+                        }
+                    ],
+                }
+            except Exception as e:
+            proposed_config = analysis_data.get("proposed_config", {}) if isinstance(analysis_data, dict) else {}
+            return {
+                "text": analysis_data.get("analysis", "") if isinstance(analysis_data, dict) else "",
+                "proposed_variations": [{
+                    "type": "ai_optimized",
+                    "manual_query": analysis_data.get("proposed_query", ""),
+                    **proposed_config,
+                }],
+            }

@@ -1,0 +1,62 @@
+{
+  "run_id": "c5febc1f",
+  "timestamp": 1768226755.1214995,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "cd116ae1",
+      "type": "specific",
+      "config": {
+        "type": "specific",
+        "manual_query": "(title:(\"pool\" OR \"swimming\" OR \"public pool\" OR \"community pool\" OR \"YMCA\") AND (\"groped\" OR \"grabbed\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"attacked\")~3 AND (stranger OR random OR \"some guy\" OR \"a man\" OR \"dude\") AND (\"I was\" OR \"happened to me\" OR \"my experience\" OR \"I felt\") AND (\"trauma\" OR \"never went back\" OR \"scared to swim\" OR \"anxiety\" OR \"PTSD\" OR \"triggered\")^2 AND -work AND -boss AND -husband AND -boyfriend AND self:true)",
+        "rationale": "Targets *physical assault* (groped/grabbed) in *public pools* with strict proximity to first-person trauma language. Prohibits domestic/workplace contexts.",
+        "proximity": 3,
+        "boost_trauma": 2,
+        "prohibited_terms": [
+          "work",
+          "boss",
+          "husband",
+          "boyfriend"
+        ],
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swimming\" OR \"public pool\" OR \"community pool\" OR \"YMCA\") AND (\"groped\" OR \"grabbed\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"attacked\")~3 AND (stranger OR random OR \"some guy\" OR \"a man\" OR \"dude\") AND (\"I was\" OR \"happened to me\" OR \"my experience\" OR \"I felt\") AND (\"trauma\" OR \"never went back\" OR \"scared to swim\" OR \"anxiety\" OR \"PTSD\" OR \"triggered\")^2 AND -work AND -boss AND -husband AND -boyfriend AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.1871864795684814,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "0ac07bfa",
+      "type": "broad",
+      "config": {
+        "type": "broad",
+        "manual_query": "(title:(\"pool\" OR \"swim\") AND (\"assault\" OR \"attack\" OR \"harassed\" OR \"violated\" OR \"unwanted touch\") AND (stranger OR random) AND (\"I\" OR \"me\" OR \"my\") AND (\"story\" OR \"experience\" OR \"happened\") AND self:true)",
+        "rationale": "Relaxes terms to *unwanted touch* or *harassed* but retains first-person focus and stranger context for higher recall.",
+        "proximity": 5,
+        "boost_first_person": 1.5,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"swim\") AND (\"assault\" OR \"attack\" OR \"harassed\" OR \"violated\" OR \"unwanted touch\") AND (stranger OR random) AND (\"I\" OR \"me\" OR \"my\") AND (\"story\" OR \"experience\" OR \"happened\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 3.6031880378723145,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks in previous queries include overly restrictive term combinations (e.g., requiring both \"trauma\"-related terms and first-person indicators in the same title) and potential topic drift toward workplace or domestic assaults despite exclusions. The intent for a first-person narrative of a public pool assault by a stranger is satisfied in structure but missing in recall, as no results were found. The remaining question is whether the story exists in a different lexical form (e.g., \"creep,\" \"pervert,\" or \"leered\") or in body text rather than title.<\u0002analyse><modification>Expand lexical variants for assault, relax proximity constraints, and target body text for first-person indicators to improve recall.<\u0002modification>"
+}

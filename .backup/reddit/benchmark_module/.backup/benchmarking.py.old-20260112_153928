@@ -1,0 +1,404 @@
+import sys
+import os
+import time
+import uuid
+import json
+from typing import List, Dict, Generator
+from app import RedditSearchEngine, LLMFilter
+from benchmark_module.storage import BenchmarkRun, BenchmarkStorage
+from benchmark_module.knowledge_store import SubredditProfiler, KEIStore
+
+
+class BenchmarkRunner:
+    def __init__(self, provider="mistral", storage_dir="benchmarks"):
+        self.provider = provider
+        self.engine = RedditSearchEngine(provider=provider, debug=True)
+        self.storage = BenchmarkStorage(base_dir=storage_dir)
+        self.llm_filter = self.engine.llm
+        self.profiler = SubredditProfiler()
+        self.kei = KEIStore()
+
+    def _generate_subreddit_tags(
+        self, subreddit_name: str, description: str
+    ) -> List[str]:
+        sys_prompt = (
+            "You are a Reddit Community Analyst. Generate 3 concise tags for the following subreddit based on its description.\n"
+            "Return a JSON object with a 'tags' key containing a list of 3 strings."
+        )
+        user_prompt = f"Subreddit: r/{subreddit_name}\nDescription: {description}"
+        try:
+            if self.provider == "mistral":
+                res = self.llm_filter.client.chat.complete(
+                    model="mistral-small-latest",
+                    messages=[
+                        {"role": "system", "content": sys_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    response_format={"type": "json_object"},
+                )
+                return json.loads(str(res.choices[0].message.content)).get("tags", [])
+            else:
+                import requests
+
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={self.llm_filter.api_key}"
+
+                payload = {
+                    "contents": [{"parts": [{"text": user_prompt}]}],
+                    "system_instruction": {"parts": [{"text": sys_prompt}]},
+                    "generationConfig": {"response_mime_type": "application/json"},
+                }
+                res = requests.post(
+                    url, json=payload, headers={"Content-Type": "application/json"}
+                )
+                return json.loads(
+                    res.json()["candidates"][0]["content"]["parts"][0]["text"]
+                ).get("tags", [])
+        except Exception:
+            return ["general", "reddit", "community"]
+
+    def _evaluate_relevance(self, description: str, post_content: str) -> Dict:
+        """Rationale-First relevance evaluation with structured output."""
+        sys_prompt = (
+            "You are a Senior Relevance Judge. Evaluate the Reddit post against the User Request.\n\n"
+            "REQUIRED PROCESS (Rationale-First):\n"
+            "1. Infer Intent: What are the mandatory requirements? (e.g. first-person, specific entity, specific action)\n"
+            "2. Identify Mismatches: List specific reasons why the post fails any requirements.\n"
+            "3. Detect Meta-Discussion: Is this a story/instance, or a community discussion ABOUT the topic? (Meta-discussions are low relevance).\n"
+            "4. Score: Assign 0-10.\n\n"
+            "You MUST provide your internal reasoning (rationale) before the final score.\n"
+            "Return a JSON object with keys: 'rationale' (string), 'mismatch_reasons' (list), 'is_meta_discussion' (bool), 'relevance_score' (int)."
+        )
+        user_prompt = (
+            f"User Request: {description}\n\nReddit Post:\n{post_content[:3000]}"
+        )
+
+        try:
+            if self.provider == "mistral":
+                res = self.llm_filter.client.chat.complete(
+                    model="mistral-large-latest",
+                    messages=[
+                        {"role": "system", "content": sys_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    response_format={"type": "json_object"},
+                )
+                return json.loads(str(res.choices[0].message.content))
+            else:
+                import requests
+
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={self.llm_filter.api_key}"
+                payload = {
+                    "contents": [{"parts": [{"text": user_prompt}]}],
+                    "system_instruction": {"parts": [{"text": sys_prompt}]},
+                    "generationConfig": {"response_mime_type": "application/json"},
+                }
+                res = requests.post(
+                    url, json=payload, headers={"Content-Type": "application/json"}
+                )
+                return json.loads(
+                    res.json()["candidates"][0]["content"]["parts"][0]["text"]
+                )
+        except Exception as e:
+            print(f"Evaluation error: {e}", file=sys.stderr)
+            return {
+                "relevance_score": 0,
+                "rationale": f"Error: {e}",
+                "mismatch_reasons": ["api_error"],
+                "is_meta_discussion": False,
+            }
+
+    def _update_kei_from_post(
+        self, description: str, post_title: str, post_text: str, score: float
+    ):
+        """Extract keywords and update KEI for high-relevance posts."""
+        if score < 7:
+            return
+
+        # Extract key terms from post using simple heuristics
+        import re
+
+        post_content = f"{post_title} {post_text}".lower()
+
+        # Extract noun phrases and significant terms (simple extraction)
+        words = re.findall(r"\b\w+\b", post_content)
+        stop_words = {
+            "the",
+            "a",
+            "an",
+            "and",
+            "or",
+            "but",
+            "in",
+            "on",
+            "at",
+            "to",
+            "for",
+            "of",
+            "with",
+            "by",
+            "as",
+            "is",
+            "was",
+            "are",
+            "were",
+            "be",
+            "been",
+            "being",
+            "have",
+            "has",
+            "had",
+            "do",
+            "does",
+            "did",
+            "will",
+            "would",
+            "could",
+            "should",
+            "may",
+            "might",
+        }
+
+        # Find frequent words (likely significant)
+        word_freq = {}
+        for word in words:
+            if len(word) > 3 and word not in stop_words:
+                word_freq[word] = word_freq.get(word, 0) + 1
+
+        # Update KEI for top 3 frequent words
+        for word, freq in sorted(word_freq.items(), key=lambda x: x[1], reverse=True)[
+            :3
+        ]:
+            # Normalize score for KEI (0-1 scale)
+            normalized_score = score / 10.0
+            self.kei.update_efficacy(word, "reddit", normalized_score)
+
+    def run_variation(self, description: str, config: Dict) -> Dict:
+        """Run a single benchmark variation with Subreddit Profiling and KEI integration."""
+        var_id = config.get("id", str(uuid.uuid4())[:8])
+        var_type = config.get("type", "default")
+        limit = config.get("limit", 10)
+        eval_limit = config.get("eval_limit", 3)
+        manual_query = config.get("manual_query", "")
+
+        if manual_query:
+            query = manual_query
+        else:
+            query = self.llm_filter.generate_boolean_string(description)
+
+        if "Error:" in query:
+            print(f"   🚨 LLM Query Generation Failed: {query}", file=sys.stderr)
+            return {
+                "id": var_id,
+                "type": var_type,
+                "config": config,
+                "generated_query": query,
+                "results": [],
+                "metrics": {"found_count": 0, "evaluated_count": 0, "average_score": 0, "elapsed_seconds": 0},
+            }
+
+        start_time = time.time()
+        search_kwargs = {
+            "keywords": query,
+            "criteria": "",
+            "subreddits": config.get("subreddits", ["all"]),
+            "target_posts": limit,
+            "manual_limit": limit * 2,
+            "is_deep_scan": config.get("is_deep_scan", False),
+            "sort_by": config.get("sort_by", "new"),
+        }
+
+        gen = self.engine.search(**search_kwargs)
+        raw_results = []
+        try:
+            while True:
+                next(gen)
+        except StopIteration as e:
+            raw_results = e.value
+        except Exception as e:
+            print(
+                f"   🚨 Search failed for variation '{var_type}': {e}", file=sys.stderr
+            )
+            raw_results = []
+
+        elapsed = time.time() - start_time
+        scored_results = []
+        total_score = 0
+        profiled_subreddits = []
+
+        for p in raw_results[:eval_limit]:
+            eval_data = self._evaluate_relevance(
+                description, f"{p.title}\n{p.selftext}"
+            )
+            score = eval_data.get("relevance_score", 0)
+
+            # Update KEI for high-relevance posts
+            self._update_kei_from_post(description, p.title, p.selftext, score)
+
+            # Profile subreddits for high-relevance posts
+            if score >= 8:
+                sub_name = p.subreddit.display_name
+                if not self.profiler.get_profile(sub_name):
+                    try:
+                        sub_obj = p.subreddit
+                        metadata = {
+                            "subscribers": sub_obj.subscribers,
+                            "description": sub_obj.public_description,
+                            "last_updated": time.time(),
+                        }
+                        tags = self._generate_subreddit_tags(
+                            sub_name, metadata["description"]
+                        )
+                        self.profiler.update_profile(sub_name, metadata, tags)
+                        profiled_subreddits.append(sub_name)
+                        print(
+                            f"   🔍 Profiled new high-relevance subreddit: r/{sub_name}"
+                        )
+                    except Exception as e:
+                        print(f"   ⚠️ Failed to profile r/{sub_name}: {e}")
+
+            scored_results.append(
+                {
+                    "id": p.id,
+                    "title": p.title,
+                    "url": p.permalink,
+                    "score": score,
+                    "feedback": eval_data,
+                    "subreddit": p.subreddit.display_name,
+                }
+            )
+            total_score += score
+
+        avg_score = (total_score / len(scored_results)) if scored_results else 0
+
+        result = {
+            "id": var_id,
+            "type": var_type,
+            "config": config,
+            "generated_query": query,
+            "subreddits_searched": search_kwargs["subreddits"],
+            "results": scored_results,
+            "metrics": {
+                "found_count": len(raw_results),
+                "evaluated_count": len(scored_results),
+                "average_score": avg_score,
+                "elapsed_seconds": elapsed,
+                "profiled_subreddits": profiled_subreddits,
+            },
+        }
+
+        return result
+
+    def run_benchmark_suite(self, description: str, variations: List[Dict]) -> tuple:
+        """Run multiple variations and perform SPO analysis."""
+        run_id = str(uuid.uuid4())[:8]
+        results = []
+
+        print(f"Starting Benchmark Suite: {run_id}")
+        for i, var_conf in enumerate(variations):
+            print(
+                f"Running variation {i + 1}/{len(variations)}: {var_conf.get('type')}"
+            )
+            res = self.run_variation(description, var_conf)
+            results.append(res)
+
+        analysis_data = self._analyze_results(description, results)
+
+        run_data = BenchmarkRun(
+            run_id=run_id,
+            timestamp=time.time(),
+            description=description,
+            variations=results,
+            analysis=analysis_data.get("text", ""),
+        )
+
+        saved_path = self.storage.save_run(run_data)
+        return saved_path, analysis_data
+
+    def _analyze_results(self, description: str, results: List[Dict]) -> Dict:
+        """SPO Multi-Pass Analysis with trajectory-based optimization."""
+        summary = []
+        for r in results:
+            mismatches = []
+            for res in r["results"]:
+                mismatches.extend(res.get("feedback", {}).get("mismatch_reasons", []))
+
+            summary.append(
+                {
+                    "type": r["type"],
+                    "query": r["generated_query"],
+                    "found": r["metrics"]["found_count"],
+                    "avg_score": r["metrics"]["average_score"],
+                    "top_mismatches": list(set(mismatches))[:5],
+                    "profiled_subreddits": r["metrics"].get("profiled_subreddits", []),
+                }
+            )
+
+        sys_prompt = (
+            "You are a Search Optimization Expert using the Self-Supervised Prompt Optimization (SPO) framework. "
+            "Analyze results and propose an optimized strategy.\n\n"
+            "REQUIRED STRUCTURE (XML-Inside-JSON):\n"
+            "1. <analyse>: Identify drawbacks (e.g., topic drift, noise) and satisfied vs. missing intent (Remaining Question logic).\n"
+            "2. <modification>: Single sentence summary of the improvement strategy.\n"
+            "3. <prompt>: The optimized Lucene Boolean string.\n\n"
+            "TRAJECTORY TYPES:\n"
+            "- Specific: High precision, strict proximity, many mandatory terms.\n"
+            "- Broad: High recall, fewer terms, larger proximity.\n"
+            "- Exploratory: Uses alternative jargon or related concepts identified in implications.\n\n"
+            "STRATEGY RULES:\n"
+            "- Propose 2-3 parallel search trajectories to explore different angles.\n"
+            "- Use as few as 3 representative samples to determine direction.\n"
+            "- If found=0, suggest BROADER query. If low score, suggest STRICTER filters.\n"
+            "- Leverage Proximity (~10), Boosting (^2), and Prohibition (-).\n\n"
+            "Return JSON: {\n"
+            '  "analysis": "<analyse>...<\\/analyse><modification>...<\\/modification>", \n'
+            '  "trajectories": [\n'
+            '    {"type": "specific|broad|exploratory", "proposed_query": "...", "proposed_config": {}, "rationale": "..."}\n'
+            "  ]\n"
+            "}"
+        )
+        user_prompt = f"Goal: {description}\n\nPrevious Iteration Results:\n{json.dumps(summary, indent=2)}"
+
+        try:
+            if self.provider == "mistral":
+                res = self.llm_filter.client.chat.complete(
+                    model="mistral-large-latest",
+                    messages=[
+                        {"role": "system", "content": sys_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    response_format={"type": "json_object"},
+                )
+                data = json.loads(str(res.choices[0].message.content))
+            else:
+                import requests
+
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={self.llm_filter.api_key}"
+                payload = {
+                    "contents": [{"parts": [{"text": user_prompt}]}],
+                    "system_instruction": {"parts": [{"text": sys_prompt}]},
+                    "generationConfig": {"response_mime_type": "application/json"},
+                }
+                res = requests.post(
+                    url, json=payload, headers={"Content-Type": "application/json"}
+                )
+                data = json.loads(
+                    res.json()["candidates"][0]["content"]["parts"][0]["text"]
+                )
+
+            proposed_variations = []
+            for traj in data.get("trajectories", []):
+                proposed_variations.append(
+                    {
+                        "type": traj.get("type", "ai_optimized"),
+                        "manual_query": traj.get("proposed_query"),
+                        "rationale": traj.get("rationale"),
+                        **traj.get("proposed_config", {}),
+                    }
+                )
+
+            return {
+                "text": data.get("analysis", ""),
+                "proposed_variations": proposed_variations,
+            }
+        except Exception as e:
+            return {"text": f"Analysis failed: {e}", "proposed_variations": []}

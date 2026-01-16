@@ -1,0 +1,52 @@
+{
+  "run_id": "76e4d960",
+  "timestamp": 1768243031.9187145,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "74c304e2",
+      "type": "standard",
+      "config": {
+        "type": "standard",
+        "limit": 10,
+        "eval_limit": 3
+      },
+      "generated_query": "((\"groped\" OR \"touched\" OR \"assaulted\" OR \"molested\" OR \"felt up\")~5 (\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"lap pool\" OR \"community pool\")) AND ((\"stranger\" OR \"random guy\" OR \"unknown man\" OR \"some guy\" OR \"creep\")~5 (\"locker room\" OR \"changing room\" OR \"shower area\" OR \"pool deck\" OR \"water\")) AND (selftext:\"woman\" OR selftext:\"girl\" OR selftext:\"female\" OR selftext:\"lady\") AND self:true",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 7.086628198623657,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "2c01897b",
+      "type": "deep_scan",
+      "config": {
+        "type": "deep_scan",
+        "limit": 10,
+        "is_deep_scan": true,
+        "sort_by": "top",
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\") AND (assaulted OR groped OR \"grabbed me\" OR \"touched me\" OR molested OR \"sexually assaulted\") AND (stranger OR \"didn\u2019t know\" OR \"random guy\" OR \"unknown man\") AND (female OR woman OR girl OR \"as a woman\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 216.21579599380493,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks in previous queries include over-constrained proximity (e.g., forcing \"stranger\" near location terms) and potential topic drift due to overly specific phrasing (e.g., \"felt up\"). The intent to find first-person narratives by women is satisfied, but the strict co-occurrence of terms may exclude valid accounts where language is less formulaic (e.g., \"he came up behind me in the pool\"). Missing intent includes alternative descriptors for assault (e.g., \"violated,\" \"harassed\") and broader spatial references (e.g., \"while swimming,\" \"in the water\").<\\/analyse><modification>Relax proximity constraints, expand assault/location vocabulary, and prioritize first-person indicators (e.g., \"I was\").<\\/modification>"
+}

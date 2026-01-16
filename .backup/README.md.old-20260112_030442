@@ -1,0 +1,169 @@
+# 🤖 Reddit AI Curator
+
+> **🤖 For AI Agents:** Please refer to [`AGENTS.md`](AGENTS.md) for build instructions, code style, and testing workflows.
+
+**Reddit AI Curator** is a self-hosted, intelligent search tool that finds high-quality Reddit discussions based on your specific needs.
+
+Unlike standard Reddit search, this tool uses a two-step filtering process:
+1.  **Keyword Logic:** A visual builder constructs complex queries (e.g., `(Python OR Rust) AND (Job OR Career)`) to scan Reddit's API.
+2.  **AI Analysis:** It sends the content of potential matches to an **LLM** (Mistral AI or Google Gemini) with your custom instructions (e.g., *"Ignore beginner questions, I want senior-level discussions"*).
+
+It includes a mobile-friendly Web UI, works on Desktop or Android (Termux), and features a persistent history system.
+
+---
+
+## ✨ Features
+
+*   **Visual Query Builder:** Create complex boolean searches `(A OR B) AND (C OR D)` without typing syntax.
+*   **Two-Stage Filtering:**
+    *   **Stage 1:** Server-side Reddit Search (scans thousands of posts).
+    *   **Stage 2:** LLM Contextual Analysis (reads the full post content to verify relevance).
+*   **Turbo Scan:** Searches multiple subreddits simultaneously via Reddit's Multi-Reddit feature.
+*   **🌍 Subreddit Discovery:** Search `r/all` to find new communities discussing your topics.
+*   **Smart History & Blacklist:** Automatically remembers found posts. Skips duplicates in future scans.
+*   **Retractable History Panel:** View previously approved posts, the query used, and the AI's reasoning.
+*   **Search Filters:** Sort by New/Top/Hot, filter by Time (Day/Week/Year), and Type (Text vs Media).
+*   **Save & Load:** Save your favorite search configurations (Subreddits + Keywords + AI Prompts) as presets.
+
+---
+
+## 🛠️ Prerequisites
+
+You will need **Python 3.8+** and API keys for the services you intend to use:
+
+1.  **Reddit API:** Create a "Script" app at [https://www.reddit.com/prefs/apps](https://www.reddit.com/prefs/apps).
+2.  **AI Provider (Choose one or both):**
+    *   **Mistral AI:** [console.mistral.ai](https://console.mistral.ai) (Great for reasoning).
+    *   **Google Gemini:** [aistudio.google.com](https://aistudio.google.com) (Fast and free tier available).
+
+---
+
+## 📥 Installation
+
+1.  **Clone the repository** (or create your project folder):
+    ```bash
+    mkdir reddit-curator
+    cd reddit-curator
+    ```
+
+2.  **Install Dependencies:**
+    ```bash
+    pip install flask praw mistralai requests python-dotenv
+    ```
+
+3.  **Project Structure:**
+    Ensure your files are organized like this:
+    ```text
+    /reddit-curator
+    ├── app.py
+    ├── .env
+    ├── templates/
+    │   └── index.html
+    └── static/
+        ├── style.css
+        └── script.js
+    ```
+
+---
+
+## ⚙️ Configuration
+
+Create a file named **`.env`** in the project root and add your keys:
+
+```ini
+# Reddit API Credentials
+REDDIT_CLIENT_ID=your_reddit_client_id
+REDDIT_CLIENT_SECRET=your_reddit_secret_key
+REDDIT_USER_AGENT=script:ai_curator:v1 (by /u/yourusername)
+
+# AI Keys (You only need the one you plan to use)
+MISTRAL_API_KEY=your_mistral_key
+GOOGLE_API_KEY=your_gemini_key
+
+# Default Subreddits (Optional fallback)
+REDDIT_SUBREDDITS=ArtificialInteligence,LocalLLaMA,Python
+```
+
+---
+
+## 🚀 Usage
+
+### 1. Start the Server
+Run the application:
+```bash
+python app.py
+```
+
+### 2. CLI Mode (Headless)
+Run the engine directly from the terminal (great for agents):
+```bash
+python app.py --keywords "python learning" --criteria "free resources" --deep_scan --sort top
+```
+
+### 3. Access the UI
+*   **On PC:** Open `http://localhost:5000`
+*   **On Android (Termux):** Open `http://localhost:5000`
+*   **From another device:** Open `http://<YOUR_PC_IP>:5000` (e.g., `http://192.168.1.80:5000`)
+
+### 3. Workflow
+1.  **Select Subreddits:** Type a subreddit name (e.g., `technology`) and press **Add**.
+2.  **Build Query:**
+    *   Click **+ Add "AND" Group**.
+    *   Type keywords inside the group (e.g., `Python`, `Coding`).
+    *   The script will find posts containing at least one word from *every* group.
+3.  **Set Strategy:**
+    *   **Candidates Wanted:** How many matches to find before stopping.
+    *   **Deep Scan:** Check this to ignore the "Newest 100" limit and dig deep into Reddit's history (up to ~1000 posts).
+4.  **AI Criteria (Optional):**
+    *   Enter instructions like: *"Must contain python code examples. Ignore career advice."*
+5.  **Start Scan:** Click **🚀 Start Post Scan**.
+
+---
+
+## 🧠 Features Guide
+
+### 🌍 Subreddit Discovery Mode
+Don't know where to look? Switch to the **Discovery** tab.
+1.  Enter a topic (e.g., `(Gardening OR Plants)`).
+2.  Click **Find Subreddits**.
+3.  The tool scans `r/all` to see where people are talking about that topic.
+4.  Click **+ Add to List** on the results to instantly add them to your curator target list.
+
+### 📜 History & Blacklist
+*   Click the **📜 History** button in the top right to open the side panel.
+*   This lists every post the AI has approved in the past.
+*   **Blacklist:** Once a post is found, it is saved to `blacklist.json`. The script will **automatically skip** these posts in future searches, so you never see the same content twice.
+
+### 💾 Saving Presets
+*   Found a perfect setup? Enter a name in the **Saved Searches** box and click **Save Current**.
+*   This saves your Subreddits, Keywords, AI Prompt, and Settings.
+*   You can load it later from the dropdown menu.
+
+---
+
+## 📱 Running on Android (Termux)
+
+This tool is lightweight enough to run on a phone.
+
+1.  Install Termux from F-Droid.
+2.  Install Python: `pkg install python`
+3.  Install libraries: `pip install flask praw mistralai requests python-dotenv`
+4.  Copy your files to the device.
+5.  Run `python app.py`.
+6.  Open Chrome and go to `http://localhost:5000`.
+
+---
+
+## ❓ Troubleshooting
+
+*   **"401 Unauthorized"**: Check your API keys in `.env`.
+*   **"No posts found"**:
+    *   Try increasing the **Search Depth** (enable Deep Scan).
+    *   Try fewer keywords (make the query broader).
+    *   Check **Debug Mode** to see why posts are being rejected.
+*   **"Rate Limit"**: If you scan too aggressively, Reddit may pause requests. The script (PRAW) handles this automatically, but it might slow down.
+
+---
+
+**License:** MIT  
+**Created by:** You & an AI Assistant

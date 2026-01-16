@@ -1,0 +1,44 @@
+{
+  "run_id": "c8f9cc08",
+  "timestamp": 1768226021.8317332,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "92ee554b",
+      "type": "standard",
+      "config": {
+        "type": "standard",
+        "limit": 10,
+        "eval_limit": 3
+      },
+      "generated_query": "Error: API error occurred: Status 429. Body: {\"object\":\"error\",\"message\":\"Service tier capacity exceeded for this model.\",\"type\":\"service_tier_capacity_exceeded\",\"param\":null,\"code\":\"3505\"}",
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 0
+      }
+    },
+    {
+      "id": "5ea5817a",
+      "type": "deep_scan",
+      "config": {
+        "type": "deep_scan",
+        "limit": 10,
+        "is_deep_scan": true,
+        "sort_by": "top",
+        "eval_limit": 3
+      },
+      "generated_query": "Error: API error occurred: Status 429. Body: {\"object\":\"error\",\"message\":\"Service tier capacity exceeded for this model.\",\"type\":\"service_tier_capacity_exceeded\",\"param\":null,\"code\":\"3505\"}",
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 0
+      }
+    }
+  ],
+  "analysis": "<analyse>Previous queries failed due to API rate limits, not content relevance. The intent remains unsatisfied: a first-person narrative by a woman detailing an assault by a stranger in a public pool. Key missing elements include emotional tone, temporal context (e.g., 'recently', 'years ago'), and alternative phrasing for 'assault' (e.g., 'groped', 'harassed', 'attacked'). Topic drift or noise is not applicable here due to zero results, but the query must avoid overly restrictive terms (e.g., 'stranger' may exclude cases where the perpetrator was initially unknown but later identified).<\\/analyse><modification>Broaden the query to include alternative terminology and emotional context while maintaining core intent.<\\/modification>"
+}

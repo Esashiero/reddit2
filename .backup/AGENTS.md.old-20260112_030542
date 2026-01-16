@@ -1,0 +1,72 @@
+# AGENTS.md
+
+> **Note for Agents:** This file contains context, instructions, and commands to help you work on this project effectively.
+
+## Project Overview
+**Reddit AI Curator** is a search engine that filters Reddit posts using a two-step process:
+1.  **Keyword Search (PRAW):** Fetches candidates from Reddit API using Boolean logic.
+2.  **AI Analysis (Mistral/Gemini):** Evaluates post content against natural language criteria.
+
+## 🛠 Development Environment
+-   **Language:** Python 3.10+
+-   **Frameworks:** Flask, PRAW, MistralAI
+-   **Config:** `.env` file required (see `README.md`)
+
+## 🚀 Build & Run Commands
+
+### Installation
+```bash
+pip install -r requirements.txt
+```
+
+### Running the App
+-   **Web Interface:** `python app.py` (http://localhost:5000)
+-   **CLI Mode:** `python app.py --keywords "term" [options]`
+
+### CLI Reference (Full)
+Use these flags to control the engine from the terminal:
+-   `--keywords "..."`: Boolean query (e.g., `"(python OR rust)"`)
+-   `--criteria "..."`: AI instructions (e.g., `"Ignore beginner posts"`)
+-   `--target_posts N`: Number of posts to find (default: 10)
+-   `--deep_scan`: Enable deep historical search (1000+ posts)
+-   `--sort [new|top|relevance|hot]`: Sort order
+-   `--time [all|year|month|week|day]`: Time filter
+-   `--limit N`: Manual fetch limit (max posts to scan)
+-   `--provider [mistral|gemini]`: AI provider
+-   `--json`: Output valid JSON (for parsing)
+
+## 🧪 Testing & Benchmarking
+
+### Unit Tests
+Run standard tests for logic and CLI arguments:
+```bash
+pytest
+```
+
+### Semantic Benchmarking (Real-World Quality)
+Test the AI's actual performance by searching Reddit and judging results with an LLM:
+```bash
+# Benchmark specific topic
+python scripts/benchmark_semantic.py --description "Python recursion help" --subreddits "learnpython"
+
+# Refine Query Generator (Interactive)
+python scripts/refine_query_generator.py --all
+```
+
+**Workflow for Improvement:**
+1.  Run `benchmark_semantic.py` to get a baseline score (0-100).
+2.  Modify `LLMFilter.generate_boolean_string` in `app.py`.
+3.  Re-run benchmark to verify improvement.
+
+## 📝 Code Style & Guidelines
+-   **Imports:** Group standard lib, third-party, then local.
+-   **Type Hints:** Mandatory for all function signatures.
+-   **Error Handling:**
+    -   Catch `prawcore.exceptions.ResponseException`.
+    -   Wrap LLM calls in `try/except` (graceful degradation to keyword-only results).
+-   **Persistence:** Do not modify `saved_queries.json` or `blacklist.json` logic unless explicitly requested.
+
+## 🔍 Context Files
+-   `TESTING_PLAN_IMPROVED.md`: Detailed testing strategy.
+-   `app.py`: Main application logic.
+-   `tests/fixtures.py`: Real-world test cases.

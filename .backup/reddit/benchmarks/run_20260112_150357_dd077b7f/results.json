@@ -1,0 +1,52 @@
+{
+  "run_id": "dd077b7f",
+  "timestamp": 1768226637.61516,
+  "description": "First-person story by a woman who was assaulted in a public pool by a stranger...",
+  "variations": [
+    {
+      "id": "3bf8e811",
+      "type": "standard",
+      "config": {
+        "type": "standard",
+        "limit": 10,
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\") AND (assaulted OR groped OR \"grabbed me\" OR \"touched me\" OR molested OR \"sexually assaulted\") AND (stranger OR \"didn\u2019t know\" OR \"random guy\" OR \"unknown man\") AND (female OR woman OR girl OR \"as a woman\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 4.401005268096924,
+        "profiled_subreddits": []
+      }
+    },
+    {
+      "id": "8f28696f",
+      "type": "deep_scan",
+      "config": {
+        "type": "deep_scan",
+        "limit": 10,
+        "is_deep_scan": true,
+        "sort_by": "top",
+        "eval_limit": 3
+      },
+      "generated_query": "(title:(\"pool\" OR \"public pool\" OR \"swimming pool\" OR \"community pool\") AND (assaulted OR groped OR \"grabbed me\" OR \"touched me\" OR \"molested\" OR \"sexually assaulted\") AND (stranger OR \"random guy\" OR \"unknown man\" OR \"some guy\") AND (female OR woman OR girl OR \"as a woman\") AND self:true)",
+      "subreddits_searched": [
+        "all"
+      ],
+      "results": [],
+      "metrics": {
+        "found_count": 0,
+        "evaluated_count": 0,
+        "average_score": 0,
+        "elapsed_seconds": 238.9472794532776,
+        "profiled_subreddits": []
+      }
+    }
+  ],
+  "analysis": "<analyse>Drawbacks: The current queries are overly restrictive due to strict term matching and lack of alternative phrasing for 'assault' or 'public pool' contexts. The intent is satisfied for 'first-person narrative by a woman' and 'stranger assault in a pool,' but missing intent includes: (1) broader trauma-related terminology (e.g., 'harassed,' 'violated,' 'felt unsafe'), (2) alternative pool descriptors (e.g., 'YMCA,' 'hotel pool,' 'beach club'), and (3) narrative framing (e.g., 'my experience,' 'this happened to me'). Remaining Question: Are there first-person accounts using less direct language or situational descriptors (e.g., 'while swimming,' 'in the locker room')?<\\/analyse><modification>Expand terminology for assault, pool contexts, and narrative framing while maintaining proximity for precision.<\\/modification>"
+}

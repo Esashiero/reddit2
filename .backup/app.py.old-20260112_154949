@@ -1,0 +1,444 @@
+from flask import Flask, Response, request, render_template, jsonify
+import os
+import praw
+import json
+import time
+import requests
+import math
+import re
+from typing import List, Dict
+from dotenv import load_dotenv, find_dotenv
+from mistralai import Mistral
+
+load_dotenv(find_dotenv(), override=True)
+
+app = Flask(__name__)
+
+# --- FILE STORAGE ---
+SAVED_QUERIES_FILE = "saved_queries.json"
+SUBREDDITS_FILE = "subreddits.json"
+BLACKLIST_FILE = "blacklist.json"
+
+# --- CONFIG ---
+DEFAULT_SUBS_ENV = os.getenv("REDDIT_SUBREDDITS", "ArtificialInteligence,LocalLLaMA,Python")
+REDDIT_ID = os.getenv("REDDIT_CLIENT_ID")
+REDDIT_SECRET = os.getenv("REDDIT_CLIENT_SECRET")
+REDDIT_AGENT = os.getenv("REDDIT_USER_AGENT", "script:flask_app:v12_fixed")
+MISTRAL_KEY = os.getenv("MISTRAL_API_KEY", "")
+GOOGLE_KEY = os.getenv("GOOGLE_API_KEY", "")
+
+# --- HELPERS ---
+class LLMFilter:
+    def __init__(self, provider):
+        self.provider = provider
+        if provider == "mistral":
+            if not MISTRAL_KEY: raise Exception("Mistral Key Missing")
+            self.client = Mistral(api_key=MISTRAL_KEY)
+        elif provider == "gemini":
+            if not GOOGLE_KEY: raise Exception("Google Key Missing")
+            self.api_key = GOOGLE_KEY
+            
+    def analyze(self, posts, criteria):
+        sys_p = "Return ONLY JSON: {\"matches\": [\"id1\"]}. No matches: {\"matches\": []}."
+        usr_p = f"CRITERIA: {criteria}\nPOSTS:\n{json.dumps(posts)}"
+        try:
+            if self.provider == "mistral":
+                res = self.client.chat.complete(
+                    model="mistral-small-latest",
+                    messages=[{"role":"system","content":sys_p},{"role":"user","content":usr_p}],
+                    response_format={"type":"json_object"}
+                )
+                return json.loads(res.choices[0].message.content).get("matches", [])
+            else:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={self.api_key}"
+                pl = {"contents":[{"parts":[{"text":usr_p}]}], "system_instruction":{"parts":[{"text":sys_p}]}, "generationConfig":{"response_mime_type":"application/json"}}
+                res = requests.post(url, json=pl, headers={"Content-Type":"application/json"})
+                txt = res.json()['candidates'][0]['content']['parts'][0]['text']
+                return json.loads(txt).get("matches", [])
+        except Exception as e:
+            print(f"LLM Error: {e}")
+            return []
+
+    def generate_boolean_string(self, description):
+        sys_p = (
+            "You are an expert Reddit Search Engineer. Your task is to generate a Boolean Search String "
+            "for finding short personal stories on Reddit. "
+            "The query must be optimized for Reddit's strict length and complexity limits.\n\n"
+            "**Guidelines:**\n"
+            "1. **Use ONLY core, single-word keywords.** (e.g., Use 'sleep' NOT 'while i slept').\n"
+            "2. **Group Size:** Generate a maximum of 3 variations per group. Focus on the most unique terms.\n"
+            "3. **Format:** Return ONLY the raw string in this format: (term1 OR term2) AND (termA OR termB)."
+            "4. **Output:** No markdown, no code blocks, no explanations, no quotes around terms. Just the string."
+        )
+        
+        try:
+            if self.provider == "mistral":
+                res = self.client.chat.complete(
+                    model="mistral-large-latest", 
+                    messages=[{"role":"system","content":sys_p},{"role":"user","content":description}]
+                )
+                query_string = res.choices[0].message.content.strip()
+            else:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={self.api_key}"
+                pl = {"contents":[{"parts":[{"text":description}]}], "system_instruction":{"parts":[{"text":sys_p}]}}
+                res = requests.post(url, json=pl, headers={"Content-Type":"application/json"})
+                query_string = res.json()['candidates'][0]['content']['parts'][0]['text'].strip()
+            
+            # Cleanup
+            query_string = query_string.replace('```', '').strip()
+            if query_string.startswith('"') and query_string.endswith('"'):
+                query_string = query_string[1:-1]
+            return query_string
+            
+        except Exception as e:
+            return f"Error: {e}"
+
+def matches_logic(text, parsed_groups):
+    if not parsed_groups: return True
+    text_lower = text.lower()
+    for group in parsed_groups:
+        # Check against clean terms (no quotes)
+        clean_group = [t.replace('"', '') for t in group]
+        if not any(t in text_lower for t in clean_group): return False
+    return True
+
+def build_reddit_query(parsed_groups):
+    if not parsed_groups: return ""
+    and_blocks = []
+    for group in parsed_groups:
+        # sanitize terms to avoid double quotes ""term""
+        or_terms = [f'"{term.replace('"', '').strip()}"' for term in group]
+        block = "(" + " OR ".join(or_terms) + ")"
+        and_blocks.append(block)
+    return " AND ".join(and_blocks)
+
+# --- ROUTES ---
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+# --- API ENDPOINTS ---
+@app.route('/api/generate_query', methods=['POST'])
+def api_generate_query():
+    data = request.json
+    desc = data.get('description')
+    provider = data.get('provider', 'mistral')
+    
+    try:
+        llm = LLMFilter(provider)
+        query_string = llm.generate_boolean_string(desc)
+        if query_string.startswith("Error:"):
+             return jsonify({"error": query_string}), 500
+        return jsonify({"query": query_string})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/blacklist', methods=['GET'])
+def get_blacklist():
+    if os.path.exists(BLACKLIST_FILE):
+        try: 
+            with open(BLACKLIST_FILE, 'r') as f: return jsonify(json.load(f))
+        except: pass
+    return jsonify({})
+
+@app.route('/api/blacklist/clear', methods=['POST'])
+def clear_blacklist():
+    with open(BLACKLIST_FILE, 'w') as f: json.dump({}, f)
+    return jsonify({"status": "cleared"})
+
+@app.route('/api/subreddits', methods=['GET'])
+def get_subreddits():
+    if os.path.exists(SUBREDDITS_FILE):
+        try: 
+            with open(SUBREDDITS_FILE, 'r') as f: return jsonify(json.load(f))
+        except: pass
+    defaults = [s.strip() for s in DEFAULT_SUBS_ENV.split(',') if s.strip()]
+    return jsonify(defaults)
+
+@app.route('/api/subreddits', methods=['POST'])
+def update_subreddits():
+    new_list = request.json
+    with open(SUBREDDITS_FILE, 'w') as f: json.dump(new_list, f, indent=2)
+    return jsonify({"status": "saved"})
+
+@app.route('/api/queries', methods=['GET'])
+def get_queries():
+    if not os.path.exists(SAVED_QUERIES_FILE): return jsonify({})
+    try: 
+        with open(SAVED_QUERIES_FILE, 'r') as f: return jsonify(json.load(f))
+    except: return jsonify({})
+
+@app.route('/api/queries', methods=['POST'])
+def save_query_route():
+    data = request.json
+    name = data.get('name')
+    current = {}
+    if os.path.exists(SAVED_QUERIES_FILE):
+        try: 
+            with open(SAVED_QUERIES_FILE, 'r') as f: current = json.load(f)
+        except: pass
+    current[name] = data['payload']
+    with open(SAVED_QUERIES_FILE, 'w') as f: json.dump(current, f, indent=2)
+    return jsonify({"status": "saved"})
+
+@app.route('/api/queries/<name>', methods=['DELETE'])
+def delete_query(name):
+    if not os.path.exists(SAVED_QUERIES_FILE): return jsonify({"status": "ok"})
+    with open(SAVED_QUERIES_FILE, 'r') as f: data = json.load(f)
+    if name in data:
+        del data[name]
+        with open(SAVED_QUERIES_FILE, 'w') as f: json.dump(data, f, indent=2)
+    return jsonify({"status": "deleted"})
+
+# --- STREAM: MODIFIED CURATOR ---
+@app.route('/stream')
+def stream():
+    keywords = request.args.get('keywords', '')
+    criteria = request.args.get('criteria', '')
+    provider = request.args.get('provider', 'mistral')
+    
+    target_posts = int(request.args.get('target_posts', 10))
+    ai_chunk_size = int(request.args.get('ai_chunk', 5))
+    is_deep_scan = request.args.get('deep_scan') == 'true'
+    manual_limit = int(request.args.get('scan_limit', 100))
+    debug_mode = request.args.get('debug') == 'true'
+    
+    sort_by = request.args.get('sort', 'new')
+    time_filter = request.args.get('time', 'all')
+    post_type = request.args.get('post_type', 'any')
+    
+    subs_param = request.args.get('subreddits', '')
+    if subs_param: subs_list = [s.strip() for s in subs_param.split(',') if s.strip()]
+    else: subs_list = ["ArtificialInteligence"]
+
+    parsed_groups = []
+    paren_groups = re.findall(r'\(([^)]+)\)', keywords)
+    for g in paren_groups:
+        terms = re.split(r'\s+OR\s+|\s+\|\s+', g, flags=re.IGNORECASE)
+        # Fix: Remove quotes from terms here to avoid double quoting later
+        clean_terms = [t.strip().lower().replace('"', '') for t in terms if t.strip()]
+        if clean_terms: parsed_groups.append(clean_terms)
+
+    reddit_query = build_reddit_query(parsed_groups)
+
+    blacklist = {}
+    if os.path.exists(BLACKLIST_FILE):
+        try:
+            with open(BLACKLIST_FILE, 'r') as f: blacklist = json.load(f)
+        except: pass
+
+    def generate():
+        def send(msg): return f"data: {msg}\n\n"
+        
+        reddit_fetch_limit = 950 if is_deep_scan else manual_limit
+        target_per_sub = math.ceil(target_posts / len(subs_list))
+        if target_per_sub < 1: target_per_sub = 1
+        
+        yield send(f"⚙️ Mode: Iterative Search (Server-Side)")
+        yield send(f"🔎 Query: {reddit_query}")
+        yield send(f"🎯 Goal: Find {target_posts} posts total.")
+
+        try:
+            reddit = praw.Reddit(client_id=REDDIT_ID, client_secret=REDDIT_SECRET, user_agent=REDDIT_AGENT)
+        except Exception as e:
+            yield send(f"❌ Reddit Error: {e}")
+            return
+
+        all_matches = []
+        found_total = 0
+
+        # 1. SEARCH PHASE (Iterative)
+        for sub in subs_list:
+            if found_total >= target_posts:
+                 break
+            
+            yield send(f"\n🔎 r/{sub}: Searching...")
+            scanned_sub = 0
+            found_sub = 0
+
+            try:
+                subreddit_object = reddit.subreddit(sub)
+                
+                post_stream = subreddit_object.search(
+                    reddit_query, 
+                    sort=sort_by, 
+                    time_filter=time_filter, 
+                    limit=reddit_fetch_limit
+                )
+
+                for post in post_stream:
+                    scanned_sub += 1
+                    
+                    if post.id in blacklist:
+                        if debug_mode: yield send(f"   🚫 Known: {post.id}")
+                        continue
+                    
+                    if post_type == "text" and not post.is_self: continue
+                    if post_type == "media" and post.is_self: continue
+                    
+                    # Logic check
+                    full_text = f"{post.title} {post.selftext}"
+                    if matches_logic(full_text, parsed_groups):
+                        found_sub += 1
+                        all_matches.append(post)
+                        found_total += 1
+                        yield send(f"   ✅ Found: {post.title[:40]}...")
+                    elif debug_mode:
+                        yield send(f"   ❌ Rejected: {post.title[:25]}...")
+
+                    if found_sub >= target_per_sub:
+                        yield send(f"   🎯 Sub limit met.")
+                        break
+                
+                yield send(f"   (Scanned {scanned_sub} posts, Kept {found_sub})")
+
+            except Exception as e:
+                # IMPORTANT: Print the actual error causing "0 posts"
+                yield send(f"   ⚠️ Error r/{sub}: {str(e)}")
+
+        if not all_matches:
+            yield send("\n❌ No posts found. Try simpler keywords.")
+            return
+
+        # 2. AI PHASE
+        final_posts = []
+        if not criteria:
+            yield send("\n⏩ Skipping AI.")
+            final_posts = all_matches
+        else:
+            try:
+                llm = LLMFilter(provider)
+                yield send(f"\n🤖 AI Analyzing {len(all_matches)} candidates...")
+                processed = []
+                pmap = {}
+                for p in all_matches:
+                    body = p.selftext
+                    if len(body) > 30000: body = body[:30000] + "..."
+                    elif not body: body = "[No Body]"
+                    processed.append({"id":p.id, "sub":p.subreddit.display_name, "title":p.title, "content":body})
+                    pmap[p.id] = p
+                
+                for i in range(0, len(processed), ai_chunk_size):
+                    batch = processed[i : i + ai_chunk_size]
+                    yield send(f"   Chunk {i//ai_chunk_size + 1}...")
+                    matches = llm.analyze(batch, criteria)
+                    if matches:
+                        yield send(f"   🎉 Approved {len(matches)} posts.")
+                        for mid in matches: 
+                            if mid in pmap: final_posts.append(pmap[mid])
+                    else:
+                        yield send("   ⛔ Chunk rejected.")
+                    time.sleep(0.5)
+            except Exception as e:
+                yield send(f"❌ AI Error: {e}")
+                return
+
+        # 3. SAVE & RENDER
+        if final_posts:
+            yield send(f"💾 Saving history...")
+            current_bl = {}
+            if os.path.exists(BLACKLIST_FILE):
+                try:
+                    with open(BLACKLIST_FILE, 'r') as f:
+                        current_bl = json.load(f)
+                except:
+                    pass
+            for p in final_posts:
+                current_bl[p.id] = {
+                    "id": p.id, "title": p.title, "url": f"https://www.reddit.com{p.permalink}",
+                    "keywords": keywords, "criteria": criteria, "timestamp": time.time()
+                }
+            with open(BLACKLIST_FILE, 'w') as f: json.dump(current_bl, f, indent=2)
+
+        html_res = ""
+        for p in final_posts:
+            safe_body = p.selftext.replace("<","&lt;").replace(">","&gt;").replace("\n", "<br>")
+            html_res += f"""<div class="card"><h3>{p.title}</h3><span class="meta">r/{p.subreddit.display_name} | <a href="https://www.reddit.com{p.permalink}" target="_blank">Open</a></span><hr style="border-color:#333"><div class="body-text">{safe_body}</div></div>"""
+        
+        yield send(f"<<<HTML_RESULT>>>{html_res.replace('\n', '||NEWLINE||')}")
+
+    return Response(generate(), mimetype='text/event-stream')
+
+# --- DISCOVERY STREAM ---
+@app.route('/stream_discovery')
+def stream_discovery():
+    keywords = request.args.get('keywords', '')
+    limit_subs = int(request.args.get('limit', 10))
+    criteria = request.args.get('criteria', '')
+    provider = request.args.get('provider', 'mistral')
+
+    parsed_groups = []
+    paren_groups = re.findall(r'\(([^)]+)\)', keywords)
+    for g in paren_groups:
+        terms = re.split(r'\s+OR\s+|\s+\|\s+', g, flags=re.IGNORECASE)
+        # Fix: Strip quotes
+        terms = [t.strip().lower().replace('"','') for t in terms if t.strip()]
+        if terms: parsed_groups.append(terms)
+
+    def generate():
+        def send(msg): return f"data: {msg}\n\n"
+        yield send(f"🌍 Searching r/all...")
+        try:
+            reddit = praw.Reddit(client_id=REDDIT_ID, client_secret=REDDIT_SECRET, user_agent=REDDIT_AGENT)
+        except Exception as e:
+            yield send(f"❌ Reddit Error: {e}")
+            return
+
+        sub_hits = {} 
+        sub_details = {}
+        yield send("🔎 Scanning Reddit global stream...")
+        
+        # Simple query for discovery
+        simple_query = " ".join([g[0] for g in parsed_groups])
+        
+        try:
+            for post in reddit.subreddit("all").search(simple_query, sort='new', limit=300):
+                if matches_logic(f"{post.title} {post.selftext}", parsed_groups):
+                    s_name = post.subreddit.display_name
+                    if s_name not in sub_hits:
+                        sub_hits[s_name] = 0
+                        sub_details[s_name] = post.subreddit
+                    sub_hits[s_name] += 1
+                    
+            yield send(f"✅ Found {len(sub_hits)} communities.")
+            sorted_subs = sorted(sub_hits.items(), key=lambda x: x[1], reverse=True)[:limit_subs*2]
+            final_subs = []
+            
+            if not criteria:
+                for name, hits in sorted_subs[:limit_subs]:
+                    try:
+                        desc = sub_details[name].public_description or ""
+                        final_subs.append({"name": name, "hits": hits, "description": desc})
+                    except: pass
+            else:
+                llm = LLMFilter(provider)
+                yield send(f"🤖 AI analyzing...")
+                for name, hits in sorted_subs:
+                    if len(final_subs) >= limit_subs: break
+                    try:
+                        s_obj = sub_details[name]
+                        desc = s_obj.public_description or ""
+                        prompt_data = {"subreddit": name, "description": desc, "match_count": hits}
+                        matches = llm.analyze([prompt_data], f"Is relevant to: {criteria}?")
+                        if matches:
+                            final_subs.append({"name": name, "hits": hits, "description": desc})
+                            yield send(f"   ✅ AI Approved: r/{name}")
+                        else:
+                            yield send(f"   ❌ AI Rejected: r/{name}")
+                    except: pass
+
+            yield send("✨ Rendering results...")
+            for sub in final_subs:
+                json_str = json.dumps(sub)
+                yield send(f"<<<JSON_CARD>>>{json_str}")
+                
+            yield send("<<<DONE>>>")
+
+        except Exception as e:
+            yield send(f"❌ Error: {e}")
+
+    return Response(generate(), mimetype='text/event-stream')
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
