@@ -1,181 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reddit AI Curator</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+    <div id="overlay" onclick="toggleHistory()"></div>
     
-    <div id="panel-overlay" onclick="toggleHistoryPanel()"></div>
     <div id="side-panel">
         <div class="panel-header">
-            <h2>📜 History</h2>
-            <button class="btn-icon" onclick="toggleHistoryPanel()">&times;</button>
+            <h2 style="margin:0; font-size:1.2rem;">📜 History</h2>
+            <button class="btn btn-outline" onclick="toggleHistory()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div style="padding: 10px; border-bottom: 1px solid #333; display: flex; gap: 10px;">
-             <button class="tool-btn" onclick="fetchHistory()" style="flex:1">Refresh</button>
-             <button class="tool-btn red" onclick="clearHistory()" style="flex:1">Clear All</button>
+        <div class="panel-body" id="history-container">
+            <!-- History items will be injected here -->
         </div>
-        <div class="panel-content" id="history-list"></div>
     </div>
 
     <div class="container">
-        <h1>
-            🤖 Reddit AI Curator
-            <button class="btn-history-toggle" onclick="toggleHistoryPanel()"><span>📜 History</span></button>
-        </h1>
-        
-        <div class="box" style="border-left: 4px solid #76dba9;">
-            <label style="color: #76dba9;">📂 Saved Searches</label>
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <select id="saved-list"><option value="">-- Select a Preset --</option></select>
-                <button class="tool-btn" onclick="loadSelectedQuery()">Load</button>
-                <button class="tool-btn red" onclick="deleteSelectedQuery()">Delete</button>
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
-                <input type="text" id="save-name" placeholder="Name this search">
-                <button class="tool-btn orange" onclick="saveCurrentQuery()">Save Current</button>
-            </div>
-        </div>
+        <header>
+            <h1><i class="fa-solid fa-robot" style="color:#3b82f6;"></i> Reddit AI Curator</h1>
+            <button class="btn btn-secondary" onclick="toggleHistory()">
+                <i class="fa-solid fa-clock-rotate-left"></i> History
+            </button>
+        </header>
 
-        <div class="box">
-            <div class="mode-tabs">
-                <button class="tab-btn active" onclick="switchMode('curator')" id="btn-mode-curator">🚀 Post Curator</button>
-                <button class="tab-btn" onclick="switchMode('discovery')" id="btn-mode-discovery">🌍 Subreddit Discovery</button>
-            </div>
+        <main>
+            <!-- TOP CONTROLS -->
+            <div class="box">
+                <div class="box-title"><i class="fa-solid fa-magnifying-glass"></i> AI Query Generator</div>
+                <div style="display:flex; gap:12px; margin-bottom:16px;">
+                    <input type="text" id="description-input" placeholder="What are you looking for? (e.g., 'Astronaut conspiracy theories')">
+                    <button class="btn btn-primary" onclick="initCuration()" id="init-btn">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Logic
+                    </button>
+                </div>
 
-            <!-- NEW: AI GENERATOR -->
-            <div style="background: #1a1f26; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px dashed #4da6ff;">
-                <label style="color: #4da6ff;">✨ AI Query Generator</label>
-                <div style="display: flex; gap: 10px; margin-top: 5px;">
-                    <input type="text" id="ai-gen-input" placeholder="Describe what you want (e.g. 'Women pretending to sleep while friends laugh')...">
-                    <button class="tool-btn" onclick="generateAIQuery()" style="width: auto; white-space: nowrap;">Generate Logic</button>
+                <!-- STEP 1: PRE-SCAN VIEW (Initially hidden) -->
+                <div id="curation-setup" class="workflow-step">
+                    <div style="margin-bottom:20px;">
+                        <label class="box-title" style="margin-bottom:8px;"><i class="fa-solid fa-lock"></i> Mandatory Constraints</label>
+                        <div id="constraints-list" style="display:flex; flex-wrap:wrap;"></div>
+                    </div>
+
+                    <div style="margin-bottom:20px;">
+                        <label class="box-title" style="margin-bottom:8px;"><i class="fa-solid fa-code-branch"></i> Query Variations</label>
+                        <div id="variations-preview" class="tournament-grid"></div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:20px;">
+                        <div style="flex:1;">
+                            <label class="box-title" style="margin-bottom:8px;"><i class="fa-solid fa-gear"></i> Subreddits</label>
+                            <input type="text" id="subs-input" placeholder="r/space, r/conspiracy...">
+                        </div>
+                        <button class="btn btn-primary" style="padding:14px 40px; font-size:1.1rem;" onclick="startPipeline()">
+                            <i class="fa-solid fa-rocket"></i> Launch Pipeline
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- NEW: RAW QUERY INPUT -->
-            <label>Raw Search Query (Editable)</label>
-            <textarea id="raw-query-input" rows="2" placeholder="(A OR B) AND (C OR D)" style="font-family: monospace; color: #76dba9;" oninput="syncRawToBuilder()"></textarea>
+            <!-- STEP 2: LIVE PIPELINE (Initially hidden) -->
+            <div id="pipeline-status" class="workflow-step">
+                <div class="box">
+                    <div class="box-title" id="pipeline-title">🚀 Search Pipeline Active</div>
 
-            <label style="margin-top: 15px;">Visual Builder</label>
-            <div id="builder-container"></div>
-            <button class="btn-add-group" onclick="addNewGroup()">+ Add "AND" Group</button>
-            
-            <div style="margin-top: 10px; margin-bottom: 20px;">
-                <span class="meta" style="margin-bottom:5px;">Live Logic Preview:</span>
-                <div id="combo-preview">Add groups...</div>
-            </div>
-            
-            <hr style="border-color: #333; margin: 20px 0;">
+                    <!-- Tournament View -->
+                    <div id="tournament-view" style="margin-bottom:24px;">
+                        <div class="box-title" style="font-size:0.75rem; color:#64748b;">Tournament Progress</div>
+                        <div id="tournament-results" class="tournament-grid"></div>
+                    </div>
 
-            <div id="mode-curator">
-                <label>📢 Target Subreddits</label>
-                <div id="sub-list-container" style="margin-bottom: 10px;"></div>
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <input type="text" id="new-sub-input" placeholder="Add subreddit" onkeypress="handleSubInputKey(event)">
-                    <button class="tool-btn" onclick="addSubreddit()" style="width: auto;">Add</button>
+                    <!-- Pass Info -->
+                    <div id="pass-info" style="margin-bottom:16px; display:none;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:12px 16px; border-radius:8px; border:1px solid #1e293b;">
+                            <div>
+                                <div style="font-size:0.7rem; color:#64748b; text-transform:uppercase;">Current Pass</div>
+                                <div id="current-query" style="font-family:monospace; font-size:0.85rem; color:#3b82f6;"></div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div id="current-sort" style="font-weight:700; color:#f1f5f9;">NEW</div>
+                                <div id="current-limit" style="font-size:0.75rem; color:#64748b;">limit: 100/sub</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Counters -->
+                    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; margin-bottom:16px;">
+                        <div class="box" style="padding:12px; margin:0; text-align:center; border-color:#334155;">
+                            <div class="stat-label">Fetched</div>
+                            <div class="stat-val" id="stat-fetched">0</div>
+                        </div>
+                        <div class="box" style="padding:12px; margin:0; text-align:center; border-color:#334155;">
+                            <div class="stat-label">Analyzed</div>
+                            <div class="stat-val" id="stat-analyzed">0</div>
+                        </div>
+                        <div class="box" style="padding:12px; margin:0; text-align:center; border-color:#10b981;">
+                            <div class="stat-label" style="color:#10b981;">Approved</div>
+                            <div class="stat-val" style="color:#10b981;" id="stat-approved">0</div>
+                        </div>
+                        <div class="box" style="padding:12px; margin:0; text-align:center; border-color:#ef4444;">
+                            <div class="stat-label" style="color:#ef4444;">Target</div>
+                            <div class="stat-val" style="color:#ef4444;" id="target-posts-val">10</div>
+                        </div>
+                    </div>
+
+                    <div id="logs-container"></div>
                 </div>
-
-                <!-- FILTERS -->
-                <div style="background: #252525; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #444;">
-                    <label style="color: #ffb74d; margin-bottom: 15px;">🔍 Search Filters</label>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 120px;">
-                            <label>Sort By</label>
-                            <select id="sort_by" onchange="toggleTimeFilter()">
-                                <option value="new">New (Date)</option>
-                                <option value="relevance">Relevance</option>
-                                <option value="top">Top (Upvotes)</option>
-                                <option value="hot">Hot</option>
-                            </select>
-                        </div>
-                        <div style="flex: 1; min-width: 120px; opacity: 0.5;" id="time_filter_container">
-                            <label>Time Range</label>
-                            <select id="time_filter" disabled>
-                                <option value="all">All Time</option>
-                                <option value="year">Past Year</option>
-                                <option value="month">Past Month</option>
-                                <option value="week">Past Week</option>
-                                <option value="day">Past 24h</option>
-                            </select>
-                        </div>
-                        <div style="flex: 1; min-width: 120px;">
-                            <label>Post Type</label>
-                            <select id="post_type">
-                                <option value="any">Any</option>
-                                <option value="text">Text Only</option>
-                                <option value="media">Media/Links Only</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background: #252525; padding: 15px; border-radius: 6px;">
-                    <label style="color: #4da6ff; margin-bottom: 15px;">🎯 Search Strategy</label>
-                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
-                        <div style="flex: 1; min-width: 150px;">
-                            <label>Candidates Wanted</label>
-                            <input type="number" id="target_posts" value="20" oninput="updateExplainer()">
-                        </div>
-                        <div style="flex: 1; min-width: 150px;">
-                            <label>Search Depth</label>
-                            <label class="checkbox-wrapper" for="deep_scan">
-                                <input type="checkbox" id="deep_scan" onchange="updateExplainer()">
-                                <span>Deep Scan (Unlimited)</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                        <div style="flex: 1;">
-                            <label>AI Chunk Size</label>
-                            <input type="number" id="ai_chunk" value="5" oninput="updateExplainer()">
-                        </div>
-                        <div style="flex: 1;">
-                            <label>Manual Limit</label>
-                            <input type="number" id="scan_limit" value="100" oninput="updateExplainer()">
-                        </div>
-                    </div>
-                    <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #333;">
-                        <div style="display: flex; align-items: center;">
-                            <input type="checkbox" id="debug_mode" style="width: 16px; height: 16px; margin-right: 8px;">
-                            <span style="color: #aaa; font-size: 0.9em;">Debug Mode</span>
-                        </div>
-                    </div>
-                    <div id="logic-explainer" style="margin-top:15px;">Loading...</div>
-                    <div style="margin-top: 15px;">
-                         <label>AI Criteria</label>
-                         <textarea id="criteria" rows="2" placeholder="Example: I want technical tutorials..."></textarea>
-                    </div>
-                    <div style="margin-top: 15px;">
-                        <label>Provider</label>
-                        <select id="provider">
-                            <option value="mistral">Mistral</option>
-                            <option value="gemini">Gemini</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="scan-btn" onclick="startScan()">🚀 Start Post Scan</button>
             </div>
 
-            <div id="mode-discovery" style="display: none;">
-                <div style="background: #252525; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
-                    <label>Max Subreddits</label>
-                    <input type="number" id="disc_limit" value="10">
-                    <label style="margin-top: 15px;">AI Filter</label>
-                    <textarea id="disc_criteria" rows="2"></textarea>
+            <!-- RESULTS LIST -->
+            <div id="results-view" class="workflow-step">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <h2 id="results-title" style="margin:0;">Curated Posts</h2>
+                    <div id="results-meta" style="color:#64748b; font-size:0.9rem;"></div>
                 </div>
-                <button class="scan-btn" onclick="startDiscovery()">🌍 Find Subreddits</button>
+                <div id="posts-container"></div>
             </div>
-        </div>
 
-        <div class="box">
-            <label>Live System Logs</label>
-            <div id="logs">Ready.</div>
-        </div>
-
-        <div id="results"></div>
-        <div id="discovery-results" class="discovery-grid"></div>
+        </main>
     </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>

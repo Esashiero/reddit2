@@ -646,6 +646,7 @@ class ConcurrentSearchPipeline:
                 self.is_running = False
 
     def run_tournament(self, variations, subreddits, sort_by, time_filter, post_type):
+        yield f"<<<TOURNAMENT_START>>>{json.dumps(variations)}"
         yield "🏆 Starting Query Tournament (5 competing variations):"
         for i, var in enumerate(variations, 1):
             yield f"   {i}. [{var['type']}] \"{var['query']}\""
@@ -663,7 +664,9 @@ class ConcurrentSearchPipeline:
                     stats = future.result()
                     # New weighted score
                     v_score = (stats['high_quality'] * 10) + (stats['avg_score'] * 0.5)
-                    performance[var['query']] = {**stats, "v_score": v_score, "type": var['type']}
+                    v_data = {**stats, "v_score": v_score, "type": var['type'], "query": var['query']}
+                    performance[var['query']] = v_data
+                    yield f"<<<TOURNAMENT_RESULT>>>{json.dumps(v_data)}"
                     yield f"   📊 Variant '{var['type']}': {stats['high_quality']} matches found (avg {stats['avg_score']:.1f}) | Score: {v_score:.1f}"
                 except Exception as e:
                     logger.error(f"Tournament error: {e}")
@@ -724,6 +727,13 @@ class ConcurrentSearchPipeline:
 
     def execute(self, query, subreddits, sort_by="new", time_filter="all", post_type="any", limit=100):
         # 0. Show Configuration
+        pass_info = {
+            "query": query,
+            "sort": sort_by,
+            "time": time_filter,
+            "limit": limit
+        }
+        yield f"<<<SEARCH_PASS>>>{json.dumps(pass_info)}"
         yield f"\n🔍 Search Pass Configuration:"
         yield f"   Query: {query}"
         yield f"   Sort: {sort_by} | Time: {time_filter} | Limit: {limit}/sub"
@@ -906,6 +916,7 @@ class RedditSearchEngine:
             core_constraints = self.llm.extract_core_characteristics(criteria)
             
             if core_constraints and "core_constraints" in core_constraints:
+                yield f"<<<CORE_CONSTRAINTS>>>{json.dumps(core_constraints['core_constraints'])}"
                 themes = [c["theme"] for c in core_constraints["core_constraints"]]
                 yield f"   🔒 Identified Mandatory constraints: {', '.join(themes)}"
             
@@ -1011,6 +1022,7 @@ class RedditSearchEngine:
         self._log_search_metrics(overall_query, criteria or keywords, subreddits, len(final_posts), duration)
         
         # Show Detailed Stats
+        yield f"<<<SEARCH_STATS>>>{json.dumps(pipeline.stats)}"
         yield "\n📊 Search Statistics:"
         yield f"   - Posts fetched from Reddit: {pipeline.stats['fetched']}"
         yield f"   - Posts analyzed by LLM: {pipeline.stats['analyzed']}"
@@ -1233,6 +1245,84 @@ def api_generate_query():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/curate/init", methods=["POST"])
+def api_curate_init():
+    data = request.json
+    if not data or not data.get("description"):
+        return jsonify({"error": "Description required"}), 400
+
+    desc = data["description"]
+    provider = data.get("provider", "mistral")
+    llm = LLMFilter(provider)
+
+    # 1. Extract Core Characteristics
+    core = llm.extract_core_characteristics(desc)
+
+    # 2. Vocabulary Context (Learning)
+    vocabulary_context = None
+    tagged_db = load_tagged_results()
+    favorites_db = load_favorites()
+    training_data = {**tagged_db, **favorites_db}
+    if training_data:
+        similar = find_similar_posts(desc, training_data, top_k=8)
+        if similar:
+            vocabulary_context = analyze_vocabulary(similar)
+
+    # 3. Generate Variations
+    variations = llm.generate_query_variations(
+        desc,
+        num_variations=5,
+        core_constraints=core,
+        vocabulary_context=vocabulary_context
+    )
+
+    return jsonify({
+        "core_constraints": core.get("core_constraints", []) if core else [],
+        "variations": variations,
+        "vocabulary_context": vocabulary_context
+    })
+
+
+@app.route("/api/results", methods=["GET"])
+def list_results():
+    os.makedirs("results", exist_ok=True)
+    files = [f for f in os.listdir("results") if f.endswith(".json")]
+    results = []
+    for f in files:
+        try:
+            with open(os.path.join("results", f), "r") as jf:
+                data = json.load(jf)
+                # If it's the new format with metadata
+                if isinstance(data, dict) and "results" in data:
+                    results.append({
+                        "id": f.replace(".json", ""),
+                        "query": data.get("query", ""),
+                        "criteria": data.get("criteria", ""),
+                        "timestamp": data.get("timestamp", 0),
+                        "count": len(data.get("results", []))
+                    })
+                else:
+                    # Old format (just list of posts)
+                    results.append({
+                        "id": f.replace(".json", ""),
+                        "query": f,
+                        "timestamp": os.path.getmtime(os.path.join("results", f)),
+                        "count": len(data)
+                    })
+        except: continue
+
+    return jsonify(sorted(results, key=lambda x: x["timestamp"], reverse=True))
+
+
+@app.route("/api/results/<result_id>", methods=["GET"])
+def get_result(result_id):
+    path = os.path.join("results", f"{result_id}.json")
+    if not os.path.exists(path):
+        return jsonify({"error": "Not found"}), 404
+    with open(path, "r") as f:
+        return jsonify(json.load(f))
+
+
 @app.route("/api/blacklist", methods=["GET"])
 def get_blacklist():
     if os.path.exists(BLACKLIST_FILE):
@@ -1397,13 +1487,7 @@ def stream():
             try:
                 msg = next(it)
                 if msg.startswith("<<<POST_SCORED>>>"):
-                    try:
-                        data = json.loads(msg.replace("<<<POST_SCORED>>>", ""))
-                        clean_msg = f"   ⭐ [{data.get('score', 0):.1f}] r/{data.get('sub')}: {data.get('title', '')[:40]}..."
-                        yield send(clean_msg)
-                    except: pass
-                elif msg.startswith("<<<"): 
-                    pass # hide other protocol messages
+                    yield send(msg)
                 else:
                     yield send(msg)
             except StopIteration as e:
@@ -1411,15 +1495,31 @@ def stream():
                 break
 
         if final_posts:
-             # Save to results/ folder if running from web too
+            # Save to results/ folder
             os.makedirs("results", exist_ok=True)
-            # Use timestamp + query/criteria for filename
             q_safe = "".join(c for c in (args.get("criteria") or args.get("keywords") or "results") if c.isalnum() or c in (' ', '_'))[:50].strip().replace(" ", "_")
-            filename = f"results/{time.strftime('%Y%m%d_%H%M%S')}_{q_safe}.html"
-            _generate_html_report(final_posts, q_safe, filename)
-            yield send(f"💾 Saved report: {filename}")
+            ts = time.strftime('%Y%m%d_%H%M%S')
 
-        # Send HTML formatted results/JSON for the frontend to render the list
+            # Save JSON
+            result_payload = {
+                "query": args.get("keywords"),
+                "criteria": args.get("criteria"),
+                "timestamp": time.time(),
+                "config": dict(args),
+                "results": final_posts
+            }
+            json_path = f"results/{ts}_{q_safe}.json"
+            with open(json_path, "w") as f:
+                json.dump(result_payload, f, indent=2)
+
+            # Save HTML (optional but kept for legacy)
+            html_path = f"results/{ts}_{q_safe}.html"
+            _generate_html_report(final_posts, args.get("criteria") or args.get("keywords"), html_path)
+
+            yield send(f"💾 Saved JSON: {json_path}")
+            yield send(f"💾 Saved HTML: {html_path}")
+
+        # Send final data
         yield send(f"<<<APPROVED_POSTS>>>{json.dumps(final_posts)}")
 
     return Response(generate(), mimetype="text/event-stream")
