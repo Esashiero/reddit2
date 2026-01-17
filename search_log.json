@@ -1,0 +1,42 @@
+[
+  {
+    "timestamp": "2026-01-16 23:55:28",
+    "query": "(astronaut OR cosmonaut OR spacefarer) AND (theory OR hypothesis) AND (Reddit OR subreddit OR \"online forum\")",
+    "criteria": "reddit astronaut theory",
+    "subs_count": 18,
+    "subs": [
+      "offmychest",
+      "sexualassault",
+      "TwoXChromosomes",
+      "amiwrong",
+      "relationship_advice",
+      "confessions",
+      "india",
+      "indiasocial",
+      "advice",
+      "relationships"
+    ],
+    "result_count": 9,
+    "duration_sec": 21.49
+  },
+  {
+    "timestamp": "2026-01-16 23:58:19",
+    "query": "(space traveler OR cosmonaut OR \"space explorer\") AND (speculation OR conjecture OR \"educated guess\") AND (Reddit OR r/ OR \"internet forum\")",
+    "criteria": "reddit astronaut theory",
+    "subs_count": 18,
+    "subs": [
+      "offmychest",
+      "sexualassault",
+      "TwoXChromosomes",
+      "amiwrong",
+      "relationship_advice",
+      "confessions",
+      "india",
+      "indiasocial",
+      "advice",
+      "relationships"
+    ],
+    "result_count": 101,
+    "duration_sec": 78.54
+  }
+]

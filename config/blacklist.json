@@ -12606,5 +12606,37 @@
     "keywords": "assault",
     "criteria": "",
     "timestamp": 1768270781.3960922
+  },
+  "1l3l86b": {
+    "id": "1l3l86b",
+    "title": "Done",
+    "url": "https://www.reddit.com/r/TrueOffMyChest/comments/1l3l86b/done/",
+    "keywords": "(astronaut OR cosmonaut OR spacefarer) AND (theory OR hypothesis) AND (Reddit OR subreddit OR \"online forum\")",
+    "criteria": "reddit astronaut theory",
+    "timestamp": 1768607734.552211
+  },
+  "g1lphq": {
+    "id": "g1lphq",
+    "title": "Problems With r/NoSleep",
+    "url": "https://www.reddit.com/r/TrueOffMyChest/comments/g1lphq/problems_with_rnosleep/",
+    "keywords": "(astronaut OR cosmonaut OR spacefarer) AND (theory OR hypothesis) AND (Reddit OR subreddit OR \"online forum\")",
+    "criteria": "reddit astronaut theory",
+    "timestamp": 1768607734.552216
+  },
+  "3wqdhm": {
+    "id": "3wqdhm",
+    "title": "Me [28 M] with my GF [F] of 11 months duration, and I'm suddenly questioning our relationship after something she said",
+    "url": "https://www.reddit.com/r/relationships/comments/3wqdhm/me_28_m_with_my_gf_f_of_11_months_duration_and_im/",
+    "keywords": "(space traveler OR cosmonaut OR \"space explorer\") AND (speculation OR conjecture OR \"educated guess\") AND (Reddit OR r/ OR \"internet forum\")",
+    "criteria": "reddit astronaut theory",
+    "timestamp": 1768607907.662214
+  },
+  "3qvj6w": {
+    "id": "3qvj6w",
+    "title": null,
+    "url": null,
+    "keywords": "(space traveler OR cosmonaut OR \"space explorer\") AND (speculation OR conjecture OR \"educated guess\") AND (Reddit OR r/ OR \"internet forum\")",
+    "criteria": "reddit astronaut theory",
+    "timestamp": 1768607907.662227
   }
 }

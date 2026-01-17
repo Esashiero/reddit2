@@ -1,711 +1,293 @@
-// GLOBAL STATE
-let activeSubreddits = [];
-
-document.addEventListener('DOMContentLoaded', async () => {
-    await fetchAndRenderSubreddits();
-    addNewGroup();
-    fetchSavedQueries();
-    fetchHistory();
-    toggleTimeFilter();
-    updateExplainer();
-
-    // Listeners
-    const deepScan = document.getElementById('deep_scan');
-    if (deepScan) {
-        deepScan.addEventListener('change', function () {
-            const manualInput = document.getElementById('scan_limit');
-            manualInput.disabled = this.checked;
-            manualInput.style.opacity = this.checked ? "0.5" : "1";
-            updateExplainer();
-        });
-    }
-
-    const rawInput = document.getElementById('raw-query-input');
-    if (rawInput) {
-        rawInput.addEventListener('input', syncRawToBuilder);
-    }
-});
-
-// --- AI QUERY GENERATOR ---
-async function generateAIQuery() {
-    const inputField = document.getElementById('ai-gen-input');
-    const desc = inputField.value;
-    // Find the button next to the input
-    const btn = inputField.nextElementSibling;
-
-    if (!desc.trim()) return alert("Please describe what you want first.");
-
-    // UI Loading State
-    const originalText = btn.innerText;
-    btn.disabled = true;
-    btn.innerText = "Generating...";
-
-    try {
-        const res = await fetch('/api/generate_query', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                description: desc,
-                provider: document.getElementById('provider').value
-            })
-        });
-
-        const data = await res.json();
-
-        if (data.query) {
-            // Set the raw input
-            document.getElementById('raw-query-input').value = data.query;
-            // Update the visual builder
-            syncRawToBuilder();
-        } else {
-            alert("AI Error: " + (data.error || "Unknown error"));
-        }
-    } catch (e) {
-        console.error(e);
-        alert("Network Error: Check console logs.");
-    }
-
-    // Reset UI
-    btn.disabled = false;
-    btn.innerText = originalText;
-}
-
-// --- SYNC LOGIC: RAW <-> BUILDER ---
-
-// 1. Raw Text -> Visual Builder
-function syncRawToBuilder() {
-    const raw = document.getElementById('raw-query-input').value;
-    const container = document.getElementById('builder-container');
-    container.innerHTML = ''; // Clear visual builder
-
-    // Parse logic: Match (groups)
-    const parenRegex = /\(([^)]+)\)/g;
-    let match;
-    let found = false;
-
-    while ((match = parenRegex.exec(raw)) !== null) {
-        found = true;
-        // Split by OR, remove quotes if present
-        const groupTerms = match[1].split(/ OR |\|/i).map(s => s.trim().replace(/"/g, '')).filter(s => s);
-
-        if (groupTerms.length > 0) {
-            // Add group without triggering sync back (prevent loop)
-            const groupDiv = addNewGroup(false);
-            const termContainer = groupDiv.querySelector('.terms-container');
-            termContainer.innerHTML = '';
-            groupTerms.forEach(term => addTermToContainer(termContainer, term, false));
-        }
-    }
-
-    // If empty/invalid, reset to one empty group
-    if (!found && raw.trim() === '') {
-        addNewGroup(false);
-    }
-
-    updatePreviewOnly();
-}
-
-// 2. Visual Builder -> Raw Text
-function syncBuilderToRaw() {
-    const groups = document.querySelectorAll('.query-group');
-    let blocks = [];
-
-    groups.forEach(group => {
-        const inputs = group.querySelectorAll('input');
-        let terms = [];
-        inputs.forEach(inp => {
-            const val = inp.value.trim();
-            if (val) terms.push(val);
-        });
-
-        if (terms.length > 0) {
-            // Join terms with OR, wrap in quotes for safety
-            const quotedTerms = terms.map(t => `"${t}"`);
-            blocks.push(`(${quotedTerms.join(" OR ")})`);
-        }
-    });
-
-    // Join groups with AND
-    const rawString = blocks.join(" AND ");
-    document.getElementById('raw-query-input').value = rawString;
-    updatePreviewOnly();
-}
-
-// --- BUILDER FUNCTIONS ---
-
-function addNewGroup(triggerSync = true) {
-    const container = document.getElementById('builder-container');
-    const groupDiv = document.createElement('div');
-    groupDiv.className = 'query-group';
-    groupDiv.innerHTML = `
-        <div class="group-header">
-            <span>MUST MATCH (AND)</span>
-            <button class="btn-icon" onclick="removeGroup(this)" title="Remove Group">&times;</button>
-        </div>
-        <div class="terms-container"></div>
-        <button class="btn-add-term" onclick="addTerm(this)">+ Add "OR" Term</button>
-    `;
-    container.appendChild(groupDiv);
-
-    // Add default empty input
-    if (triggerSync) {
-        addTermToContainer(groupDiv.querySelector('.terms-container'), "", true);
-    }
-    return groupDiv;
-}
-
-function addTerm(btn) {
-    addTermToContainer(btn.previousElementSibling, "", true);
-}
-
-function addTermToContainer(container, value = "", triggerSync = true) {
-    const row = document.createElement('div');
-    row.className = 'term-row';
-    row.innerHTML = `
-        <input type="text" placeholder="keyword..." value="${value}" oninput="syncBuilderToRaw()">
-        <button class="btn-icon" onclick="removeTerm(this)">&times;</button>
-    `;
-    container.appendChild(row);
-
-    // Only focus if adding manually
-    if (!value && triggerSync) row.querySelector('input').focus();
-
-    if (triggerSync) syncBuilderToRaw();
-}
-
-function removeTerm(btn) {
-    btn.parentElement.remove();
-    syncBuilderToRaw();
-}
-
-function removeGroup(btn) {
-    btn.closest('.query-group').remove();
-    syncBuilderToRaw();
-}
-
-// --- DATA EXTRACTION ---
-function getBuilderData() {
-    const groups = document.querySelectorAll('.query-group');
-    let logicalGroups = [];
-    groups.forEach(group => {
-        const inputs = group.querySelectorAll('input');
-        let terms = [];
-        inputs.forEach(inp => { if (inp.value.trim()) terms.push(inp.value.trim()); });
-        if (terms.length > 0) logicalGroups.push(terms);
-    });
-    return logicalGroups;
-}
-
-function updatePreviewOnly() {
-    const groups = getBuilderData();
-    const previewBox = document.getElementById('combo-preview');
-    if (groups.length === 0) { previewBox.innerHTML = "Add terms..."; return; }
-
-    const combinations = cartesian(groups);
-    let html = "";
-    const displayLimit = 20;
-
-    combinations.slice(0, displayLimit).forEach(combo => {
-        const line = Array.isArray(combo) ? combo.join(" + ") : combo;
-        html += `<div class="preview-item">🔎 ${line}</div>`;
-    });
-
-    if (combinations.length > displayLimit) {
-        html += `<div class="preview-item" style="color:#888">...and ${combinations.length - displayLimit} more combinations</div>`;
-    }
-    previewBox.innerHTML = html;
-}
-
-function cartesian(args) {
-    if (args.length === 0) return [];
-    const r = [], max = args.length - 1;
-    function helper(arr, i) {
-        for (let j = 0, l = args[i].length; j < l; j++) {
-            const a = arr.slice(0); a.push(args[i][j]);
-            if (i == max) r.push(a); else helper(a, i + 1);
-        }
-    }
-    helper([], 0);
-    return r;
-}
-
-// --- SUBREDDIT MANAGER ---
-async function fetchAndRenderSubreddits() {
-    try {
-        const res = await fetch('/api/subreddits');
-        const data = await res.json();
-        activeSubreddits = data;
-        renderSubreddits();
-    } catch (e) { console.error(e); }
-}
-
-async function syncSubreddits() {
-    await fetch('/api/subreddits', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(activeSubreddits)
-    });
-}
-
-function renderSubreddits() {
-    const container = document.getElementById('sub-list-container');
-    container.innerHTML = '';
-    activeSubreddits.forEach(sub => {
-        const tag = document.createElement('span');
-        tag.className = 'sub-tag';
-        tag.innerHTML = `r/${sub} <span class="remove-sub" onclick="removeSub('${sub}')">&times;</span>`;
-        container.appendChild(tag);
-    });
-    updateExplainer();
-}
-
-async function addSubreddit() {
-    const input = document.getElementById('new-sub-input');
-    let val = input.value.trim().replace(/^r\//, '');
-    if (val && !activeSubreddits.includes(val)) {
-        activeSubreddits.push(val);
-        renderSubreddits();
-        input.value = '';
-        await syncSubreddits();
-    }
-}
-
-function handleSubInputKey(event) { if (event.key === 'Enter') addSubreddit(); }
-
-async function removeSub(sub) {
-    activeSubreddits = activeSubreddits.filter(s => s !== sub);
-    renderSubreddits();
-    await syncSubreddits();
-}
-
-// --- SETTINGS UI ---
-function updateExplainer() {
-    const box = document.getElementById('logic-explainer');
-    if (!box) return;
-
-    const target = document.getElementById('target_posts').value;
-    const isDeep = document.getElementById('deep_scan').checked;
-    const limit = document.getElementById('scan_limit').value;
-    const subs = activeSubreddits.length;
-    const chunk = document.getElementById('ai_chunk').value;
-
-    let text = "";
-    if (isDeep) {
-        text = `Script will scan the <strong>combined stream of ${subs} subreddits</strong> (Server-Side). It stops as soon as it finds <strong>${target} candidates</strong>.`;
-    } else {
-        text = `Script will scan the <strong>newest ${limit} posts</strong> across all ${subs} subreddits simultaneously.`;
-    }
-    text += `<br><br>Then, the LLM will analyze these <strong>${target} candidates</strong> in groups of <strong>${chunk}</strong>.`;
-    box.innerHTML = text;
-}
-
-function toggleTimeFilter() {
-    const sortVal = document.getElementById('sort_by').value;
-    const timeSelect = document.getElementById('time_filter');
-    const timeContainer = document.getElementById('time_filter_container');
-
-    if (sortVal === 'top' || sortVal === 'relevance') {
-        timeSelect.disabled = false;
-        timeContainer.style.opacity = "1";
-    } else {
-        timeSelect.disabled = true;
-        timeContainer.style.opacity = "0.5";
-    }
-}
-
-// --- SAVE / LOAD ---
-async function saveCurrentQuery() {
-    const name = document.getElementById('save-name').value.trim();
-    if (!name) return alert("Please enter a name.");
-
-    const payload = {
-        groups: getBuilderData(),
-        criteria: document.getElementById('criteria').value,
-        target_posts: document.getElementById('target_posts').value,
-        deep_scan: document.getElementById('deep_scan').checked,
-        ai_chunk: document.getElementById('ai_chunk').value,
-        scan_limit: document.getElementById('scan_limit').value,
-        provider: document.getElementById('provider').value,
-        subreddits: activeSubreddits,
-        sort: document.getElementById('sort_by').value,
-        time: document.getElementById('time_filter').value,
-        post_type: document.getElementById('post_type').value
-    };
-
-    await fetch('/api/queries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, payload })
-    });
-
-    document.getElementById('save-name').value = "";
-    fetchSavedQueries();
-    alert("Saved!");
-}
-
-async function fetchSavedQueries() {
-    const res = await fetch('/api/queries');
-    const data = await res.json();
-    const select = document.getElementById('saved-list');
-    select.innerHTML = '<option value="">-- Select a Preset --</option>';
-    for (const [name, payload] of Object.entries(data)) {
-        const opt = document.createElement('option');
-        opt.value = name;
-        opt.textContent = name;
-        opt.dataset.payload = JSON.stringify(payload);
-        select.appendChild(opt);
-    }
-}
-
-async function deleteSelectedQuery() {
-    const select = document.getElementById('saved-list');
-    const name = select.value;
-    if (!name) return;
-    if (confirm("Delete " + name + "?")) {
-        await fetch('/api/queries/' + encodeURIComponent(name), { method: 'DELETE' });
-        fetchSavedQueries();
-    }
-}
-
-function loadSelectedQuery() {
-    const select = document.getElementById('saved-list');
-    const selectedOpt = select.options[select.selectedIndex];
-    if (!selectedOpt.value) return;
-
-    const payload = JSON.parse(selectedOpt.dataset.payload);
-
-    // Rebuild visual from data
-    document.getElementById('builder-container').innerHTML = '';
-    payload.groups.forEach(groupTerms => {
-        const groupDiv = addNewGroup(false);
-        const container = groupDiv.querySelector('.terms-container');
-        container.innerHTML = '';
-        groupTerms.forEach(term => addTermToContainer(container, term, false));
-    });
-
-    // Sync to Raw
-    syncBuilderToRaw();
-
-    document.getElementById('criteria').value = payload.criteria || "";
-    document.getElementById('target_posts').value = payload.target_posts || 20;
-    document.getElementById('ai_chunk').value = payload.ai_chunk || 5;
-    document.getElementById('scan_limit').value = payload.scan_limit || 100;
-    document.getElementById('provider').value = payload.provider || "mistral";
-
-    if (payload.sort) document.getElementById('sort_by').value = payload.sort;
-    if (payload.time) document.getElementById('time_filter').value = payload.time;
-    if (payload.post_type) document.getElementById('post_type').value = payload.post_type;
-    toggleTimeFilter();
-
-    const deepBox = document.getElementById('deep_scan');
-    deepBox.checked = payload.deep_scan || false;
-
-    if (payload.subreddits) {
-        activeSubreddits = payload.subreddits;
-        renderSubreddits();
-        syncSubreddits();
-    }
-    updateExplainer();
-}
-
-// --- HISTORY PANEL ---
-function toggleHistoryPanel() {
-    const panel = document.getElementById('side-panel');
-    const overlay = document.getElementById('panel-overlay');
-    panel.classList.toggle('open');
-    overlay.classList.toggle('show');
-}
-
-async function fetchHistory() {
-    const container = document.getElementById('history-list');
-    container.innerHTML = '<p style="color:#666; text-align:center;">Loading...</p>';
-    try {
-        const res = await fetch('/api/blacklist');
-        const data = await res.json();
-        const items = Object.values(data).reverse();
-
-        if (items.length === 0) {
-            container.innerHTML = '<p style="color:#666; text-align:center;">No history found.</p>';
-            return;
-        }
-
-        container.innerHTML = '';
-        items.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'history-card';
-            let criteriaShort = item.criteria || "None";
-            if (criteriaShort.length > 50) criteriaShort = criteriaShort.substring(0, 50) + "...";
-
-            div.innerHTML = `
-                <h4><a href="${item.url}" target="_blank">${item.title}</a></h4>
-                <span class="meta-tag">🔎 Query: ${item.keywords}</span>
-                <span class="meta-tag">🤖 Criteria: ${criteriaShort}</span>
-                <div style="margin-top:5px; font-size:0.8em; color:#666;">ID: ${item.id}</div>
-            `;
-            container.appendChild(div);
-        });
-    } catch (e) {
-        container.innerHTML = '<p style="color:red; text-align:center;">Error loading history.</p>';
-    }
-}
-
-async function clearHistory() {
-    if (!confirm("Clear all history?")) return;
-    await fetch('/api/blacklist/clear', { method: 'POST' });
-    fetchHistory();
-}
-
-// --- EXECUTION ---
-function startScan() {
-    const logs = document.getElementById('logs');
-    const results = document.getElementById('results');
-    const btn = document.querySelector('#mode-curator .scan-btn');
-    const keywordString = document.getElementById('raw-query-input').value;
-
-    if (!keywordString) return alert("Add keywords first!");
-
-    logs.innerHTML = "🚀 Initializing...";
-    results.innerHTML = "";
-    btn.disabled = true;
-
-    const params = new URLSearchParams({
-        keywords: keywordString,
-        criteria: document.getElementById('criteria').value,
-        provider: document.getElementById('provider').value,
-        target_posts: document.getElementById('target_posts').value,
-        deep_scan: document.getElementById('deep_scan').checked,
-        ai_chunk: document.getElementById('ai_chunk').value,
-        scan_limit: document.getElementById('scan_limit').value,
-        subreddits: activeSubreddits.join(','),
-        debug: document.getElementById('debug_mode').checked,
-        sort: document.getElementById('sort_by').value,
-        time: document.getElementById('time_filter').value,
-        post_type: document.getElementById('post_type').value
-    });
-
-    const eventSource = new EventSource("/stream?" + params.toString());
-
-    eventSource.onmessage = function (e) {
-        if (e.data.startsWith("<<<HTML_RESULT>>>")) {
-            const htmlContent = e.data.replace("<<<HTML_RESULT>>>", "").replaceAll("||NEWLINE||", "\n");
-            results.innerHTML = htmlContent;
-            eventSource.close();
-            btn.disabled = false;
-            logs.innerHTML += "\n✅ Process Complete.";
-            logs.scrollTop = logs.scrollHeight;
-            fetchHistory();
-        } else if (e.data.startsWith("<<<APPROVED_POSTS>>>")) {
-            // Handle new approved posts format with scores
-            try {
-                const approvedData = JSON.parse(e.data.replace("<<<APPROVED_POSTS>>>", ""));
-                renderApprovedPosts(approvedData);
-            } catch (err) {
-                console.error("Error parsing approved posts:", err);
-            }
-        } else {
-            logs.innerHTML += "\n" + e.data;
-            logs.scrollTop = logs.scrollHeight;
-        }
-    };
-
-    eventSource.onerror = function () {
-        eventSource.close();
-        btn.disabled = false;
-        logs.innerHTML += "\n❌ Connection Closed.";
-    };
-}
-
-// Mode 2
-function startDiscovery() {
-    const logs = document.getElementById('logs');
-    const resultsBox = document.getElementById('discovery-results');
-    const btn = document.querySelector('#mode-discovery .scan-btn');
-    const keywordString = document.getElementById('raw-query-input').value;
-
-    if (!keywordString) return alert("Add keywords first!");
-
-    logs.innerHTML = "🌍 Starting Global Discovery...";
-    resultsBox.innerHTML = "";
-    btn.disabled = true;
-
-    const params = new URLSearchParams({
-        keywords: keywordString,
-        limit: document.getElementById('disc_limit').value,
-        criteria: document.getElementById('disc_criteria').value,
-        provider: document.getElementById('provider').value
-    });
-
-    const eventSource = new EventSource("/stream_discovery?" + params.toString());
-
-    eventSource.onmessage = function (e) {
-        if (e.data.startsWith("<<<JSON_CARD>>>")) {
-            const sub = JSON.parse(e.data.replace("<<<JSON_CARD>>>", ""));
-            renderDiscoveryCard(sub);
-        } else if (e.data.includes("<<<DONE>>>")) {
-            eventSource.close();
-            btn.disabled = false;
-            logs.innerHTML += "\n✅ Discovery Complete.";
-        } else {
-            logs.innerHTML += "\n" + e.data;
-            logs.scrollTop = logs.scrollHeight;
-        }
-    };
-
-    eventSource.onerror = function () {
-        eventSource.close();
-        btn.disabled = false;
-        logs.innerHTML += "\n❌ Connection Closed.";
-    };
-}
-
-function renderDiscoveryCard(sub) {
-    const box = document.getElementById('discovery-results');
-    const div = document.createElement('div');
-    div.className = 'sub-card';
-    const safeDesc = sub.description ? sub.description.substring(0, 150) + "..." : "No description.";
-    div.innerHTML = `
-        <h4>r/${sub.name}</h4>
-        <span class="stats">Matches found: ${sub.hits}</span>
-        <p>${safeDesc}</p>
-        <button class="btn-add-sub" onclick="addDiscoverySub('${sub.name}', this)">+ Add to List</button>
-    `;
-    box.appendChild(div);
-}
-
-async function addDiscoverySub(name, btn) {
-    if (!activeSubreddits.includes(name)) {
-        activeSubreddits.push(name);
-        renderSubreddits();
-        await syncSubreddits();
-        btn.innerHTML = "✅ Added";
-        btn.style.background = "#2b7bd6";
-        btn.disabled = true;
-    } else {
-        alert("Already in your list!");
-    }
-}
-
-// Global state
-let approvedPostsData = [];
+// --- STATE MANAGEMENT ---
+let currentCuration = {
+    description: "",
+    constraints: [],
+    variations: [],
+    results: [],
+    stats: { fetched: 0, analyzed: 0, approved: 0 }
+};
+
+let tournamentData = {};
 let userFavorites = {};
 
+document.addEventListener('DOMContentLoaded', () => {
+    loadSubreddits();
+    loadHistory();
+    loadUserFavorites();
+});
+
+// --- API WRAPPERS ---
+async function api(endpoint, method = 'GET', body = null) {
+    const options = {
+        method,
+        headers: { 'Content-Type': 'application/json' }
+    };
+    if (body) options.body = JSON.stringify(body);
+    const res = await fetch(endpoint, options);
+    return res.json();
+}
+
+// --- INITIALIZATION ---
+async function loadSubreddits() {
+    const subs = await api('/api/subreddits');
+    document.getElementById('subs-input').value = subs.join(', ');
+}
+
 async function loadUserFavorites() {
+    userFavorites = await api('/api/favorites');
+}
+
+async function initCuration() {
+    const desc = document.getElementById('description-input').value;
+    if (!desc) return alert("Please enter a description");
+
+    const btn = document.getElementById('init-btn');
+    const originalContent = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
+
     try {
-        const resp = await fetch('/api/favorites');
-        if (resp.ok) {
-            userFavorites = await resp.json();
-        }
+        const data = await api('/api/curate/init', 'POST', { description: desc });
+
+        currentCuration.description = desc;
+        currentCuration.constraints = data.core_constraints;
+        currentCuration.variations = data.variations;
+
+        renderSetup(data);
+        document.getElementById('curation-setup').style.display = 'block';
+        document.getElementById('curation-setup').scrollIntoView({ behavior: 'smooth' });
     } catch (e) {
-        console.error("Failed to load favorites", e);
+        alert("Error initializing curation: " + e.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalContent;
     }
 }
 
-// Ensure favorites are loaded when page loads
-document.addEventListener('DOMContentLoaded', loadUserFavorites);
+function renderSetup(data) {
+    // Render Constraints
+    const cList = document.getElementById('constraints-list');
+    cList.innerHTML = data.core_constraints.map(c => `
+        <div class="constraint-tag">
+            <span class="constraint-theme">${c.theme}</span>
+            <span class="constraint-desc">${c.terms.slice(0, 3).join(', ')}...</span>
+        </div>
+    `).join('');
 
-function renderApprovedPosts(posts) {
-    approvedPostsData = posts;  // Store for export
-    const box = document.getElementById('results');
-    if (!box) return;
+    // Render Variations Preview
+    const vPreview = document.getElementById('variations-preview');
+    vPreview.innerHTML = data.variations.map(v => `
+        <div class="variant-card">
+            <div class="variant-type">${v.type}</div>
+            <div class="variant-query">${v.query}</div>
+            <div style="font-size:0.75rem; color:#64748b; margin-top:4px;">${v.reasoning}</div>
+        </div>
+    `).join('');
+}
 
-    let html = '<div class="results-header">';
-    html += '<h3>✅ Approved Posts (' + posts.length + ')</h3>';
-    html += '<button class="btn-export" onclick="exportResults()" style="background:#10b981;margin-left:10px;">📥 Export Results</button>';
-    html += '</div>';
-    html += '<div class="approved-posts">';
+// --- PIPELINE EXECUTION ---
+function startPipeline() {
+    const desc = currentCuration.description;
+    const subs = document.getElementById('subs-input').value;
 
-    posts.forEach((post, idx) => {
-        const score = post.score || 0;
-        const scoreClass = score >= 80 ? 'score-high' : (score >= 60 ? 'score-medium' : 'score-low');
-        const isFavorited = !!userFavorites[post.id];
+    // UI Reset
+    document.getElementById('pipeline-status').style.display = 'block';
+    document.getElementById('tournament-view').style.display = 'none';
+    document.getElementById('results-view').style.display = 'none';
+    document.getElementById('logs-container').innerHTML = '';
+    document.getElementById('tournament-results').innerHTML = '';
+    document.getElementById('posts-container').innerHTML = '';
 
-        // Date formatting
-        const dateStr = post.timestamp ? new Date(post.timestamp * 1000).toLocaleDateString() : 'Unknown Date';
+    // Reset Stats
+    updateStats({ fetched: 0, analyzed: 0, approved: 0 });
+    tournamentData = {};
 
-        // Tags rendering
-        let tagsHtml = '';
-        if (post.tags && post.tags.length > 0) {
-            tagsHtml = '<div class="tag-list">';
-            post.tags.slice(0, 8).forEach(tag => {
-                tagsHtml += `<span class="tag-pill">${escapeHtml(tag)}</span>`;
-            });
-            tagsHtml += '</div>';
-        }
-
-        const longContent = post.content && post.content.length > 500;
-        const contentHtml = post.content ?
-            `<div id="content-${idx}" class="approved-content ${longContent ? 'collapsed' : ''}">${escapeHtml(post.content)}</div>` :
-            '';
-        const toggleHtml = longContent ?
-            `<button class="show-toggle" onclick="toggleContent(${idx})">Show More ↓</button>` :
-            '';
-
-        html += `
-            <div class="approved-card">
-                <div class="approved-header">
-                    <div>
-                        <span class="sub-tag">r/${post.sub}</span>
-                        <div class="post-date">${dateStr}</div>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <button class="fav-btn ${isFavorited ? 'active' : ''}" 
-                                onclick="toggleFavorite('${post.id}', ${idx})" 
-                                title="Favorite this post for better learning">
-                                ${isFavorited ? '★' : '☆'}
-                        </button>
-                        <span class="score-tag ${scoreClass}">Score: ${score}</span>
-                    </div>
-                </div>
-                <h4><a href="${post.url}" target="_blank">${escapeHtml(post.title)}</a></h4>
-                ${contentHtml}
-                ${toggleHtml}
-                ${tagsHtml}
-                <div class="approved-meta" style="margin-top:10px;">ID: ${post.id}</div>
-            </div>
-        `;
+    const params = new URLSearchParams({
+        keywords: currentCuration.variations[0].query, // Default
+        criteria: desc,
+        subreddits: subs,
+        tournament: 'true',
+        exhaustive: 'false',
+        target_posts: '10'
     });
-    html += '</div>';
 
-    box.innerHTML = html;
-}
+    const eventSource = new EventSource(`/stream?${params.toString()}`);
 
-function toggleFavorite(postId, idx) {
-    const isFavorited = !!userFavorites[postId];
-    const post = approvedPostsData[idx] || Object.values(userFavorites).find(p => p.id === postId);
+    eventSource.onmessage = (e) => {
+        const data = e.data;
 
-    if (isFavorited) {
-        // DELETE
-        fetch(`/api/favorites/${postId}`, { method: 'DELETE' })
-            .then(() => {
-                delete userFavorites[postId];
-                renderApprovedPosts(approvedPostsData);
+        if (data.startsWith('<<<TOURNAMENT_START>>>')) {
+            document.getElementById('tournament-view').style.display = 'block';
+            const variations = JSON.parse(data.replace('<<<TOURNAMENT_START>>>', ''));
+            renderTournamentBase(variations);
+        }
+        else if (data.startsWith('<<<TOURNAMENT_RESULT>>>')) {
+            const result = JSON.parse(data.replace('<<<TOURNAMENT_RESULT>>>', ''));
+            updateTournamentResult(result);
+        }
+        else if (data.startsWith('<<<SEARCH_PASS>>>')) {
+            const info = JSON.parse(data.replace('<<<SEARCH_PASS>>>', ''));
+            showSearchPass(info);
+        }
+        else if (data.startsWith('<<<POST_SCORED>>>')) {
+            const post = JSON.parse(data.replace('<<<POST_SCORED>>>', ''));
+            // Optionally add to a live feed
+            log(`⭐ [${post.score.toFixed(1)}] r/${post.sub}: ${post.title.substring(0, 50)}...`, "success");
+        }
+        else if (data.startsWith('<<<SEARCH_STATS>>>')) {
+            const stats = JSON.parse(data.replace('<<<SEARCH_STATS>>>', ''));
+            updateStats({
+                fetched: stats.fetched,
+                analyzed: stats.analyzed,
+                approved: stats.scores.high
             });
-    } else {
-        // POST
-        fetch('/api/favorites', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(post)
-        }).then(() => {
-            userFavorites[postId] = post;
-            renderApprovedPosts(approvedPostsData);
-        });
+        }
+        else if (data.startsWith('<<<APPROVED_POSTS>>>')) {
+            const posts = JSON.parse(data.replace('<<<APPROVED_POSTS>>>', ''));
+            finalizeResults(posts);
+            eventSource.close();
+            loadHistory();
+        }
+        else {
+            log(data);
+        }
+    };
+
+    eventSource.onerror = () => {
+        log("❌ Connection Closed", "warning");
+        eventSource.close();
+    };
+}
+
+// --- UI COMPONENTS ---
+
+function renderTournamentBase(variations) {
+    const container = document.getElementById('tournament-results');
+    container.innerHTML = variations.map(v => `
+        <div class="variant-card" id="v-${v.type}">
+            <div class="variant-header">
+                <div class="variant-type">${v.type}</div>
+                <div class="stat-val" id="score-${v.type}">--</div>
+            </div>
+            <div class="variant-query">${v.query}</div>
+            <div class="variant-stats">
+                <div class="stat-item">
+                    <span class="stat-val" id="hq-${v.type}">0</span>
+                    <span class="stat-label">Matches</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val" id="avg-${v.type}">0</span>
+                    <span class="stat-label">Avg Score</span>
+                </div>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="pb-${v.type}"></div></div>
+        </div>
+    `).join('');
+}
+
+function updateTournamentResult(res) {
+    const card = document.getElementById(`v-${res.type}`);
+    if (!card) return;
+
+    document.getElementById(`score-${res.type}`).innerText = res.v_score.toFixed(1);
+    document.getElementById(`hq-${res.type}`).innerText = res.high_quality;
+    document.getElementById(`avg-${res.type}`).innerText = res.avg_score.toFixed(1);
+
+    const pb = document.getElementById(`pb-${res.type}`);
+    pb.style.width = '100%';
+    pb.style.background = '#10b981';
+
+    tournamentData[res.type] = res;
+
+    // Check if winner
+    const all = Object.values(tournamentData);
+    if (all.length === 5) {
+        const winner = all.sort((a,b) => b.v_score - a.v_score)[0];
+        document.getElementById(`v-${winner.type}`).classList.add('winner');
+        log(`🏆 Winner: ${winner.type} variant`, "success");
     }
 }
 
-function toggleContent(idx) {
-    const el = document.getElementById(`content-${idx}`);
-    const btn = el.nextElementSibling;
-    const isCollapsed = el.classList.contains('collapsed');
+function showSearchPass(info) {
+    const el = document.getElementById('pass-info');
+    el.style.display = 'block';
+    document.getElementById('current-query').innerText = info.query;
+    document.getElementById('current-sort').innerText = info.sort.toUpperCase();
+    document.getElementById('current-limit').innerText = `limit: ${info.limit}/sub`;
+}
 
-    if (isCollapsed) {
-        el.classList.remove('collapsed');
-        btn.innerText = "Show Less ↑";
-    } else {
-        el.classList.add('collapsed');
-        btn.innerText = "Show More ↓";
-        el.closest('.approved-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+function updateStats(stats) {
+    document.getElementById('stat-fetched').innerText = stats.fetched;
+    document.getElementById('stat-analyzed').innerText = stats.analyzed;
+    document.getElementById('stat-approved').innerText = stats.approved;
+
+    if (stats.approved >= 10) {
+        document.getElementById('stat-approved').style.color = '#10b981';
     }
+}
+
+function finalizeResults(posts) {
+    currentCuration.results = posts;
+    document.getElementById('results-view').style.display = 'block';
+    document.getElementById('results-view').scrollIntoView({ behavior: 'smooth' });
+
+    const container = document.getElementById('posts-container');
+    container.innerHTML = posts.map((p, i) => renderPostCard(p, i)).join('');
+
+    document.getElementById('results-meta').innerText = `${posts.length} high-quality matches found`;
+}
+
+function renderPostCard(p, index) {
+    const score = (typeof p.score === 'number') ? p.score.toFixed(1) : "N/A";
+    const isFavorited = !!userFavorites[p.id];
+
+    // Simple keyword highlighting based on description/query
+    let highlightedTitle = escapeHtml(p.title);
+    let highlightedContent = escapeHtml(p.content || "");
+
+    const terms = currentCuration.description.split(' ').filter(t => t.length > 3);
+    terms.forEach(term => {
+        const regex = new RegExp(`(${term})`, 'gi');
+        highlightedTitle = highlightedTitle.replace(regex, '<mark>$1</mark>');
+        highlightedContent = highlightedContent.replace(regex, '<mark>$1</mark>');
+    });
+
+    return `
+        <div class="post-card">
+            <div class="post-header">
+                <span class="post-sub">r/${p.sub}</span>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <button class="btn btn-outline" style="padding:4px 8px;" onclick="toggleFavorite('${p.id}', ${index})">
+                        <i class="fa-${isFavorited ? 'solid' : 'regular'} fa-star" style="color:${isFavorited ? '#f59e0b' : 'inherit'}"></i>
+                    </button>
+                    <span class="post-score">${score}</span>
+                </div>
+            </div>
+            <h3 class="post-title"><a href="${p.url}" target="_blank">${highlightedTitle}</a></h3>
+            <div class="post-content" id="content-${p.id}">${highlightedContent}</div>
+            <button class="btn btn-outline" style="margin-top:8px; font-size:0.75rem;" onclick="toggleExpand('${p.id}')">Toggle Expand</button>
+            <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                ${(p.tags || []).map(t => `<span class="tag-pill">${t}</span>`).join('')}
+            </div>
+        </div>
+    `;
+}
+
+async function toggleFavorite(postId, index) {
+    const post = currentCuration.results[index];
+    if (userFavorites[postId]) {
+        await api(`/api/favorites/${postId}`, 'DELETE');
+        delete userFavorites[postId];
+    } else {
+        await api('/api/favorites', 'POST', post);
+        userFavorites[postId] = post;
+    }
+    // Re-render specifically this card or all
+    finalizeResults(currentCuration.results);
+}
+
+function toggleExpand(id) {
+    document.getElementById(`content-${id}`).classList.toggle('expanded');
 }
 
 function escapeHtml(text) {
@@ -714,33 +296,56 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-function exportResults() {
-    if (!approvedPostsData || approvedPostsData.length === 0) {
-        alert('No results to export!');
+function log(msg, type = "info") {
+    const container = document.getElementById('logs-container');
+    const div = document.createElement('div');
+    div.className = `log-entry ${type}`;
+    div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+// --- HISTORY & NAVIGATION ---
+function toggleHistory() {
+    const panel = document.getElementById('side-panel');
+    const overlay = document.getElementById('overlay');
+    panel.classList.toggle('open');
+    overlay.classList.toggle('show');
+}
+
+async function loadHistory() {
+    const data = await api('/api/results');
+    const container = document.getElementById('history-container');
+
+    if (data.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:#64748b; margin-top:20px;">No history found</div>';
         return;
     }
 
-    // Create formatted export
-    const timestamp = new Date().toISOString().split('T')[0];
-    let exportText = `Reddit Curator Results - ${timestamp}\n`;
-    exportText += '=====================================\n\n';
+    container.innerHTML = data.map(item => {
+        const date = new Date(item.timestamp * 1000).toLocaleString();
+        return `
+            <div class="history-item" onclick="loadSavedResult('${item.id}')">
+                <div class="history-date">${date}</div>
+                <div class="history-query">${item.criteria || item.query}</div>
+                <div class="history-stats">
+                    <span><i class="fa-solid fa-file-lines"></i> ${item.count} posts</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
 
-    approvedPostsData.forEach((post, index) => {
-        exportText += `${index + 1}. [${post.sub}] Score: ${post.score}\n`;
-        exportText += `   Title: ${post.title}\n`;
-        exportText += `   URL: ${post.url}\n`;
-        exportText += `   ID: ${post.id}\n`;
-        exportText += '\n-------------------------------------\n\n';
-    });
+async function loadSavedResult(id) {
+    toggleHistory();
+    const data = await api(`/api/results/${id}`);
 
-    // Create and download file
-    const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `reddit-curator-results-${timestamp}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    currentCuration.description = data.criteria || data.query;
+    currentCuration.results = data.results;
+
+    document.getElementById('curation-setup').style.display = 'none';
+    document.getElementById('pipeline-status').style.display = 'none';
+
+    finalizeResults(data.results);
+    document.getElementById('results-title').innerText = "History Result";
 }
